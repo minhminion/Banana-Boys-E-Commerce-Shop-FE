@@ -10,13 +10,16 @@
     "antd": "^4.0.3",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "firebase": "^7.14.2",
     "google-maps-react": "^2.0.2",
     "history": "^4.10.1",
     "lottie-web": "^5.6.6",
+    "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-breadcrumbs-dynamic": "^1.2.1",
+    "react-chat-widget": "^3.0.0",
     "react-dom": "^16.13.0",
     "react-hooks-paginator": "^0.4.4",
     "react-id-swiper": "^3.0.0",
@@ -40,10 +43,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build && firebase deploy"
+    "deploy": "react-scripts build && firebase deploy",
+    "preinstall": "npx npm-force-resolutions"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "resolutions": {
+    "moment": "2.24.0"
   },
   "browserslist": {
     "production": [
@@ -56,5 +63,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "npm-force-resolutions": "0.0.3"
   }
 }

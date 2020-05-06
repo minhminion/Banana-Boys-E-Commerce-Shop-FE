@@ -15,7 +15,7 @@ import { createMultilanguageReducer } from 'redux-multilanguage'
 export const history = createBrowserHistory()
 
 const config = {
-  key: 'root',
+  key: 'shop',
   storage,
   blacklist: ['session', 'compiler']
 }

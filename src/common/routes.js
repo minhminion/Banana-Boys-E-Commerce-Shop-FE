@@ -17,15 +17,10 @@ const Routes = (props) => {
 
   const { store } = props
   let { user } = store.getState()
-  user = user || {
-    user: {
-      id: 1,
-      name: 'Minh'
-    },
-    role: 'admin'
-  }
+  user = user || {}
   /** If use is not exists => not login then show mot found page */
-  if (!user.user || !user.user.id) {
+  // if (!user.user || !user.user.id) {
+  if (true) {
     return (
       <Switch>
           <Route exact path={process.env.PUBLIC_URL + "/"} component={Home} />
