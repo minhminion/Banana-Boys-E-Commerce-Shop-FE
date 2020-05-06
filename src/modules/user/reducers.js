@@ -5,7 +5,11 @@ import { clearAll } from '../../common/redux/actions/common'
 export const defaultState = {
   token: null,
   exp: null,
-  user: {}
+  // THiS is MOCK EXAMPLE FOR USER API 
+  user: {
+    id: Math.floor(Math.random() * 100),
+    name: "Minh"
+  }
 }
 
 const handlers = {

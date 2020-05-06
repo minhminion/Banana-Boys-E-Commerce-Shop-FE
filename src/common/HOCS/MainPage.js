@@ -8,6 +8,9 @@ import ProgressLoading from '../components/widgets/ProgressLoading'
 import Loading from '../components/widgets/Loading'
 import userHandler from '../../modules/user/handlers'
 
+import 'react-chat-widget/lib/styles.css';
+import ChatBox from '../components/widgets/ChatBox/ChatBox'
+
 const MainPage = (props) => {
   const [loading, setLoading] = useState(false)
 
@@ -48,6 +51,7 @@ const MainPage = (props) => {
             <Routes store={store} />
           </Suspense>
         </BrowserRouter>
+        <ChatBox user={user || null}/>
         <ProgressLoading.Component />
         <PageLoading.Component type='bars' />
         <Modal.Component global />
