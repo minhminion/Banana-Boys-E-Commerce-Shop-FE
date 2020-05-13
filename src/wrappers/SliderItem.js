@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const SliderItem = ({ data, sliderClassName }) => {
   return (
     <div
-      className={`single-slider slider-height-1 bg-purple ${
+      className={`single-slider slider-height-1 bg-primary-2 ${
         sliderClassName ? sliderClassName : ""
       }`}
     >

@@ -55,17 +55,20 @@ const Header = ({
         }`}
       >
         <div className={layout === "container-fluid" ? layout : "container"}>
-          <div className="row">
-            <div className="col-xl-2 col-lg-2 col-md-6 col-4">
+          <div className="row" style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                justifyContent: 'center'
+          }}>
+            <div className="col-xl-4 col-lg-4 col-md-6 col-8">
               {/* header logo */}
-              {/* <h3>Banana Boys.</h3> */}
-              <Logo imageUrl="/img/logo-banana.png" logoClass="logo" style={{ width: 300 }}/>
+              <Logo imageUrl="/img/BananaLogo.png" logoClass="logo" style={{ width: 75 }}/>
             </div>
-            <div className="col-xl-8 col-lg-8 d-none d-lg-block">
+            <div className="col-xl-6 col-lg-6 d-none d-lg-block">
               {/* Nav menu */}
               <NavMenu />
             </div>
-            <div className="col-xl-2 col-lg-2 col-md-6 col-8">
+            <div className="col-xl-2 col-lg-2 col-md-6 col-4">
               {/* Icon group */}
               <IconGroup />
             </div>
