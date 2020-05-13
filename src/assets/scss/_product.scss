@@ -201,8 +201,8 @@
                 border-radius: 3px;
                 font-weight: 500;
                 margin-bottom: 10px;
-                &.pink{
-                    background-color: #fa6bff;
+                &.red{
+                    background-color: $red-color;
                 }
                 &.purple{
                     background-color: $theme-color;
@@ -1144,7 +1144,7 @@
             position: absolute;
             display: block;
             border: 0;
-            background: #fa6bff none repeat scroll 0 0;
+            background: $red-color none repeat scroll 0 0;
             border: none;
             transition: all .0s ease 0s;
         }
@@ -1155,7 +1155,7 @@
             height: 15px;
             margin-left: 0;
             width: 15px;
-            border: 4px solid #fa6bff;
+            border: 4px solid $red-color;
         }
     }
 
@@ -1194,7 +1194,7 @@
                 color: #fa6bff;
             }
             &.red{
-                color: #ff3d2a;
+                color: $red-color;
             }
             &.purple{
                 color: $theme-color;
@@ -1237,12 +1237,12 @@
                 transition: all 0.4s ease-in-out;
                 transform: scaleX(0);
                 &:hover, &.active {
-                    background-color: #fa6bff;
+                    background-color: $red-color;
                 }
             }
             &.product-action-2-red {
                 a{
-                    background-color: #df262b;
+                    background-color: $red-color;
                     &:hover {
                         background-color: $theme-color
                     }
@@ -1303,7 +1303,7 @@
                         color: #fa6bff;
                         text-decoration: line-through;
                         &.red {
-                            color: #ff3d2a;
+                            color: $red-color;
                         }
                     }
                     &::before {
@@ -1614,7 +1614,7 @@
                     margin: 0 3px;
                     transition: all 0.4s ease-in-out;
                     &:hover, &.active {
-                        background-color: #fa6bff;
+                        background-color: $red-color;
                     }
                     &:disabled{
                         cursor: not-allowed;
@@ -1796,7 +1796,7 @@
                     display: none;
                 }
                 &.old {
-                    color: #fa6bff;
+                    color: $red-color;
                     text-decoration: line-through;
                 }
             }
@@ -1960,7 +1960,7 @@
                 border-radius: 50px;
                 margin: 0 3px;
                 &:hover, &.active {
-                    background-color: #fa6bff;
+                    background-color: $red-color;
                     color: #fff;
                 }
             }
@@ -1998,7 +1998,7 @@
                     display: none;
                 }
                 &.old {
-                    color: #fa6bff;
+                    color: $red-color;
                     text-decoration: line-through;
                 }
             }
