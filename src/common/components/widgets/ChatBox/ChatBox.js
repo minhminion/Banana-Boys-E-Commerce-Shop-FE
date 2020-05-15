@@ -112,6 +112,7 @@ const ChatBox = ({ user }) => {
     <div className="fixed-widgets">
       <Popover
         title={
+          user.id &&
           <Fragment>
             <Text strong>Chăm sóc khách hàng</Text>
             <CloseOutlined style={{ float: "right", lineHeight: 1.5 }} onClick={() => setVisible(false)}/>

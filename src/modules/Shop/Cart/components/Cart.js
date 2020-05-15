@@ -1,11 +1,15 @@
-import PropTypes from "prop-types"
-import React, { Fragment, useState } from "react"
-import { Link } from "react-router-dom"
-import MetaTags from "react-meta-tags"
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic"
-import { getDiscountPrice, defaultCurrency } from "../../../../common/helpers/product"
-import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop"
-import Breadcrumb from "../../../../wrappers/Breadcrumb"
+import PropTypes from "prop-types";
+import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
+import MetaTags from "react-meta-tags";
+import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
+import {
+  getDiscountPrice,
+  defaultCurrency,
+} from "../../../../common/helpers/product";
+import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
+import Breadcrumb from "../../../../wrappers/Breadcrumb";
+import { Col, Row } from "antd";
 
 const Cart = ({
   location,
@@ -16,21 +20,23 @@ const Cart = ({
   cartItemStock,
   deleteFromCart,
   deleteAllFromCart,
-  strings
+  strings,
 }) => {
-  const [quantityCount] = useState(1)
-  const { pathname } = location
-  let cartTotalPrice = 0
+  const [quantityCount] = useState(1);
+  const { pathname } = location;
+  let cartTotalPrice = 0;
 
   return (
     <Fragment>
       <MetaTags>
-        <title>Banana Boys | {strings['cart']}</title>
+        <title>Banana Boys | {strings["cart"]}</title>
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>{strings['home']}</BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>
+        {strings["home"]}
+      </BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        {strings['cart']}
+        {strings["cart"]}
       </BreadcrumbsItem>
       <MainLayoutShop headerTop="visible">
         <Breadcrumb />
@@ -45,12 +51,12 @@ const Cart = ({
                       <table>
                         <thead>
                           <tr>
-                            <th>{strings['image']}</th>
-                            <th>{strings['product_name']}</th>
-                            <th>{strings['unit_price']}</th>
-                            <th>{strings['qty']}</th>
-                            <th>{strings['subtotal']}</th>
-                            <th>{strings['action']}</th>
+                            <th>{strings["image"]}</th>
+                            <th>{strings["product_name"]}</th>
+                            <th>{strings["unit_price"]}</th>
+                            <th>{strings["qty"]}</th>
+                            <th>{strings["subtotal"]}</th>
+                            <th>{strings["action"]}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -58,19 +64,17 @@ const Cart = ({
                             const discountedPrice = getDiscountPrice(
                               cartItem.price,
                               cartItem.discount
-                            )
-                            const finalProductPrice = (
-                              cartItem.price * currency.currencyRate
-                            )
-                            const finalDiscountedPrice = (
-                              discountedPrice * currency.currencyRate
-                            )
+                            );
+                            const finalProductPrice =
+                              cartItem.price * currency.currencyRate;
+                            const finalDiscountedPrice =
+                              discountedPrice * currency.currencyRate;
 
                             discountedPrice != null
                               ? (cartTotalPrice +=
                                   finalDiscountedPrice * cartItem.quantity)
                               : (cartTotalPrice +=
-                                  finalProductPrice * cartItem.quantity)
+                                  finalProductPrice * cartItem.quantity);
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -108,15 +112,24 @@ const Cart = ({
                                   {discountedPrice !== null ? (
                                     <Fragment>
                                       <span className="amount old">
-                                        {defaultCurrency(currency, finalProductPrice)}
+                                        {defaultCurrency(
+                                          currency,
+                                          finalProductPrice
+                                        )}
                                       </span>
                                       <span className="amount">
-                                        {defaultCurrency(currency, finalDiscountedPrice)}
+                                        {defaultCurrency(
+                                          currency,
+                                          finalDiscountedPrice
+                                        )}
                                       </span>
                                     </Fragment>
                                   ) : (
                                     <span className="amount">
-                                      {defaultCurrency(currency, finalProductPrice)}
+                                      {defaultCurrency(
+                                        currency,
+                                        finalProductPrice
+                                      )}
                                     </span>
                                   )}
                                 </td>
@@ -125,9 +138,7 @@ const Cart = ({
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                      onClick={() =>
-                                        decreaseQuantity(cartItem)
-                                      }
+                                      onClick={() => decreaseQuantity(cartItem)}
                                     >
                                       -
                                     </button>
@@ -140,18 +151,13 @@ const Cart = ({
                                     <button
                                       className="inc qtybutton"
                                       onClick={() =>
-                                        addToCart(
-                                          cartItem,
-                                          quantityCount
-                                        )
+                                        addToCart(cartItem, quantityCount)
                                       }
                                       disabled={
                                         cartItem !== undefined &&
                                         cartItem.quantity &&
                                         cartItem.quantity >=
-                                          cartItemStock(
-                                            cartItem
-                                          )
+                                          cartItemStock(cartItem)
                                       }
                                     >
                                       +
@@ -159,24 +165,26 @@ const Cart = ({
                                   </div>
                                 </td>
                                 <td className="product-subtotal">
-                                  {
-                                  discountedPrice !== null
-                                    ? (defaultCurrency(currency, finalDiscountedPrice * cartItem.quantity))
-                                    : (defaultCurrency(currency, finalProductPrice * cartItem.quantity))
-                                  }
+                                  {discountedPrice !== null
+                                    ? defaultCurrency(
+                                        currency,
+                                        finalDiscountedPrice * cartItem.quantity
+                                      )
+                                    : defaultCurrency(
+                                        currency,
+                                        finalProductPrice * cartItem.quantity
+                                      )}
                                 </td>
 
                                 <td className="product-remove">
                                   <button
-                                    onClick={() =>
-                                      deleteFromCart(cartItem)
-                                    }
+                                    onClick={() => deleteFromCart(cartItem)}
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>
                                 </td>
                               </tr>
-                            )
+                            );
                           })}
                         </tbody>
                       </table>
@@ -187,109 +195,65 @@ const Cart = ({
                   <div className="col-lg-12">
                     <div className="cart-shiping-update-wrapper">
                       <div className="cart-shiping-update">
-                        <Link
-                          to={process.env.PUBLIC_URL + "/shop"}
-                        >
-                          {strings['continue_shopping']}
+                        <Link to={process.env.PUBLIC_URL + "/shop"}>
+                          {strings["continue_shopping"]}
                         </Link>
                       </div>
                       <div className="cart-clear">
                         <button onClick={() => deleteAllFromCart()}>
-                          {strings['clear_shopping_cart']}
+                          {strings["clear_shopping_cart"]}
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="row">
-                  <div className="col-lg-4 col-md-6">
-                    <div className="cart-tax">
-                      <div className="title-wrap">
-                        <h4 className="cart-bottom-title section-bg-gray">
-                          Estimate Shipping And Tax
-                        </h4>
-                      </div>
-                      <div className="tax-wrapper">
-                        <p>
-                          Enter your destination to get a shipping estimate.
-                        </p>
-                        <div className="tax-select-wrapper">
-                          <div className="tax-select">
-                            <label>* Country</label>
-                            <select className="email s-email s-wid">
-                              <option>Bangladesh</option>
-                              <option>Albania</option>
-                              <option>Åland Islands</option>
-                              <option>Afghanistan</option>
-                              <option>Belgium</option>
-                            </select>
-                          </div>
-                          <div className="tax-select">
-                            <label>* Region / State</label>
-                            <select className="email s-email s-wid">
-                              <option>Bangladesh</option>
-                              <option>Albania</option>
-                              <option>Åland Islands</option>
-                              <option>Afghanistan</option>
-                              <option>Belgium</option>
-                            </select>
-                          </div>
-                          <div className="tax-select">
-                            <label>* Zip/Postal Code</label>
-                            <input type="text" />
-                          </div>
-                          <button className="cart-btn-2" type="submit">
-                            Get A Quote
-                          </button>
+                <div>
+                  <div className="grand-totall">
+                    <Row gutter={50}>
+                      <Col span={12}>
+                        <div className="title-wrap">
+                          <h4 className="cart-bottom-title section-bg-gary-cart">
+                            Coupon
+                          </h4>
                         </div>
-                      </div>
-                    </div>
-                  </div>
+                        <h5>
+                          Total products{" "}
+                          <span>
+                            {defaultCurrency(currency, cartTotalPrice)}
+                          </span>
+                        </h5>
 
-                  <div className="col-lg-4 col-md-6">
-                    <div className="discount-code-wrapper">
-                      <div className="title-wrap">
-                        <h4 className="cart-bottom-title section-bg-gray">
-                          Use Coupon Code
+                        <h4 className="grand-totall-title">
+                          Grand Total{" "}
+                          <span>
+                            {defaultCurrency(currency, cartTotalPrice)}
+                          </span>
                         </h4>
-                      </div>
-                      <div className="discount-code">
-                        <p>Enter your coupon code if you have one.</p>
-                        <form>
-                          <input type="text" required name="name" />
-                          <button className="cart-btn-2" type="submit">
-                            Apply Coupon
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
+                      </Col>
+                      <Col span={12}>
+                        <div className="title-wrap">
+                          <h4 className="cart-bottom-title section-bg-gary-cart">
+                            Cart Total
+                          </h4>
+                        </div>
+                        <h5>
+                          Total products{" "}
+                          <span>
+                            {defaultCurrency(currency, cartTotalPrice)}
+                          </span>
+                        </h5>
 
-                  <div className="col-lg-4 col-md-12">
-                    <div className="grand-totall">
-                      <div className="title-wrap">
-                        <h4 className="cart-bottom-title section-bg-gary-cart">
-                          Cart Total
+                        <h4 className="grand-totall-title">
+                          Grand Total{" "}
+                          <span>
+                            {defaultCurrency(currency, cartTotalPrice)}
+                          </span>
                         </h4>
-                      </div>
-                      <h5>
-                        Total products{" "}
-                        <span>
-                          {defaultCurrency(currency, cartTotalPrice)}
-                        </span>
-                      </h5>
-
-                      <h4 className="grand-totall-title">
-                        Grand Total{" "}
-                        <span>
-                          {defaultCurrency(currency, cartTotalPrice)}
-                        </span>
-                      </h4>
-                      <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                        Proceed to Checkout
-                      </Link>
-                    </div>
+                      </Col>
+                    </Row>
+                    <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                      Proceed to Checkout
+                    </Link>
                   </div>
                 </div>
               </Fragment>
@@ -314,8 +278,8 @@ const Cart = ({
         </div>
       </MainLayoutShop>
     </Fragment>
-  )
-}
+  );
+};
 
 Cart.propTypes = {
   addToCart: PropTypes.func,
@@ -324,7 +288,7 @@ Cart.propTypes = {
   decreaseQuantity: PropTypes.func,
   location: PropTypes.object,
   deleteAllFromCart: PropTypes.func,
-  deleteFromCart: PropTypes.func
-}
+  deleteFromCart: PropTypes.func,
+};
 
-export default Cart
+export default Cart;

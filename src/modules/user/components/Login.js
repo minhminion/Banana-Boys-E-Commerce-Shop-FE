@@ -24,7 +24,7 @@ const Login = (props) => {
       const errors = result.error
       checkError(errors.error)
     } else {
-      history.push('/project') 
+      history.push('/') 
     }
   }
 

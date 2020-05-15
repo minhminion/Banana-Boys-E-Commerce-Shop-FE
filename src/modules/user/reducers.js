@@ -6,10 +6,7 @@ export const defaultState = {
   token: null,
   exp: null,
   // THiS is MOCK EXAMPLE FOR USER API 
-  user: {
-    id: Math.floor(Math.random() * 100),
-    name: "Minh"
-  }
+  user: {}
 }
 
 const handlers = {
