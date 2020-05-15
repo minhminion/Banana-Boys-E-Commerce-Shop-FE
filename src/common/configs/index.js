@@ -1,5 +1,5 @@
-export const DEFAULT_URL = 'http://localhost:5000/api'
-export const FRONT_PAGE_URL = 'http://localhost:3000'
+export const DEFAULT_URL = 'https://localhost:5001/api/v1'
+export const FRONT_PAGE_URL = 'http://localhost:3001'
 export const firebaseConfig = {
     apiKey: "AIzaSyBZgXR-zV-8U1QREdDZw4h1-yrlxbPAaTI",
     authDomain: "app-message-edc41.firebaseapp.com",

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import cartHandlers from "../../../modules/Shop/Cart/handlers";
+import userHandlers from "../../../modules/user/handlers"
 import { multilanguage } from "redux-multilanguage";
 
 const IconGroup = ({
@@ -12,18 +13,18 @@ const IconGroup = ({
   wishlistData,
   deleteFromCart,
   iconWhiteClass,
-  strings
+  strings,
+  user,
+  signOut,
 }) => {
-  const handleClick = e => {
+  const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
 
   const handleCart = (isOpen) => {
-    const cartContent = document.querySelector(
-      ".shopping-cart-content"
-    )
-    cartContent.classList.toggle('active')
-  }
+    const cartContent = document.querySelector(".shopping-cart-content");
+    cartContent.classList.toggle("active");
+  };
 
   const triggerMobileMenu = () => {
     const offcanvasMobileMenu = document.querySelector(
@@ -37,7 +38,7 @@ const IconGroup = ({
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ""}`}
     >
       <div className="same-style header-search d-none d-lg-block">
-        <button className="search-active" onClick={e => handleClick(e)}>
+        <button className="search-active" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-search" />
         </button>
         <div className="search-content">
@@ -52,37 +53,51 @@ const IconGroup = ({
       <div className="same-style account-setting d-none d-lg-block">
         <button
           className="account-setting-active"
-          onClick={e => handleClick(e)}
+          onClick={(e) => handleClick(e)}
         >
           <i className="pe-7s-user-female" />
         </button>
         <div className="account-dropdown">
           <ul>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>{strings['login']}</Link>
-            </li>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                {strings['register']}
-              </Link>
-            </li>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                {strings['my_account']}
-              </Link>
-            </li>
+            {!user || !user.id ? (
+              <>
+                <li>
+                  <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                    {strings["login"]}
+                  </Link>
+                </li>
+                <li>
+                  <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                    {strings["register"]}
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to={process.env.PUBLIC_URL + "/my-account"}>
+                    {strings["my_account"]}
+                  </Link>
+                </li>
+                <li>
+                  <Link onClick={() => signOut()} to={process.env.PUBLIC_URL}>
+                    {strings["sign_out"]}
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
       <div className="same-style header-wishlist">
         <Link to={process.env.PUBLIC_URL + "/wishlist"}>
-          <i className='pe-7s-like' />
+          <i className="pe-7s-like" />
           <span className="count-style">
             {wishlistData && wishlistData.length ? wishlistData.length : 0}
           </span>
         </Link>
       </div>
-      <div 
+      <div
         className="same-style cart-wrap d-none d-lg-block"
         onMouseEnter={(e) => handleCart(e)}
         onMouseLeave={(e) => handleCart(e)}
@@ -127,11 +142,12 @@ IconGroup.propTypes = {
   iconWhiteClass: PropTypes.string,
   deleteFromCart: PropTypes.func,
   wishlistData: PropTypes.array,
-  strings: PropTypes.object
+  strings: PropTypes.object,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
+    user: state.user.user,
     currency: state.currencyData,
     cartData: state.cart,
     wishlistData: state.wishlist,
@@ -140,10 +156,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    signOut: () => {
+      userHandlers(dispatch, props).logoutAccount();
+    },
     deleteFromCart: (item) => {
-      cartHandlers(dispatch, props).deleteFromCart(item)
-    }
+      cartHandlers(dispatch, props).deleteFromCart(item);
+    },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(multilanguage(IconGroup));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(multilanguage(IconGroup));

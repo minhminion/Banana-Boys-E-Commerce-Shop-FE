@@ -1,13 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Link } from "react-router-dom"
-import { Typography, Form, Input, Col, Row, Select, Button, DatePicker } from 'antd'
-import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { Typography, Form, Input, Col, Row, Select, Button, DatePicker, Space } from 'antd'
+import { PlusCircleOutlined, MinusCircleOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { cities, allDistricts } from './../../../constant/address'
 const { Title } = Typography
 const { Option } = Select
 
 const BillDetails = ({
-  cartItems
+  cartItems,
+  user,
+  goNext,
 }) => {
   const [districts, setDistricts] = useState(null)
   const [showAdditional, setShowAdditional] = useState(false)
@@ -38,6 +40,7 @@ const BillDetails = ({
   };
 
   const onFinish = (values) => {
+    goNext()
     console.log('======== Bao Minh: onFinish -> values', values)
   }
 
@@ -95,6 +98,8 @@ const BillDetails = ({
           layout='vertical' validateMessages={validateMessages}
           onFinish={onFinish}
           initialValues={{
+            email: user.email || '',
+            phone: user.phone || '',
             city: { label: 'Hồ Chí Minh' },
             district: { label: 'Quận 1' }
           }}
@@ -222,8 +227,11 @@ const BillDetails = ({
           {
             showAdditional && additionalForm
           }
-          <Button htmlType='submit'>
-            Submit
+          <Button htmlType='submit' className="button" >
+            <Space style={{ alignItems: 'flex-end'}}>
+               <span>Next</span>
+               <ArrowRightOutlined />
+            </Space>
           </Button>
         </Form>
       </div>

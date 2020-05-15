@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './assets/custome-theme/antd-theme.less'
 import './assets/scss/style.scss'
 import * as serviceWorker from './serviceWorker'
 import store,{ history } from './common/store'
