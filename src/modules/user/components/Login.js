@@ -11,13 +11,13 @@ const tailLayout = {
 };
 
 const Login = (props) => {
+  const { loginAccount, history } = props
 
   const onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
 
   const onFinish = async (values) => {
-    const { loginAccount, history } = props
     const { email, password } = values
     const result = await loginAccount({email, password})
     if (result) {
@@ -27,6 +27,7 @@ const Login = (props) => {
       history.push('/') 
     }
   }
+
 
 
   return (

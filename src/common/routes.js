@@ -1,6 +1,7 @@
 import React, { lazy } from 'react'
 import { Route, Switch } from 'react-router'
 import UnderContruct from '../pages/UnderContruct'
+import UserAccount from '../modules/UserAccount/containers/UserAccount'
 
 const LoginRegister = lazy(() => import('../modules/user/containers/LoginRegister'))
 const Wishlist = lazy(() => import('../modules/Shop/WishList/containers/Wishlist'))
@@ -29,7 +30,7 @@ const Routes = (props) => {
           <Route path={process.env.PUBLIC_URL + "/wishlist"} component={Wishlist} />
           <Route path={process.env.PUBLIC_URL + "/cart"} component={Cart} />
           <Route path={process.env.PUBLIC_URL + "/checkout"} component={Checkout} />
-          <Route path={process.env.PUBLIC_URL + "/my-account"} component={MyAccount} />
+          <Route path={process.env.PUBLIC_URL + "/user"} component={UserAccount} />
           <Route path={process.env.PUBLIC_URL + "/contact"} component={Contact} />
           <Route exact path={process.env.PUBLIC_URL} component={Home} />
           <Route exact component={NotFound} />
