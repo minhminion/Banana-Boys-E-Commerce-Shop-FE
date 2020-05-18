@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Logo from "../common/components/header/Logo";
 import NavMenu from "../common/components/header/NavMenu";
 import IconGroup from "../common/components/header/IconGroup";
-// import MobileMenu from "../common/components/header/MobileMenu";
 import HeaderTop from "../common/components/header/HeaderTop";
 import MobileMenu from "../common/components/header/MobileMenu";
 
@@ -51,7 +50,7 @@ const Header = ({
         className={` ${
           headerPaddingClass ? headerPaddingClass : ""
         } sticky-bar header-res-padding clearfix ${
-          scroll > headerTop ? "stick" : ""
+          scroll > headerTop + 50 ? "stick" : ""
         }`}
       >
         <div className={layout === "container-fluid" ? layout : "container"}>

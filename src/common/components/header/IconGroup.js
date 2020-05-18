@@ -75,7 +75,7 @@ const IconGroup = ({
             ) : (
               <>
                 <li>
-                  <Link to={process.env.PUBLIC_URL + "/my-account"}>
+                  <Link to={process.env.PUBLIC_URL + "/user"}>
                     {strings["my_account"]}
                   </Link>
                 </li>

@@ -1,5 +1,6 @@
 import * as mocks from './mocks'
 import * as theme from './theme'
 import * as address from './address'
+import * as ENUMS from './enums'
 
-export default { theme, mocks, address } 
+export { theme, mocks, address, ENUMS } 

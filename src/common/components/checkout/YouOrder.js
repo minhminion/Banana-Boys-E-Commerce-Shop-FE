@@ -16,7 +16,7 @@ const YouOrder = ({
   const payments = [
     {
       id: "credit",
-      content: "Thẻ tính dụng",
+      content: "Thẻ tín dụng",
     },
     {
       id: "cod",
