@@ -5,7 +5,8 @@ import { getDiscountPrice, defaultCurrency } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
-import { HeartOutlined, HeartFilled } from '@ant-design/icons'
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { ENUMS } from "../../../constant";
 
 const ProductGridListSingle = ({
   product,
@@ -16,11 +17,13 @@ const ProductGridListSingle = ({
   wishlistItem,
   sliderClassName,
   spaceBottomClass,
-  strings
+  strings,
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+
+  // THIS GET DISCOUNT BY %
+  // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
+  const discountedPrice = product.salePrice;
   const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate
@@ -40,13 +43,13 @@ const ProductGridListSingle = ({
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               <img
                 className="default-img"
-                src={process.env.PUBLIC_URL + '/img/products/3.jpg'}
+                src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
                 alt=""
               />
-              {product.image.length > 1 ? (
+              {product.images && product.images.length > 1 ? (
                 <img
                   className="hover-img"
-                  src={process.env.PUBLIC_URL + '/img/products/3.jpg'}
+                  src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
                   alt=""
                 />
               ) : (
@@ -78,11 +81,15 @@ const ProductGridListSingle = ({
                   }
                   onClick={() => addToWishlist(product)}
                 >
-                  { wishlistItem ? <HeartFilled style={{color: '#DC143C'}} /> : <HeartOutlined /> }
+                  {wishlistItem ? (
+                    <HeartFilled style={{ color: "#DC143C" }} />
+                  ) : (
+                    <HeartOutlined />
+                  )}
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                {product.stock && product.stock > 0 ? (
+                {product.quantity && product.quantity > 0 ? (
                   <button
                     onClick={() => addToCart(product, 1)}
                     className={
@@ -92,18 +99,18 @@ const ProductGridListSingle = ({
                     }
                     disabled={cartItem !== undefined && cartItem.quantity > 0}
                     title={
-                      cartItem !== undefined ? "Added to cart" : "Add to cart"
+                      cartItem !== undefined ? "Added to cart" : strings['add_to_cart']
                     }
                   >
                     {" "}
                     <i className="pe-7s-cart"></i>{" "}
                     {cartItem !== undefined && cartItem.quantity > 0
-                      ? strings['added_to_cart']
-                      : strings['add_to_cart']}
+                      ? strings["added_to_cart"]
+                      : strings["add_to_cart"]}
                   </button>
                 ) : (
                   <button disabled className="active">
-                    {strings['out_of_stock']}
+                    {strings["out_of_stock"]}
                   </button>
                 )}
               </div>
@@ -125,19 +132,31 @@ const ProductGridListSingle = ({
                 <Rating ratingValue={product.rating} />
               </div>
             ) : (
-              ""
+              <div className="product-rating">
+                <Rating ratingValue={4} />
+              </div>
             )}
             <div className="product-price">
               {discountedPrice !== null ? (
                 <Fragment>
-                  <span>{defaultCurrency(currency, finalDiscountedPrice)}</span>{" "}
                   <span className="old">
                     {defaultCurrency(currency, finalProductPrice)}
-                  </span>
+                  </span>{" "}
+                  <span>{`${defaultCurrency(currency, finalDiscountedPrice)} / 
+                  ${
+                    ENUMS.ProductUnit.find(
+                      (item) => item.id === product.productUnit
+                    ).content
+                  }`}</span>
                 </Fragment>
               ) : (
                 <span>
-                  {defaultCurrency(currency, finalProductPrice)}
+                  {`${defaultCurrency(currency, finalProductPrice)} / 
+                  ${
+                    ENUMS.ProductUnit.find(
+                      (item) => item.id === product.productUnit
+                    ).content
+                  }`}
                 </span>
               )}
             </div>
@@ -151,13 +170,13 @@ const ProductGridListSingle = ({
                   <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
                     <img
                       className="default-img img-fluid"
-                      src={process.env.PUBLIC_URL + '/img/products/3.jpg'}
+                      src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
                       alt=""
                     />
-                    {product.image.length > 1 ? (
+                    {product.images && product.images.length > 1 ? (
                       <img
                         className="hover-img img-fluid"
-                        src={process.env.PUBLIC_URL + '/img/products/3.jpg'}
+                        src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
                         alt=""
                       />
                     ) : (
@@ -197,9 +216,7 @@ const ProductGridListSingle = ({
                       </span>
                     </Fragment>
                   ) : (
-                    <span>
-                      {defaultCurrency(currency, finalProductPrice)}
-                    </span>
+                    <span>{defaultCurrency(currency, finalProductPrice)}</span>
                   )}
                 </div>
                 {product.rating && product.rating > 0 ? (
@@ -209,18 +226,17 @@ const ProductGridListSingle = ({
                     </div>
                   </div>
                 ) : (
-                  ""
+                  <div className="rating-review">
+                    <div className="product-list-rating">
+                      <Rating ratingValue={4} />
+                    </div>
+                  </div>
                 )}
-                {product.shortDescription ? (
-                  <p>{product.shortDescription}</p>
-                ) : (
-                  ""
-                )}
+                {product.description ? <p>{product.description}</p> : ""}
 
                 <div className="shop-list-actions d-flex align-items-center">
                   <div className="shop-list-btn btn-hover">
-                    { product.stock && product.stock > 0 
-                    ? (
+                    {product.quantity && product.quantity > 0 ? (
                       <button
                         onClick={() => addToCart(product, 1)}
                         className={
@@ -234,18 +250,18 @@ const ProductGridListSingle = ({
                         title={
                           cartItem !== undefined
                             ? "Added to cart"
-                            : "Add to cart"
+                            : strings['add_to_cart']
                         }
                       >
                         {" "}
                         <i className="pe-7s-cart"></i>{" "}
                         {cartItem !== undefined && cartItem.quantity > 0
-                          ? strings['added_to_cart']
-                          : strings['add_to_cart']}
+                          ? strings["added_to_cart"]
+                          : strings["add_to_cart"]}
                       </button>
                     ) : (
                       <button disabled className="active">
-                        {strings['out_of_stock']}
+                        {strings["out_of_stock"]}
                       </button>
                     )}
                   </div>
@@ -260,7 +276,11 @@ const ProductGridListSingle = ({
                       }
                       onClick={() => addToWishlist(product)}
                     >
-                      { wishlistItem ? <HeartFilled style={{color: '#DC143C'}} /> : <HeartOutlined /> }
+                      {wishlistItem ? (
+                        <HeartFilled style={{ color: "#DC143C" }} />
+                      ) : (
+                        <HeartOutlined />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -296,7 +316,7 @@ ProductGridListSingle.propTypes = {
   sliderClassName: PropTypes.string,
   spaceBottomClass: PropTypes.string,
   wishlistItem: PropTypes.object,
-  strings: PropTypes.object
+  strings: PropTypes.object,
 };
 
-export default multilanguage(ProductGridListSingle)
+export default multilanguage(ProductGridListSingle);

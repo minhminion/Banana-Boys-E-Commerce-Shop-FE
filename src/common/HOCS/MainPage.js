@@ -10,6 +10,7 @@ import userHandler from '../../modules/LoginAndRegister/handlers'
 
 import 'react-chat-widget/lib/styles.css';
 import ChatBox from '../components/widgets/ChatBox/ChatBox'
+import LoadingBar from 'react-redux-loading-bar'
 
 const MainPage = (props) => {
   const [loading, setLoading] = useState(false)
@@ -37,6 +38,7 @@ const MainPage = (props) => {
     }
     return (
       <>
+        <LoadingBar className='loading-progress-bar'/>
         <BrowserRouter>
           <Suspense
             fallback={

@@ -26,7 +26,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: "fade",
   };
 
   const thumbnailSwiperParams = {
@@ -41,25 +41,25 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
     breakpoints: {
       1200: {
         slidesPerView: 4,
-        direction: "vertical"
+        direction: "vertical",
       },
       992: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: "horizontal",
       },
       768: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: "horizontal",
       },
       640: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: "horizontal",
       },
       320: {
         slidesPerView: 4,
-        direction: "horizontal"
-      }
-    }
+        direction: "horizontal",
+      },
+    },
   };
 
   return (
@@ -87,8 +87,8 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
             )}
             <LightgalleryProvider>
               <Swiper {...gallerySwiperParams}>
-                {product.image &&
-                  product.image.map((single, key) => {
+                {product.images ? (
+                  product.images.map((single, key) => {
                     return (
                       <div key={key}>
                         <LightgalleryItem
@@ -108,7 +108,26 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                         </div>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <div key={1}>
+                    <LightgalleryItem
+                      group="any"
+                      src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                    >
+                      <button>
+                        <i className="pe-7s-expand1"></i>
+                      </button>
+                    </LightgalleryItem>
+                    <div className="single-image">
+                      <img
+                        src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                        className="img-fluid"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                )}
               </Swiper>
             </LightgalleryProvider>
           </div>
@@ -122,7 +141,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
         >
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
             <Swiper {...thumbnailSwiperParams}>
-              {product.image &&
+              {product.image ? (
                 product.image.map((single, key) => {
                   return (
                     <div key={key}>
@@ -135,7 +154,18 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                       </div>
                     </div>
                   );
-                })}
+                })
+              ) : (
+                <div key={1}>
+                  <div className="single-image">
+                    <img
+                      src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                      className="img-fluid"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              )}
             </Swiper>
           </div>
         </div>
@@ -146,7 +176,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
 
 ProductImageGalleryLeftThumb.propTypes = {
   product: PropTypes.object,
-  thumbPosition: PropTypes.string
+  thumbPosition: PropTypes.string,
 };
 
 export default ProductImageGalleryLeftThumb;

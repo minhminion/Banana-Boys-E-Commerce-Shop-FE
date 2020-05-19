@@ -13,11 +13,11 @@ import {
 import {
   setUserToken,
   setUserTokenExp,
-  setUserInformation,
-} from "./../modules/LoginAndRegister/actions";
+  setUserInformation
+} from './../modules/LoginAndRegister/actions'
 
-import storeAccessible from "./utils/storeAccessible";
-import { MODULE_NAME as MODULE_USER } from "../modules/LoginAndRegister/models";
+import storeAccessible from './utils/storeAccessible'
+import { MODULE_NAME as MODULE_USER } from '../modules/LoginAndRegister/models'
 
 export async function loading(fetchingProcess, done = undefined) {
   storeAccessible.dispatch(loadStart({ config: { key: "loading" } }));

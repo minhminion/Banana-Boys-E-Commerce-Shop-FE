@@ -3,8 +3,8 @@ import { clearAll } from "../actions/common";
 import { handleActions } from "redux-actions";
 
 const defaultState = {
-  currencySymbol: "$",
-  currencyName: "USD",
+  currencySymbol: "VND",
+  currencyName: "VND",
   currencyRate: 1
 };
 
@@ -20,12 +20,6 @@ const updateCurrency = (currency) => {
     case 'EUR':
       return {
         currencySymbol: "€",
-        currencyRate: currency.currencyRate,
-        currencyName
-      }
-    case 'GBP':
-      return {
-        currencySymbol: "$",
         currencyRate: currency.currencyRate,
         currencyName
       }

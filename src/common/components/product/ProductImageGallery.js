@@ -26,7 +26,7 @@ const ProductImageGallery = ({ product }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: "fade",
   };
 
   const thumbnailSwiperParams = {
@@ -40,7 +40,7 @@ const ProductImageGallery = ({ product }) => {
     slideToClickedSlide: true,
     navigation: {
       nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      prevEl: ".swiper-button-prev",
     },
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
@@ -51,7 +51,7 @@ const ProductImageGallery = ({ product }) => {
       <button className="swiper-button-next ht-swiper-button-nav">
         <i className="pe-7s-angle-right" />
       </button>
-    )
+    ),
   };
 
   return (
@@ -71,7 +71,7 @@ const ProductImageGallery = ({ product }) => {
         )}
         <LightgalleryProvider>
           <Swiper {...gallerySwiperParams}>
-            {product.image &&
+            {product.image ? (
               product.image.map((single, key) => {
                 return (
                   <div key={key}>
@@ -92,13 +92,32 @@ const ProductImageGallery = ({ product }) => {
                     </div>
                   </div>
                 );
-              })}
+              })
+            ) : (
+              <div key={1}>
+                <LightgalleryItem
+                  group="any"
+                  src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                >
+                  <button>
+                    <i className="pe-7s-expand1"></i>
+                  </button>
+                </LightgalleryItem>
+                <div className="single-image">
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                    className="img-fluid"
+                    alt=""
+                  />
+                </div>
+              </div>
+            )}
           </Swiper>
         </LightgalleryProvider>
       </div>
       <div className="product-small-image-wrapper mt-15">
         <Swiper {...thumbnailSwiperParams}>
-          {product.image &&
+          {product.image ? (
             product.image.map((single, key) => {
               return (
                 <div key={key}>
@@ -111,7 +130,18 @@ const ProductImageGallery = ({ product }) => {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div key={1}>
+              <div className="single-image">
+                <img
+                  src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                  className="img-fluid"
+                  alt=""
+                />
+              </div>
+            </div>
+          )}
         </Swiper>
       </div>
     </Fragment>
@@ -119,7 +149,7 @@ const ProductImageGallery = ({ product }) => {
 };
 
 ProductImageGallery.propTypes = {
-  product: PropTypes.object
+  product: PropTypes.object,
 };
 
 export default ProductImageGallery;

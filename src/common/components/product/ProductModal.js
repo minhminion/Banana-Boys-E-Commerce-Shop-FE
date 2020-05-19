@@ -5,31 +5,36 @@ import { getProductCartQuantity, defaultCurrency } from "../../helpers/product";
 import { Modal } from "react-bootstrap";
 import Rating from "./sub-components/ProductRating";
 import { connect } from "react-redux";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons"
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { ENUMS } from "../../../constant";
+import { multilanguage } from "redux-multilanguage";
 
-function ProductModal(props) {
-  const { product } = props;
-  const { currency } = props;
-  const { discountedprice } = props;
-  const { finalproductprice } = props;
-  const { finaldiscountedprice } = props;
+function ProductModal({
+  product,
+  currency,
+  discountedprice,
+  finaldiscountedprice,
+  finalproductprice,
+  strings,
+  wishlistItem,
+  addtocart,
+  ...props
+}) {
 
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
-  const [productStock, setProductStock] = useState(product.stock);
+  const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [quantityCount, setQuantityCount] = useState(1);
 
-  const wishlistItem = props.wishlistitem;
-
-  const addToCart = props.addtocart;
+  const addToCart = () => {
+    setQuantityCount(1);
+    addtocart(product, quantityCount);
+  };
   const addToWishlist = props.addtowishlist;
 
   const cartItems = props.cartitems;
 
-  const productCartQty = getProductCartQuantity(
-    cartItems,
-    product
-  );
+  const productCartQty = getProductCartQuantity(cartItems, product);
 
   useEffect(() => {
     if (
@@ -47,7 +52,7 @@ function ProductModal(props) {
     getSwiper: getGallerySwiper,
     spaceBetween: 10,
     loopedSlides: 4,
-    loop: true
+    loop: true,
   };
 
   const thumbnailSwiperParams = {
@@ -61,7 +66,7 @@ function ProductModal(props) {
     slideToClickedSlide: true,
     navigation: {
       nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      prevEl: ".swiper-button-prev",
     },
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
@@ -72,7 +77,7 @@ function ProductModal(props) {
       <button className="swiper-button-next ht-swiper-button-nav">
         <i className="pe-7s-angle-right" />
       </button>
-    )
+    ),
   };
 
   return (
@@ -89,8 +94,8 @@ function ProductModal(props) {
             <div className="col-md-5 col-sm-12 col-xs-12">
               <div className="product-large-image-wrapper">
                 <Swiper {...gallerySwiperParams}>
-                  {product.image &&
-                    product.image.map((single, key) => {
+                  {product.images ? (
+                    product.images.map((single, key) => {
                       return (
                         <div key={key}>
                           <div className="single-image">
@@ -102,13 +107,24 @@ function ProductModal(props) {
                           </div>
                         </div>
                       );
-                    })}
+                    })
+                  ) : (
+                    <div key={1}>
+                      <div className="single-image">
+                        <img
+                          src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                          className="img-fluid"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  )}
                 </Swiper>
               </div>
               <div className="product-small-image-wrapper mt-15">
                 <Swiper {...thumbnailSwiperParams}>
-                  {product.image &&
-                    product.image.map((single, key) => {
+                  {product.images &&
+                    product.images.map((single, key) => {
                       return (
                         <div key={key}>
                           <div className="single-image">
@@ -130,15 +146,25 @@ function ProductModal(props) {
                 <div className="product-details-price">
                   {discountedprice !== null ? (
                     <Fragment>
-                      <span>
-                        {defaultCurrency(currency, finaldiscountedprice)}
-                      </span>{" "}
                       <span className="old">
-                      {defaultCurrency(currency, finalproductprice)}
+                        {defaultCurrency(currency, finalproductprice)}
+                      </span>{" "}
+                      <span>
+                        {`${defaultCurrency(currency, finaldiscountedprice)} / ${
+                          ENUMS.ProductUnit.find(
+                            (item) => item.id === product.productUnit
+                          ).content
+                        }`}
                       </span>
                     </Fragment>
                   ) : (
-                    <span>{defaultCurrency(currency, finalproductprice)}</span>
+                    <span>
+                      {`${defaultCurrency(currency, finalproductprice)} / ${
+                        ENUMS.ProductUnit.find(
+                          (item) => item.id === product.productUnit
+                        ).content
+                      }`}
+                    </span>
                   )}
                 </div>
                 {product.rating && product.rating > 0 ? (
@@ -148,74 +174,78 @@ function ProductModal(props) {
                     </div>
                   </div>
                 ) : (
-                  ""
-                )}
-                <div className="pro-details-list">
-                  <p>{product.shortDescription}</p>
-                </div>
-                  <div className="pro-details-quality">
-                    <div className="cart-plus-minus">
-                      <button
-                        onClick={() =>
-                          setQuantityCount(
-                            quantityCount > 1 ? quantityCount - 1 : 1
-                          )
-                        }
-                        className="dec qtybutton"
-                      >
-                        -
-                      </button>
-                      <input
-                        className="cart-plus-minus-box"
-                        type="text"
-                        value={quantityCount}
-                        readOnly
-                      />
-                      <button
-                        onClick={() =>
-                          setQuantityCount(
-                            quantityCount < productStock - productCartQty
-                              ? quantityCount + 1
-                              : quantityCount
-                          )
-                        }
-                        className="inc qtybutton"
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="pro-details-cart btn-hover">
-                      {productStock && productStock > 0 ? (
-                        <button
-                          onClick={() =>
-                            addToCart(
-                              product,
-                              quantityCount,
-                            )
-                          }
-                          disabled={productCartQty >= productStock}
-                        >
-                          {" "}
-                          Add To Cart{" "}
-                        </button>
-                      ) : (
-                        <button disabled>Out of Stock</button>
-                      )}
-                    </div>
-                    <div className="pro-details-wishlist">
-                      <button
-                        disabled={wishlistItem !== undefined}
-                        title={
-                          wishlistItem !== undefined
-                            ? "Added to wishlist"
-                            : "Add to wishlist"
-                        }
-                        onClick={() => addToWishlist(product)}
-                      >
-                        { wishlistItem ? <HeartFilled style={{color: '#DC143C'}} /> : <HeartOutlined /> }
-                      </button>
+                  <div className="pro-details-rating-wrap">
+                    <div className="pro-details-rating">
+                      <Rating ratingValue={4} />
                     </div>
                   </div>
+                )}
+                <div className="pro-details-list">
+                  <p>{product.description}</p>
+                </div>
+                <div className="pro-details-quality">
+                  <div className="cart-plus-minus">
+                    <button
+                      onClick={() =>
+                        setQuantityCount(
+                          quantityCount > 1 ? quantityCount - 1 : 1
+                        )
+                      }
+                      className="dec qtybutton"
+                    >
+                      -
+                    </button>
+                    <input
+                      className="cart-plus-minus-box"
+                      type="text"
+                      value={quantityCount}
+                      readOnly
+                    />
+                    <button
+                      onClick={() =>
+                        setQuantityCount(
+                          quantityCount < productQuantity - productCartQty
+                            ? quantityCount + 1
+                            : quantityCount
+                        )
+                      }
+                      className="inc qtybutton"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="pro-details-cart btn-hover">
+                    {productQuantity && productQuantity > 0 ? (
+                      <button
+                        onClick={() => addToCart(product, quantityCount)}
+                        disabled={productCartQty >= productQuantity}
+                      >
+                        {productCartQty >= productQuantity
+                          ? "Out of Stock"
+                          : strings['add_to_cart']}
+                      </button>
+                    ) : (
+                      <button disabled>Out of Stock</button>
+                    )}
+                  </div>
+                  <div className="pro-details-wishlist">
+                    <button
+                      disabled={wishlistItem !== undefined}
+                      title={
+                        wishlistItem !== undefined
+                          ? "Added to wishlist"
+                          : "Add to wishlist"
+                      }
+                      onClick={() => addToWishlist(product)}
+                    >
+                      {wishlistItem ? (
+                        <HeartFilled style={{ color: "#DC143C" }} />
+                      ) : (
+                        <HeartOutlined />
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -239,13 +269,13 @@ ProductModal.propTypes = {
   onHide: PropTypes.func,
   product: PropTypes.object,
   show: PropTypes.bool,
-  wishlistitem: PropTypes.object
+  wishlistitem: PropTypes.object,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    cartitems: state.cart
+    cartitems: state.cart,
   };
 };
 
-export default connect(mapStateToProps)(ProductModal);
+export default connect(mapStateToProps)(multilanguage(ProductModal));

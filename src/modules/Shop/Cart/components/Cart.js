@@ -87,10 +87,11 @@ const Cart = ({
                                   >
                                     <img
                                       className="img-fluid"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        cartItem.image[0]
-                                      }
+                                      src={`${process.env.PUBLIC_URL}${
+                                        cartItem.image
+                                          ? cartItem.image[0]
+                                          : "img/products/3.jpg"
+                                      } `}
                                       alt=""
                                     />
                                   </Link>

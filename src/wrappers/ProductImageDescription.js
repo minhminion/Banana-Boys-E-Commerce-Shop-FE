@@ -19,7 +19,9 @@ const ProductImageDescription = ({
     wishlistItem => wishlistItem.id === product.id
   )[0];
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+   // THIS GET DISCOUNT BY %
+  // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
+  const discountedPrice = product.salePrice
   const finalProductPrice = +(product.price * currency.currencyRate);
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate
@@ -33,7 +35,7 @@ const ProductImageDescription = ({
     >
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-6">
+          <div className="col-lg-5 col-md-5">
             {/* product image gallery */}
             {galleryType === "leftThumb" ? (
               <ProductImageGallerySideThumb
@@ -48,7 +50,7 @@ const ProductImageDescription = ({
               <ProductImageGallery product={product} />
             )}
           </div>
-          <div className="col-lg-6 col-md-6">
+          <div className="col-lg-7 col-md-7">
             {/* product description info */}
             <ProductDescriptionInfo
               product={product}

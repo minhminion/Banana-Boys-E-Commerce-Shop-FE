@@ -1,18 +1,38 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-// import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
-// import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
-// import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import ProductImageDescription from "../../../../wrappers/ProductImageDescription";
 import ProductDescriptionTab from "../../../../wrappers/ProductDescriptionTab";
 import RelatedProductSlider from "../../../../wrappers/RelatedProductSlider";
+import { useParams } from "react-router";
 
-const ProductInfo = ({ location, product, strings, cartItems, currency, wishlistItems }) => {
+const ProductInfo = ({
+  location,
+  strings,
+  cartItems,
+  currency,
+  wishlistItems,
+  getSingleProduct,
+}) => {
   const { pathname } = location;
+  const { id } = useParams();
+
+  const [product, setProduct] = useState({});
+  console.log("======== Bao Minh: ProductInfo -> product", product);
+
+  const fetchSingleProduct = async (productId) => {
+    const response = await getSingleProduct(productId);
+    setProduct(response.data.data);
+    console.log("======== Bao Minh: fetchSingleProduct -> response", response);
+  };
+
+  useEffect(() => {
+    console.log("RUn");
+    fetchSingleProduct(id);
+  },[id]);
 
   return (
     <Fragment>
@@ -20,7 +40,9 @@ const ProductInfo = ({ location, product, strings, cartItems, currency, wishlist
         <title>Banana Boys | Product Page</title>
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>{strings['home']}</BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>
+        {strings["home"]}
+      </BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
         Shop Product
       </BreadcrumbsItem>
@@ -28,28 +50,34 @@ const ProductInfo = ({ location, product, strings, cartItems, currency, wishlist
       <MainLayoutShop headerTop="visible">
         {/* breadcrumb */}
         <Breadcrumb />
+        {product && product.id ? (
+          <>
+            <ProductImageDescription
+              galleryType="leftThumb"
+              spaceTopClass="pt-100"
+              spaceBottomClass="pb-100"
+              product={product}
+              currency={currency}
+              cartItems={cartItems}
+              wishlistItems={wishlistItems}
+            />
 
+            {/* product description tab */}
+            <ProductDescriptionTab
+              product={product}
+              spaceBottomClass="pb-90"
+            />
+
+            {/* related product slider */}
+            <RelatedProductSlider
+              spaceBottomClass="pb-95"
+              category={product.category}
+            />
+          </>
+        ) : (
+          ""
+        )}
         {/* product description with image */}
-        <ProductImageDescription
-          spaceTopClass="pt-100"
-          spaceBottomClass="pb-100"
-          product={product}
-          currency={currency}
-          cartItems={cartItems}
-          wishlistItems={wishlistItems}
-        />
-
-        {/* product description tab */}
-        <ProductDescriptionTab
-          spaceBottomClass="pb-90"
-          productFullDesc={product.fullDescription}
-        />
-
-        {/* related product slider */}
-        <RelatedProductSlider
-          spaceBottomClass="pb-95"
-          category={product.category[0]}
-        />
       </MainLayoutShop>
     </Fragment>
   );
@@ -57,11 +85,10 @@ const ProductInfo = ({ location, product, strings, cartItems, currency, wishlist
 
 ProductInfo.propTypes = {
   location: PropTypes.object,
-  product: PropTypes.object,
   strings: PropTypes.object,
   cartItems: PropTypes.array,
   currency: PropTypes.object,
-  wishlistItems: PropTypes.array
+  wishlistItems: PropTypes.array,
 };
 
 export default ProductInfo;

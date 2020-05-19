@@ -2,6 +2,7 @@
 import {
   takeEvery,
   select,
+  put
   // takeLatest
 } from 'redux-saga/effects'
 // import {
@@ -16,22 +17,35 @@ import {
   loadEnd
 } from '../../redux/actions/session'
 import PageLoading from '../../components/widgets/PageLoading'
+import { hideLoading, showLoading } from 'react-redux-loading-bar'
 // import ProgressLoading from '../../components/widgets/ProgressLoading'
 
+// function * onFetchStart ({ payload: { config } }) {
+//   // yield ProgressLoading.show()
+//   yield PageLoading.show()
+// }
+
+// function * onFetchSuccess ({ payload: { response, config } }) {
+//   // yield ProgressLoading.hide()
+//   yield PageLoading.hide(true)
+//   // console.log('Fetch Success', config)
+// }
+
+// function * onFetchFailure ({ payload: { error, config } }) {
+//   // yield ProgressLoading.hide()
+//   yield PageLoading.hide(false)
+// }
+
 function * onFetchStart ({ payload: { config } }) {
-  // yield ProgressLoading.show()
-  yield PageLoading.show()
+  yield put(showLoading())
 }
 
 function * onFetchSuccess ({ payload: { response, config } }) {
-  // yield ProgressLoading.hide()
-  yield PageLoading.hide(true)
-  // console.log('Fetch Success', config)
+  yield put(hideLoading())
 }
 
 function * onFetchFailure ({ payload: { error, config } }) {
-  // yield ProgressLoading.hide()
-  yield PageLoading.hide(false)
+  yield put(hideLoading())
 }
 
 function * watchFetchStart () {

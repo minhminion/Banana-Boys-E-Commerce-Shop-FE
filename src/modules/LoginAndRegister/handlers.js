@@ -40,6 +40,6 @@ export default (dispatch, props) => ({
     }
   },
   logoutAccount: () => {
-    dispatch(clearAll());
-  },
+    dispatch(clearAll())
+  }
 });

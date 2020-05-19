@@ -6,14 +6,14 @@ import UserAccount from "../modules/UserAccount/containers/UserAccount";
 import LoginRegister from "../modules/LoginAndRegister/Containers/TabsLoginAndRegister";
 
 // const LoginRegister = lazy(() =>
-//   import("../modules/user/containers/LoginRegister")
+//   import("../modules/LoginAndRegister/containers/LoginRegister")
 // );
 const Wishlist = lazy(() =>
   import("../modules/Shop/WishList/containers/Wishlist")
 );
 const Cart = lazy(() => import("../modules/Shop/Cart/containers/Cart"));
-const Product = lazy(() =>
-  import("../modules/Shop/Products/components/Product")
+const ProductList = lazy(() =>
+  import("../modules/Shop/Products/containers/ProductList")
 );
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Checkout = lazy(() => import("../pages/Checkout"));
@@ -41,7 +41,7 @@ const Routes = (props) => {
           path={process.env.PUBLIC_URL + "/product/:id"}
           component={ProductInfo}
         />
-        <Route path={process.env.PUBLIC_URL + "/shop"} component={Product} />
+        <Route path={process.env.PUBLIC_URL + "/shop"} component={ProductList} />
         <Route
           path={process.env.PUBLIC_URL + "/wishlist"}
           component={Wishlist}

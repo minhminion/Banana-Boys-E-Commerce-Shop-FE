@@ -1,21 +1,23 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { getDiscountPrice, defaultCurrency } from "../../../helpers/product";
+import { defaultCurrency } from "../../../helpers/product";
 import { multilanguage } from "redux-multilanguage";
 
-const MenuCart = ({ cartData, currency, deleteFromCart, strings }) => {
+const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
   let cartTotalPrice = 0;
+
   return (
     <div className="shopping-cart-content">
       {cartData && cartData.length > 0 ? (
         <Fragment>
           <ul>
             {cartData.map((single, key) => {
-              const discountedPrice = getDiscountPrice(
-                single.price,
-                single.discount
-              );
+              // const discountedPrice = getDiscountPrice(
+              //   single.price,
+              //   single.discount
+              // );
+              const discountedPrice = single.salePrice
               const finalProductPrice = (
                 single.price * currency.currencyRate
               );
@@ -33,7 +35,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings }) => {
                     <Link to={process.env.PUBLIC_URL + "/product/" + single.id}>
                       <img
                         alt=""
-                        src={process.env.PUBLIC_URL + single.image[0]}
+                        src={`${process.env.PUBLIC_URL}${single.image ? single.image[0] : '/img/products/3.jpg'} `}
                         className="img-fluid"
                       />
                     </Link>
@@ -47,7 +49,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings }) => {
                         {single.name}{" "}
                       </Link>
                     </h4>
-                    <h6>Qty: {single.quantity}</h6>
+                    <h6>Số lượng: {single.quantity}</h6>
                     <span>
                       {discountedPrice !== null
                         ? defaultCurrency(currency,finalDiscountedPrice)

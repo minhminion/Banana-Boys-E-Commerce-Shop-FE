@@ -1,21 +1,38 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getProducts } from "../common/helpers/product";
 import wishListHandler from '../modules/Shop/WishList/handlers'
 import cartHandler from '../modules/Shop/Cart/handlers'
 import ProductGridSingle from "../common/components/product/ProductGridSingle";
+import handlers from "../modules/Shop/Products/handlers";
 
 const ProductGrid = ({
-  products,
   currency,
   addToCart,
   addToWishlist,
   cartItems,
   wishlistItems,
   sliderClassName,
-  spaceBottomClass
+  spaceBottomClass,
+  getAllProducts
 }) => {
+
+  const [products, setProducts] = useState([])
+
+  const fetchAllProducts = async (pageNumber = 1, params) => {
+    const response = await getAllProducts(pageNumber, { pageSize: 6 });
+    if (response && response.data) {
+      setProducts(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllProducts();
+    return () => {
+      
+    }
+  }, []);
+
   return (
     <Fragment>
       {products.map(product => {
@@ -56,12 +73,6 @@ ProductGrid.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    products: getProducts(
-      [...require('../data/products.json')],
-      ownProps.category,
-      ownProps.type,
-      ownProps.limit
-    ),
     currency: state.currencyData,
     cartItems: state.cart,
     wishlistItems: state.wishlist,
@@ -75,7 +86,8 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     addToWishlist: (item) => {
       wishListHandler(dispatch, props).addToWishList(item)
-    }
+    },
+    getAllProducts: (pageNumber, params) => handlers(dispatch, props).getAllProducts(pageNumber, params)
   };
 };
 
