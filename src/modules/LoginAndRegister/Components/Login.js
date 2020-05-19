@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, notification } from "antd";
 import checkError from "../../../libraries/CheckError";
 const layout = {
   labelCol: { span: 6 },
@@ -9,25 +9,22 @@ const tailLayout = {
   wrapperCol: { offset: 6, span: 16 },
 };
 
-// const onFinish = (values) => {
-//   console.log("Success:", values);
-// };
-
-// const onFinishFailed = (errorInfo) => {
-//   console.log("Failed:", errorInfo);
-// };
+const openNotificationWithIcon = type => {
+  notification[type]({
+    message: 'Đăng nhập thành công',
+  });
+};
 
 function Login(props) {
   async function handleSubmit(values) {
     const { loginAccount, history } = props;
-    console.log(values);
     const { email, password } = values;
     const result = await loginAccount({ email, password });
     if (result) {
       const error = result.error;
-      console.log(result.error);
       checkError(error.error);
     } else {
+      openNotificationWithIcon('success')
       history.push("/");
     }
   }
@@ -46,17 +43,35 @@ function Login(props) {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+          rules={[
+            {
+              type: "email",
+              message: "E-mail không hợp lệ!",
+            },
+            {
+              required: true,
+              message: "Vui lòng nhập e-mail!",
+            },
+          ]}
         >
-          <Input />
+          <Input placeholder="Nhập e-mail" />
         </Form.Item>
 
         <Form.Item
           label="Mật khẩu"
           name="password"
-          rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng nhập mật khẩu!",
+            },
+            {
+              min: 8,
+              message: "Mật khẩu từ 8 ký tự trở lên",
+            },
+          ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Mật khẩu từ 8 ký tự trở lên" />
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Form.Item name="remember" valuePropName="checked" noStyle>
