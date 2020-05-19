@@ -6,7 +6,7 @@ import Modal from '../components/widgets/Modal'
 import PageLoading from '../components/widgets/PageLoading'
 import ProgressLoading from '../components/widgets/ProgressLoading'
 import Loading from '../components/widgets/Loading'
-import userHandler from '../../modules/user/handlers'
+import userHandler from '../../modules/LoginAndRegister/handlers'
 
 import 'react-chat-widget/lib/styles.css';
 import ChatBox from '../components/widgets/ChatBox/ChatBox'

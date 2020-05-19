@@ -11,6 +11,7 @@ export default (dispatch, props) => ({
         method: "POST",
         data: userInfo,
       });
+      console.log(result)
       if (result.data && result.status === 200) {
         dispatch(setUserToken(result.data.token));
         dispatch(setUserTokenExp(result.data.exp));
@@ -37,5 +38,8 @@ export default (dispatch, props) => ({
       }
       return { success: false, error: { message: "Server error" } };
     }
+  },
+  logoutAccount: () => {
+    dispatch(clearAll());
   },
 });

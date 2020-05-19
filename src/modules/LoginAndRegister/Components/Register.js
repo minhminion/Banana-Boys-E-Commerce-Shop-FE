@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, DatePicker, Radio } from "antd";
+import { Form, Input, Button, DatePicker, Radio, notification } from "antd";
 import checkError from "../../../libraries/CheckError";
 
 const tailLayout = {
@@ -21,50 +21,24 @@ const config = {
   ],
 };
 
-const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+const openNotificationWithIcon = type => {
+  notification[type]({
+    message: 'Đăng ký thành công',
+    description: 'Bạn hãy đăng nhập để thỏa sức mua sắm. '
+  });
+};
 
 const Register = (props) => {
   const [form] = Form.useForm();
-  const [valueGender, setValueGender] = useState(1);
-  const [valueDate, setValueDate] = useState("");
-
-  // const onFinish = (values, fieldsValue) => {
-  //   console.log("Received values of form: ", values);
-  //   const date = {
-  //     ...fieldsValue,
-  //     "date-picker": fieldsValue["date-picker"].format("YYYY-MM-DD"),
-  //   };
-  //   console.log("Received values of form: ", date);
-  // };
-  function handleChangeGender(e) {
-    console.log(e.target.value);
-    setValueGender(e.target.value);
-  }
-  function handleSelectDate(date, dateString) {
-    setValueDate(dateString);
-  }
   async function onFinish(values) {
-    console.log("Values ======> ", values);
-    // const { name, email, phone, password, address } = values;
-    // const date = valueDate;
-    // const gender = valueGender;
-    // console.log(name, email, phone, password, address, gender, date);
     const { registerAccount, history } = props;
     const result = await registerAccount(values);
-    console.log(result);
-    if (!result || !result.status === 200) {
+    if (!result || result.status !== 200) {
       const error = result.error;
-      console.log(result.error);
-      checkError(error.error);
+      checkError(error.errors);
     } else {
+      openNotificationWithIcon('success')
       history.push("/");
-    }
-  }
-  function validatePassword(rule, value, callback) {
-    if (value.length >= 8) {
-      callback();
-    } else {
-      callback("Mật khẩu phải từ 8 ký tự trở lên!");
     }
   }
 
@@ -98,6 +72,10 @@ const Register = (props) => {
             required: true,
             message: "Vui lòng nhập số điện thoại của bạn!",
           },
+          {
+            pattern: new RegExp(/(03|07|08|09|01[2|6|8|9])+([0-9]{8})\b/),
+            message: "Số điện thoại không hợp lệ!"
+          },
         ]}
       >
         <Input placeholder="Nhập số điện thoại" />
@@ -128,7 +106,8 @@ const Register = (props) => {
             message: "Vui lòng nhập mật khẩu!",
           },
           {
-            validator: validatePassword,
+            min: 8,
+            message: "Mật khẩu từ 8 ký tự trở lên",
           },
         ]}
         hasFeedback

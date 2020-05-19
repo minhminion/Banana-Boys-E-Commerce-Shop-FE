@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import cartHandlers from "../../../modules/Shop/Cart/handlers";
-import userHandlers from "../../../modules/user/handlers"
+import userHandlers from "../../../modules/LoginAndRegister/handlers"
 import { multilanguage } from "redux-multilanguage";
 
 const IconGroup = ({
