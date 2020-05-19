@@ -13,7 +13,7 @@ const ProductGrid = ({
   cartItems,
   wishlistItems,
   sliderClassName,
-  spaceBottomClass
+  spaceBottomClass,
 }) => {
   return (
     <Fragment>

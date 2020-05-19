@@ -110,6 +110,7 @@ const IconGroup = ({
         </button>
         {/* menu cart */}
         <MenuCart
+          user={user}
           cartData={cartData}
           currency={currency}
           deleteFromCart={deleteFromCart}
@@ -145,7 +146,7 @@ IconGroup.propTypes = {
   strings: PropTypes.object,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   return {
     user: state.user.user,
     currency: state.currencyData,

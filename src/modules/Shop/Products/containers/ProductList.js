@@ -1,10 +1,10 @@
-import ProductInfo from '../components/ProductInfo';
+
 import { connect } from 'react-redux';
 import { multilanguage } from 'redux-multilanguage';
+import ProductList from '../components/ProductList';
 import handlers from '../handlers';
 
 const mapStateToProps = (state, ownProps) => {
-
   return {
     currency: state.currencyData,
     cartItems: state.cart,
@@ -18,4 +18,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(multilanguage(ProductInfo));
+export default connect(mapStateToProps,mapDispatchToProps)(multilanguage(ProductList));

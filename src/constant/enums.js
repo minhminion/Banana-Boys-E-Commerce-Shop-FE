@@ -5,6 +5,11 @@ export const Gender = {
   Female: 1,
   Other: 2,
 };
+export const FilterOrder =
+{
+    Ascending: 1,
+    Descending: 2
+}
 
 export const MethodOfPayment = {
   COD: 0,
@@ -54,35 +59,43 @@ export const UserStatus = {
 export const ProductUnit = [
   {
     id: 1,
-    content: 'Each'
+    content: 'Trái',
+    type: 'Each'
   },
   {
     id: 2,
-    content: 'BundleOfTwo'
+    content: '2 Trái',
+    type: 'BundleOfTwo'
   },
   {
     id: 3,
-    content: 'BundleOfThree'
+    content: '3 Trái',
+    type: 'BundleOfThree'
   },
   {
     id: 4,
-    content: 'BundleOfFour'
+    content: '4 Trái',
+    type: 'BundleOfFour'
   },
   {
     id: 5,
-    content: 'BundleOfFive'
+    content: '5 Trái',
+    type: 'BundleOfFive'
   },
   {
     id: 6,
-    content: 'G'
+    content: 'G',
+    type: 'G'
   },
   {
     id: 7,
-    content: 'Kg'
+    content: 'Kg',
+    type: 'Kg'
   },
   {
     id: 8,
-    content: 'Pack'
+    content: 'Túi',
+    type: 'Pack'
   },
 ]
 

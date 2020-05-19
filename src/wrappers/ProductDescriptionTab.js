@@ -3,7 +3,7 @@ import React from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 
-const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
+const ProductDescriptionTab = ({ spaceBottomClass, product }) => {
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
@@ -27,10 +27,10 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 <div className="product-anotherinfo-wrapper">
                   <ul>
                     <li>
-                      <span>Weight</span> 400 g
+                      <span>Trọng lượng</span> 400 g / Quả
                     </li>
                     <li>
-                      <span>Dimensions</span>10 x 10 x 15 cm{" "}
+                      <span>Xuất xứ</span>{product.origin}{" "}
                     </li>
                     <li>
                       <span>Materials</span> 60% cotton, 40% polyester
@@ -43,7 +43,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {productFullDesc}
+                {product.description}
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
                 <div className="row">
@@ -179,7 +179,6 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
 };
 
 ProductDescriptionTab.propTypes = {
-  productFullDesc: PropTypes.string,
   spaceBottomClass: PropTypes.string
 };
 

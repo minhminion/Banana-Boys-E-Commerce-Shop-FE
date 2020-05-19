@@ -5,7 +5,7 @@ import { getDiscountPrice, defaultCurrency } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons"
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 const ProductGridSingle = ({
   product,
@@ -16,15 +16,16 @@ const ProductGridSingle = ({
   wishlistItem,
   sliderClassName,
   spaceBottomClass,
-  strings
+  strings,
 }) => {
+  console.log('======== Bao Minh: product', product)
   const [modalShow, setModalShow] = useState(false);
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+  // THIS GET DISCOUNT BY %
+  // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
+  const discountedPrice = product.salePrice;
   const finalProductPrice = +(product.price * currency.currencyRate);
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  );
+  const finalDiscountedPrice = +(discountedPrice * currency.currencyRate);
 
   return (
     <Fragment>
@@ -40,10 +41,10 @@ const ProductGridSingle = ({
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               <img
                 className="default-img"
-                src={process.env.PUBLIC_URL + product.image[0]}
+                src={`${process.env.PUBLIC_URL}${product.images ? product.images[0] : '/img/products/3.jpg'}`}
                 alt=""
               />
-              {product.image.length > 1 ? (
+              {product.images && product.images.length > 1 ? (
                 <img
                   className="hover-img"
                   src={process.env.PUBLIC_URL + product.image[1]}
@@ -77,11 +78,15 @@ const ProductGridSingle = ({
                   }
                   onClick={() => addToWishlist(product)}
                 >
-                  { wishlistItem ? <HeartFilled style={{color: '#DC143C'}} /> : <HeartOutlined /> }
+                  {wishlistItem ? (
+                    <HeartFilled style={{ color: "#DC143C" }} />
+                  ) : (
+                    <HeartOutlined />
+                  )}
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                {product.stock && product.stock > 0 ? (
+                {product.quantity && product.quantity > 0 ? (
                   <button
                     onClick={() => addToCart(product)}
                     className={
@@ -91,18 +96,18 @@ const ProductGridSingle = ({
                     }
                     disabled={cartItem !== undefined && cartItem.quantity > 0}
                     title={
-                      cartItem !== undefined ? "Added to cart" : "Add to cart"
+                      cartItem !== undefined ? "Added to cart" : strings['add_to_cart']
                     }
                   >
                     {" "}
                     <i className="pe-7s-cart"></i>{" "}
                     {cartItem !== undefined && cartItem.quantity > 0
-                      ? strings['added_to_cart']
-                      : strings['add_to_cart']}
+                      ? strings["added_to_cart"]
+                      : strings["add_to_cart"]}
                   </button>
                 ) : (
                   <button disabled className="active">
-                    {strings['out_of_stock']}
+                    {strings["out_of_stock"]}
                   </button>
                 )}
               </div>
@@ -124,7 +129,9 @@ const ProductGridSingle = ({
                 <Rating ratingValue={product.rating} />
               </div>
             ) : (
-              ""
+              <div className="pro-details-rating">
+                <Rating ratingValue={4} />
+              </div>
             )}
             <div className="product-price">
               {discountedPrice !== null ? (
@@ -168,7 +175,7 @@ ProductGridSingle.propTypes = {
   sliderClassName: PropTypes.string,
   spaceBottomClass: PropTypes.string,
   wishlistItem: PropTypes.object,
-  strings: PropTypes.object
+  strings: PropTypes.object,
 };
 
 export default multilanguage(ProductGridSingle);

@@ -1,26 +1,27 @@
-import createSagaMiddleware from "redux-saga";
-import { createBrowserHistory } from "history";
-import { createStore, compose, applyMiddleware } from "redux";
-import commonReducers from "./redux/reducers/common";
-import { MODULE_REDUCERS } from "../modules";
-import createSaga from "./middlewares/saga";
-import storage from "redux-persist/lib/storage";
-import sessionReducers from "./redux/reducers/session";
-import currencyReducers from "./redux/reducers/currency";
-import { getCookie } from "./utils/cookie";
-import { defaultState } from "../modules/LoginAndRegister/reducers";
-import { persistCombineReducers, persistStore } from "redux-persist";
-import { createMultilanguageReducer } from "redux-multilanguage";
+import createSagaMiddleware from 'redux-saga'
+import { createBrowserHistory } from 'history'
+import { createStore, compose, applyMiddleware } from 'redux'
+import commonReducers from './redux/reducers/common'
+import { MODULE_REDUCERS } from '../modules'
+import createSaga from './middlewares/saga'
+import storage from 'redux-persist/lib/storage'
+import sessionReducers from './redux/reducers/session'
+import currencyReducers from './redux/reducers/currency'
+import { getCookie } from './utils/cookie'
+import { defaultState } from '../modules/LoginAndRegister/reducers'
+import { persistCombineReducers, persistStore } from 'redux-persist'
+import { createMultilanguageReducer } from 'redux-multilanguage'
+import { loadingBarReducer } from 'react-redux-loading-bar'
 
 export const history = createBrowserHistory();
 
 const config = {
   key: "shop",
   storage,
-  blacklist: ["session", "compiler"],
-};
-const createMiddlewares = (sagaMiddleware) => {
-  const middlewares = [];
+  blacklist: ['session', 'compiler', 'loadingBar']
+}
+const createMiddlewares = sagaMiddleware => {
+  const middlewares = []
 
   // Saga Middleware
   if (sagaMiddleware) {
@@ -60,6 +61,7 @@ function mapCookieToStorage() {
 
 const createReducers = (reducers) => {
   return persistCombineReducers(config, {
+    loadingBar: loadingBarReducer,
     multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),
     common: commonReducers,
     session: sessionReducers,

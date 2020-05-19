@@ -1,16 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {
-  getIndividualCategories,
-  getIndividualTags,
-} from "../common/helpers/product";
 import ShopSearch from '../common/components/product/ShopSearch'
 import ShopCategories from "../common/components/product/ShopCategories";
 import ShopTag from "../common/components/product/ShopTag";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass }) => {
-  const uniqueCategories = getIndividualCategories(products);
-  const uniqueTags = getIndividualTags(products);
+const ShopSidebar = ({ getSortParams, sideSpaceClass, categories }) => {
 
   return (
     <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ""}`}>
@@ -19,12 +13,12 @@ const ShopSidebar = ({ products, getSortParams, sideSpaceClass }) => {
 
       {/* filter by categories */}
       <ShopCategories
-        categories={uniqueCategories}
+        categories={categories}
         getSortParams={getSortParams}
       />
 
       {/* filter by tag */}
-      <ShopTag tags={uniqueTags} getSortParams={getSortParams} />
+      {/* <ShopTag tags={uniqueTags} getSortParams={getSortParams} /> */}
     </div>
   );
 };

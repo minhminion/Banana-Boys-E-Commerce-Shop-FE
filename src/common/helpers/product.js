@@ -189,13 +189,13 @@ export const getIndividualSizes = product => {
 };
 
 export const setActiveSort = e => {
-  const filterButtons = document.querySelectorAll(
-    ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-  );
-  filterButtons.forEach(item => {
-    item.classList.remove("active");
-  });
-  e.currentTarget.classList.add("active");
+  // const filterButtons = document.querySelectorAll(
+  //   ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+  // );
+  // filterButtons.forEach(item => {
+  //   item.classList.remove("active");
+  // });
+  e.currentTarget.classList.toggle("active");
 };
 
 export const setActiveLayout = e => {

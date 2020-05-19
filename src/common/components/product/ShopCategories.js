@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 import { setActiveSort } from "../../helpers/product";
 
 const ShopCategories = ({ categories, getSortParams }) => {
+  const [categoriesFilter, setCategoriesFilter] = useState([]);
+
   return (
     <div className="sidebar-widget">
       <h4 className="pro-sidebar-title">Categories </h4>
@@ -12,8 +14,8 @@ const ShopCategories = ({ categories, getSortParams }) => {
             <li>
               <div className="sidebar-widget-list-left">
                 <button
-                  onClick={e => {
-                    getSortParams("category", "");
+                  onClick={(e) => {
+                    // setCategoriesFilter([]);
                     setActiveSort(e);
                   }}
                 >
@@ -26,13 +28,18 @@ const ShopCategories = ({ categories, getSortParams }) => {
                 <li key={key}>
                   <div className="sidebar-widget-list-left">
                     <button
-                      onClick={e => {
-                        getSortParams("category", category);
+                      onClick={(e) => {
+                        setCategoriesFilter((prev) => {
+                          const index = prev.indexOf(category.id)
+                          index > -1 && prev.splice(index, 1)
+                          return index > -1 ? prev : [ ...prev, category.id ]
+                        }
+                        )
                         setActiveSort(e);
                       }}
                     >
                       {" "}
-                      <span className="checkmark" /> {category}{" "}
+                      <span className="checkmark" /> {category.name}{" "}
                     </button>
                   </div>
                 </li>
@@ -49,7 +56,7 @@ const ShopCategories = ({ categories, getSortParams }) => {
 
 ShopCategories.propTypes = {
   categories: PropTypes.array,
-  getSortParams: PropTypes.func
+  getSortParams: PropTypes.func,
 };
 
 export default ShopCategories;
