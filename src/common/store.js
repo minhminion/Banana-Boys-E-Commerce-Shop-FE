@@ -18,7 +18,7 @@ export const history = createBrowserHistory();
 const config = {
   key: "shop",
   storage,
-  blacklist: ['session', 'compiler', 'loadingBar']
+  blacklist: ['session', 'compiler', 'loadingBar', 'user']
 }
 const createMiddlewares = sagaMiddleware => {
   const middlewares = []
@@ -38,20 +38,21 @@ function mapCookieToStorage() {
     initialState = {
       user: {
         user: user,
-        token: getCookie("token"),
-        userTypeId: user.user_type_id,
-      },
-    };
-    const storage = JSON.parse(window.localStorage.getItem("persist:root"));
-    const userStorage =
-      storage && storage.user ? JSON.parse(storage.user) : defaultState;
-    userStorage.token = getCookie("token");
-    userStorage.exp = getCookie("exp");
+        token: getCookie('token'),
+        userTypeId: user.user_type_id
+      }
+    }
+    // const storage = JSON.parse(window.localStorage.getItem('persist:root'))
+    // const userStorage = storage && storage.user
+    //   ? JSON.parse(storage.user)
+    //   : defaultState
+    // userStorage.token = getCookie('token')
+    // userStorage.exp = getCookie('exp')
 
-    userStorage.userTypeId = user.user_type_id;
-    userStorage.user = user;
-    storage.user = JSON.stringify(userStorage);
-    window.localStorage.setItem("persist:root", JSON.stringify(storage));
+    // userStorage.userTypeId = user.user_type_id
+    // userStorage.user = user
+    // storage.user = JSON.stringify(userStorage)
+    // window.localStorage.setItem('persist:shop', JSON.stringify(storage))
   } catch (err) {
     // console.log('err', err)
     initialState = undefined;
