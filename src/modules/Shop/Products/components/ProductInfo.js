@@ -21,16 +21,13 @@ const ProductInfo = ({
   const { id } = useParams();
 
   const [product, setProduct] = useState({});
-  console.log("======== Bao Minh: ProductInfo -> product", product);
 
   const fetchSingleProduct = async (productId) => {
     const response = await getSingleProduct(productId);
     setProduct(response.data.data);
-    console.log("======== Bao Minh: fetchSingleProduct -> response", response);
   };
 
   useEffect(() => {
-    console.log("RUn");
     fetchSingleProduct(id);
   },[id]);
 

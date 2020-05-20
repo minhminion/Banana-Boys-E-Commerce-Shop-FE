@@ -27,6 +27,7 @@ const ProductInfo = lazy(() =>
 const Routes = (props) => {
   const { store } = props;
   let { user } = store.getState();
+  console.log('======== Bao Minh: Routes -> user', user)
   user = user || {};
   /** If use is not exists => not login then show mot found page */
   // if (!user.user || !user.user.id) {

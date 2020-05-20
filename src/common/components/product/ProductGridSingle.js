@@ -18,7 +18,6 @@ const ProductGridSingle = ({
   spaceBottomClass,
   strings,
 }) => {
-  console.log('======== Bao Minh: product', product)
   const [modalShow, setModalShow] = useState(false);
 
   // THIS GET DISCOUNT BY %

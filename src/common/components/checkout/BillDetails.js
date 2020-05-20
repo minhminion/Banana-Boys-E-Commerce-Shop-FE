@@ -100,7 +100,7 @@ const BillDetails = ({
           onFinish={onFinish}
           initialValues={{
             email: user.email || '',
-            phone: user.phone || '',
+            phone: user.customer ? user.customer.phone : '',
             city: { label: 'Hồ Chí Minh' },
             district: { label: 'Quận 1' }
           }}
