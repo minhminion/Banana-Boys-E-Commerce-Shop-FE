@@ -37,12 +37,10 @@ const BillDetails = ({
 
   // ON SELECT DISTRICT IN FORM
   const onDistrictChange = (value) => {
-    // console.log('======== Bao Minh: onDistrictChange -> value', value)
   };
 
   const onFinish = (values) => {
     goNext()
-    console.log('======== Bao Minh: onFinish -> values', values)
   }
 
   // MESSAGE WHEN ERROR

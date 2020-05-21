@@ -31,6 +31,13 @@ const handlers = {
       token: action.payload,
     };
   },
+  [actions.setUserRefreshToken]: (state, action) => {
+    setCookie("refreshToken", action.payload);
+    return {
+      ...state,
+      refreshToken: action.payload,
+    };
+  },
   [actions.setUserTokenExp]: (state, action) => {
     setCookie("exp", action.payload);
     return {
