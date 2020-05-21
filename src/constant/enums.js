@@ -37,11 +37,11 @@ export const PriceCurrency = {
 };
 
 export const RoleNameEnum = {
-  Customer: 0,
-  Admin: 1,
+  Customer: 1,
   Shipper: 2,
-  StorageManager: 3,
-  Manager: 4,
+  Admin: 3,
+  StorageManager: 4,
+  Manager: 5,
 };
 
 export const ShipperStatus = {

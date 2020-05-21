@@ -38,8 +38,8 @@ function mapCookieToStorage() {
     initialState = {
       user: {
         user: user,
+        refreshToken: getCookie('refreshToken'),
         token: getCookie('token'),
-        userTypeId: user.user_type_id
       }
     }
     // const storage = JSON.parse(window.localStorage.getItem('persist:root'))

@@ -5,7 +5,7 @@ import { ENUMS } from "../../../constant";
 export default (dispatch, props) => ({
   getCategories: async (params) => {
     try {
-      const response = await fetchLoading({
+      const response = await fetchAuthLoading({
         url: ENDPOINTS.getCategories,
         method: 'GET',
         ...params
@@ -66,7 +66,6 @@ export default (dispatch, props) => ({
       })
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
       return { success: false, message: 'Server Error' }
     }
   },
@@ -78,7 +77,6 @@ export default (dispatch, props) => ({
       })
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
       return { success: false, message: 'Server Error' }
     }
   }

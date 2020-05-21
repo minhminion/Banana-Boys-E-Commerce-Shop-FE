@@ -1,7 +1,8 @@
 import { fetch, fetchLoading } from "../../common/effects";
 import { ENDPOINTS } from "./models";
-import { setUserToken, setUserTokenExp, setUserInformation } from "./actions";
+import { setUserToken, setUserTokenExp, setUserInformation, setUserRefreshToken } from "./actions";
 import { clearAll } from "../../common/redux/actions/common";
+import { ENUMS } from "../../constant";
 
 export default (dispatch, props) => ({
   loginAccount: async (userInfo) => {
@@ -11,11 +12,21 @@ export default (dispatch, props) => ({
         method: "POST",
         data: userInfo,
       });
-      console.log(result)
-      if (result.data && result.status === 200) {
+      console.log(result);
+      if (
+        result.data &&
+        result.status === 200 &&
+        result.data.user.roleId === ENUMS.RoleNameEnum.Customer
+      ) {
         dispatch(setUserToken(result.data.token));
+        dispatch(setUserRefreshToken(result.data.refreshToken));
         dispatch(setUserTokenExp(result.data.exp));
         dispatch(setUserInformation(result.data.user));
+      } else {
+        return {
+          success: false,
+          error: { errors: "Tài khoản không khả dụng" },
+        };
       }
     } catch (error) {
       if (error.response) {
@@ -40,6 +51,6 @@ export default (dispatch, props) => ({
     }
   },
   logoutAccount: () => {
-    dispatch(clearAll())
-  }
+    dispatch(clearAll());
+  },
 });

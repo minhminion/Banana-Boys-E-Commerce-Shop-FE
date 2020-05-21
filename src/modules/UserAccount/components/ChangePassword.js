@@ -14,7 +14,6 @@ const tailLayout = {
 
 const ChangePassword = () => {
   const onFinish = (values) => {
-    console.log("======== Bao Minh: onFinish -> values", values);
   };
 
   return (

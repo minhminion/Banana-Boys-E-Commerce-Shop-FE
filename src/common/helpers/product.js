@@ -1,6 +1,5 @@
 // get products
 export const getProducts = (products, category, type, limit) => {
-  console.log('======== Bao Minh: getProducts -> products', products)
   const finalProducts = category
     ? products.filter(
         product => product.category.filter(single => single === category)[0]

@@ -22,7 +22,7 @@ function Login(props) {
     const result = await loginAccount({ email, password });
     if (result) {
       const error = result.error;
-      checkError(error.error);
+      checkError(error.errors);
     } else {
       openNotificationWithIcon('success')
       history.push("/");

@@ -13,11 +13,12 @@ import {
 import {
   setUserToken,
   setUserTokenExp,
-  setUserInformation
-} from './../modules/LoginAndRegister/actions'
+  setUserInformation,
+  setUserRefreshToken,
+} from "./../modules/LoginAndRegister/actions";
 
-import storeAccessible from './utils/storeAccessible'
-import { MODULE_NAME as MODULE_USER } from '../modules/LoginAndRegister/models'
+import storeAccessible from "./utils/storeAccessible";
+import { MODULE_NAME as MODULE_USER } from "../modules/LoginAndRegister/models";
 
 export async function loading(fetchingProcess, done = undefined) {
   storeAccessible.dispatch(loadStart({ config: { key: "loading" } }));
@@ -127,6 +128,7 @@ export async function fetchAuthLoading({ url, headers, ...options }) {
 
     const { exp } = user;
     let token = user.token;
+    let refreshToken = user.refreshToken;
 
     if (moment.utc().unix() >= exp) {
       const result = await axios({
@@ -135,9 +137,16 @@ export async function fetchAuthLoading({ url, headers, ...options }) {
         url: ENDPOINTS.refreshToken,
         data: {
           token,
+          refreshToken,
         },
       });
-      const { user: newUser, exp: newExp, token: newToken } = result.data;
+      const {
+        user: newUser,
+        exp: newExp,
+        token: newToken,
+        refreshToken: newRefreshToken,
+      } = result.data;
+      storeAccessible.dispatch(setUserRefreshToken(newRefreshToken));
       storeAccessible.dispatch(setUserToken(newToken));
       storeAccessible.dispatch(setUserTokenExp(newExp));
       storeAccessible.dispatch(setUserInformation(newUser));
