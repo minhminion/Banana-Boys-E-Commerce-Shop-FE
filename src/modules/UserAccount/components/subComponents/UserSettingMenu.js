@@ -1,7 +1,7 @@
 import React from "react"
 import { Menu } from "antd"
 import { useLocation, useHistory } from "react-router"
-import { AppleOutlined, AreaChartOutlined, MessageOutlined } from '@ant-design/icons'
+import { HomeOutlined, UserOutlined, MessageOutlined, ProfileOutlined, LockOutlined } from '@ant-design/icons'
 
 
 const { SubMenu } = Menu
@@ -10,19 +10,22 @@ const SettingMenu = (strings) => ([
     {
       key: 'my_account',
       menuTitle: 'Tài khoản của tôi',
-      icon: <AreaChartOutlined />,
+      icon: <UserOutlined />,
       subMenus: [
         {
           key: 'profile',
           menuTitle: "Hồ sơ",
+          icon: <ProfileOutlined />
         },
         {
           key: 'address',
           menuTitle: "Địa chỉ",
+          icon: <HomeOutlined />
         },
         {
           key: 'change_password',
           menuTitle: "Đổi mật khẩu",
+          icon: <LockOutlined />
         },
       ]
     },
@@ -56,7 +59,7 @@ const SettingMenu = (strings) => ([
             key={menuItem.key}
             title={
               <>
-              {menuItem.icon || <AppleOutlined />}
+              {menuItem.icon }
               <span>
                 {menuItem.menuTitle}
               </span>
@@ -68,7 +71,7 @@ const SettingMenu = (strings) => ([
         )
       } 
       return (
-        <Menu.Item key={menuItem.key}>{menuItem.icon || <AppleOutlined />}<span>{menuItem.menuTitle}</span></Menu.Item>
+        <Menu.Item key={menuItem.key}>{menuItem.icon}<span>{menuItem.menuTitle}</span></Menu.Item>
       )
     }
   
