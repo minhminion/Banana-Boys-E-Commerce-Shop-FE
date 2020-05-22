@@ -13,8 +13,7 @@ const tailLayout = {
 };
 
 const ChangePassword = () => {
-  const onFinish = (values) => {
-  };
+  const onFinish = (values) => {};
 
   return (
     <div>
@@ -34,56 +33,54 @@ const ChangePassword = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Nhập mật khẩu củ của bạn" />
         </Form.Item>
         <Form.Item
           name="new_password"
           label="Mật khẩu mới"
-          hasFeedback
           rules={[
-            () => ({
-              validator(rule, value) {
-                if (value) {
-                  if (value.length > 8) {
-                    return Promise.resolve();
-                  } else {
-                    return Promise.reject("Mật khẩu phải dài hơn 8 ký tự");
-                  }
-								}
-								return Promise.reject("Vui lòng nhập mật khẩu mới");
-              },
-            }),
+            {
+              required: true,
+              message: "Vui lòng nhập mật khẩu!",
+            },
+            {
+              min: 8,
+              message: "Mật khẩu từ 8 ký tự trở lên",
+            },
           ]}
+          hasFeedback
         >
-          <Input.Password />
+          <Input.Password placeholder="Nhập mật khẩu mới của bạn" />
         </Form.Item>
 
         <Form.Item
-          name="confirm"
-          label="Xác nhận mật khẩu mới"
+          name="confirmPassword"
+          label="Xác nhận mật khẩu"
           dependencies={["new_password"]}
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Vui lòng xác nhận lại mật khẩu mới",
+              message: "Vui lòng xác nhận mật khẩu của bạn!",
             },
+
             ({ getFieldValue }) => ({
               validator(rule, value) {
                 if (!value || getFieldValue("new_password") === value) {
                   return Promise.resolve();
                 }
+
                 return Promise.reject(
-                  "Mật khẩu mới và mật khẩu xác nhận không khớp"
+                  "Hai mật khẩu mà bạn đã nhập không khớp!"
                 );
               },
             }),
           ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Xác nhận lại mật khẩu mới" />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button className="button" htmlType="submit">
+          <Button style={{ width: "95%" }} type="primary" htmlType="submit">
             Xác nhận
           </Button>
         </Form.Item>

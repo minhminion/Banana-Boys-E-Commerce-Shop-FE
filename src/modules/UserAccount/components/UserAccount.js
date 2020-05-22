@@ -10,6 +10,7 @@ import UserProfile from "./UserProfile";
 import Breadcrumb from "../../../wrappers/Breadcrumb";
 import ChangePassword from "./ChangePassword";
 import UserOrderList from "./UserOrderList";
+import AddressList from "./AddressList";
 
 const { Content, Sider } = Layout;
 
@@ -38,7 +39,7 @@ const UserAccount = ({ strings, location, user }) => {
             style={{ background: "none", borderRight: "1px solid #f0f0f0" }}
             width={200}
           >
-            <UserImage user={{ user }} />
+            <UserImage user={user} />
             <UserSettingMenu mode="inline" />
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
@@ -46,10 +47,8 @@ const UserAccount = ({ strings, location, user }) => {
               <Route path={process.env.PUBLIC_URL + "/user/profile"}>
                 <UserProfile user={user} />
               </Route>
-              <Route
-                path={process.env.PUBLIC_URL + "/user/address"}
-              >
-                <ChangePassword />
+              <Route path={process.env.PUBLIC_URL + "/user/address"}>
+                <AddressList />
               </Route>
               <Route
                 path={process.env.PUBLIC_URL + "/user/change_password"}
@@ -57,9 +56,7 @@ const UserAccount = ({ strings, location, user }) => {
               >
                 <ChangePassword />
               </Route>
-              <Route
-                path={process.env.PUBLIC_URL + "/user/orders"}
-              >
+              <Route path={process.env.PUBLIC_URL + "/user/orders"}>
                 <UserOrderList />
               </Route>
             </Switch>

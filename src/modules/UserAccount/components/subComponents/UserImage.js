@@ -6,7 +6,7 @@ const UserImage = ({ user }) => {
     return (
         <Space style={{ alignItems: 'baseline' }}>
             <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size={45}/>
-            <Typography.Title level={4}>{user.name || 'UserName'}</Typography.Title>
+            <Typography.Title level={4}>{user.customer.name || 'UserName'}</Typography.Title>
         </Space>
     )
 }
