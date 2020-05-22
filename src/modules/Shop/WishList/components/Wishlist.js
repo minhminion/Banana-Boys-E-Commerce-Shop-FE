@@ -11,6 +11,7 @@ import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import { HeartOutlined } from "@ant-design/icons";
 import { multilanguage } from "redux-multilanguage";
+import { useSelector } from "react-redux";
 
 const Wishlist = ({
   location,
@@ -23,6 +24,11 @@ const Wishlist = ({
   strings,
 }) => {
   const { pathname } = location;
+
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
+
   return (
     <Fragment>
       <MetaTags>
@@ -136,7 +142,7 @@ const Wishlist = ({
                                   {wishlistItem.quantity &&
                                   wishlistItem.quantity > 0 ? (
                                     <button
-                                      onClick={() => addToCart(wishlistItem, 1)}
+                                      onClick={() => addToCart(wishlistItem, 1, cartId)}
                                       className={
                                         cartItem !== undefined &&
                                         cartItem.quantity > 0

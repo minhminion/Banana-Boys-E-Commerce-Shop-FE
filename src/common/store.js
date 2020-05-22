@@ -18,7 +18,7 @@ export const history = createBrowserHistory();
 const config = {
   key: "shop",
   storage,
-  blacklist: ['session', 'compiler', 'loadingBar', 'user']
+  blacklist: ['session', 'compiler', 'loadingBar', 'user', 'cart']
 }
 const createMiddlewares = sagaMiddleware => {
   const middlewares = []

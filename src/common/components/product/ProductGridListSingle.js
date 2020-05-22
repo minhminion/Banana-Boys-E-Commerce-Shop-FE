@@ -7,8 +7,10 @@ import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
+import { useSelector } from "react-redux";
 
 const ProductGridListSingle = ({
+  cartId,
   product,
   currency,
   addToCart,
@@ -91,7 +93,7 @@ const ProductGridListSingle = ({
               <div className="pro-same-action pro-cart">
                 {product.quantity && product.quantity > 0 ? (
                   <button
-                    onClick={() => addToCart(product, 1)}
+                    onClick={() => addToCart(product, 1, cartId)}
                     className={
                       cartItem !== undefined && cartItem.quantity > 0
                         ? "active"
@@ -238,7 +240,7 @@ const ProductGridListSingle = ({
                   <div className="shop-list-btn btn-hover">
                     {product.quantity && product.quantity > 0 ? (
                       <button
-                        onClick={() => addToCart(product, 1)}
+                        onClick={() => addToCart(product, 1, cartId)}
                         className={
                           cartItem !== undefined && cartItem.quantity > 0
                             ? "active"

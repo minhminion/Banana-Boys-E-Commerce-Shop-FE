@@ -7,6 +7,8 @@ import { multilanguage } from "redux-multilanguage";
 const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
   let cartTotalPrice = 0;
 
+  const cartId = user && user.customer ? user.customer.cart.id : null
+
   return (
     <div className="shopping-cart-content">
       {cartData && cartData.length > 0 ? (
@@ -57,7 +59,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
                     </span>
                   </div>
                   <div className="shopping-cart-delete">
-                    <button onClick={() => deleteFromCart(single)}>
+                    <button onClick={() => deleteFromCart(single, cartId)}>
                       <i className="fa fa-times-circle" />
                     </button>
                   </div>

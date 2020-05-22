@@ -6,6 +6,7 @@ import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const ProductGridSingle = ({
   product,
@@ -19,6 +20,10 @@ const ProductGridSingle = ({
   strings,
 }) => {
   const [modalShow, setModalShow] = useState(false);
+
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
 
   // THIS GET DISCOUNT BY %
   // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
@@ -40,7 +45,9 @@ const ProductGridSingle = ({
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               <img
                 className="default-img"
-                src={`${process.env.PUBLIC_URL}${product.images ? product.images[0] : '/img/products/3.jpg'}`}
+                src={`${process.env.PUBLIC_URL}${
+                  product.images ? product.images[0] : "/img/products/3.jpg"
+                }`}
                 alt=""
               />
               {product.images && product.images.length > 1 ? (
@@ -87,7 +94,7 @@ const ProductGridSingle = ({
               <div className="pro-same-action pro-cart">
                 {product.quantity && product.quantity > 0 ? (
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => addToCart(product, 1, cartId)}
                     className={
                       cartItem !== undefined && cartItem.quantity > 0
                         ? "active"
@@ -95,7 +102,9 @@ const ProductGridSingle = ({
                     }
                     disabled={cartItem !== undefined && cartItem.quantity > 0}
                     title={
-                      cartItem !== undefined ? "Added to cart" : strings['add_to_cart']
+                      cartItem !== undefined
+                        ? "Added to cart"
+                        : strings["add_to_cart"]
                     }
                   >
                     {" "}
