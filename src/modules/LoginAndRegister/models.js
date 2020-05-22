@@ -4,6 +4,7 @@ export const MODULE_NAME = "user";
 export const ENDPOINTS = {
   registerAccount: `${DEFAULT_URL}/register`,
   loginAccount: `${DEFAULT_URL}/login`,
+  cartDetails: `${DEFAULT_URL}/cartDetails`,
 };
 
 export const LIMIT = 20;

@@ -1,4 +1,4 @@
-import { fetch, fetchLoading } from "../../common/effects";
+import { fetch, fetchLoading, fetchAuthLoading } from "../../common/effects";
 import { ENDPOINTS } from "./models";
 import { setUserToken, setUserTokenExp, setUserInformation, setUserRefreshToken } from "./actions";
 import { clearAll } from "../../common/redux/actions/common";
@@ -12,10 +12,9 @@ export default (dispatch, props) => ({
         method: "POST",
         data: userInfo,
       });
-      console.log(result);
       if (
         result.data &&
-        result.status === 200 &&
+        result.status === ENUMS.httpStatus.OK &&
         result.data.user.roleId === ENUMS.RoleNameEnum.Customer
       ) {
         dispatch(setUserToken(result.data.token));

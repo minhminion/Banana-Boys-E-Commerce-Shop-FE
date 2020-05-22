@@ -2,7 +2,7 @@ import { notification } from "antd";
 
 const checkError = (error) => {
   notification.config({
-    placement: "topRight",
+    placement: "bottomLeft",
   });
   try {
     switch (typeof error) {

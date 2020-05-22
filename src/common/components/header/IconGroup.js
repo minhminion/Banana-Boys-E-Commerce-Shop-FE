@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import cartHandlers from "../../../modules/Shop/Cart/handlers";
 import userHandlers from "../../../modules/LoginAndRegister/handlers"
@@ -17,6 +17,7 @@ const IconGroup = ({
   user,
   signOut,
 }) => {
+
   const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
@@ -99,8 +100,9 @@ const IconGroup = ({
       </div>
       <div
         className="same-style cart-wrap d-none d-lg-block"
-        onMouseEnter={(e) => handleCart(e)}
-        onMouseLeave={(e) => handleCart(e)}
+        onClick={(e) => handleCart(e)}
+        // onBlur={(e) => handleCart(e)}
+        // onMouseLeave={(e) => handleCart(e)}
       >
         <button className="icon-cart">
           <i className="pe-7s-shopbag" />
@@ -160,8 +162,8 @@ const mapDispatchToProps = (dispatch, props) => {
     signOut: () => {
       userHandlers(dispatch, props).logoutAccount();
     },
-    deleteFromCart: (item) => {
-      cartHandlers(dispatch, props).deleteFromCart(item);
+    deleteFromCart: (item, cartId) => {
+      cartHandlers(dispatch, props).deleteFromCart(item, cartId);
     },
   };
 };

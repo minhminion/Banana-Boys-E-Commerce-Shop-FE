@@ -4,7 +4,7 @@ import Swiper from "react-id-swiper";
 import { getProductCartQuantity, defaultCurrency } from "../../helpers/product";
 import { Modal } from "react-bootstrap";
 import Rating from "./sub-components/ProductRating";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { multilanguage } from "redux-multilanguage";
@@ -21,6 +21,10 @@ function ProductModal({
   ...props
 }) {
 
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
+
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
   const [productQuantity, setProductQuantity] = useState(product.quantity);
@@ -28,7 +32,7 @@ function ProductModal({
 
   const addToCart = () => {
     setQuantityCount(1);
-    addtocart(product, quantityCount);
+    addtocart(product, quantityCount, cartId);
   };
   const addToWishlist = props.addtowishlist;
 
@@ -217,7 +221,7 @@ function ProductModal({
                   <div className="pro-details-cart btn-hover">
                     {productQuantity && productQuantity > 0 ? (
                       <button
-                        onClick={() => addToCart(product, quantityCount)}
+                        onClick={() => addToCart(product, quantityCount, cartId)}
                         disabled={productCartQty >= productQuantity}
                       >
                         {productCartQty >= productQuantity

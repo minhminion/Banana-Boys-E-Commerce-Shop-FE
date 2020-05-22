@@ -14,6 +14,7 @@ const handlers = {
   [clearAll]: (state, action) => {
     setCookie('user', '')
     setCookie('token', '')
+    setCookie('refreshToken', '')
     setCookie('exp', '')
     return { ...defaultState };
   },

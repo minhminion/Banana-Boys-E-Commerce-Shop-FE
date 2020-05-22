@@ -10,6 +10,7 @@ import {
 import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import { Col, Row } from "antd";
+import { useSelector } from "react-redux";
 
 const Cart = ({
   location,
@@ -25,6 +26,10 @@ const Cart = ({
   const [quantityCount] = useState(1);
   const { pathname } = location;
   let cartTotalPrice = 0;
+
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
 
   return (
     <Fragment>
@@ -139,7 +144,7 @@ const Cart = ({
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                      onClick={() => decreaseQuantity(cartItem)}
+                                      onClick={() => decreaseQuantity(cartItem, cartId)}
                                     >
                                       -
                                     </button>
@@ -152,7 +157,7 @@ const Cart = ({
                                     <button
                                       className="inc qtybutton"
                                       onClick={() =>
-                                        addToCart(cartItem, quantityCount)
+                                        addToCart(cartItem, quantityCount, cartId)
                                       }
                                       disabled={
                                         cartItem !== undefined &&
@@ -179,7 +184,7 @@ const Cart = ({
 
                                 <td className="product-remove">
                                   <button
-                                    onClick={() => deleteFromCart(cartItem)}
+                                    onClick={() => deleteFromCart(cartItem, cartId)}
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>
@@ -201,7 +206,7 @@ const Cart = ({
                         </Link>
                       </div>
                       <div className="cart-clear">
-                        <button onClick={() => deleteAllFromCart()}>
+                        <button onClick={() => deleteAllFromCart(cartId)}>
                           {strings["clear_shopping_cart"]}
                         </button>
                       </div>

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import wishListHandler from '../modules/Shop/WishList/handlers'
 import cartHandler from '../modules/Shop/Cart/handlers'
 import ProductGridListSingle from "../common/components/product/ProductGridListSingle";
@@ -15,11 +15,17 @@ const ProductGrid = ({
   sliderClassName,
   spaceBottomClass,
 }) => {
+
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
+
   return (
     <Fragment>
       {products.slice(0,9).map(product => {
         return (
           <ProductGridListSingle
+            cartId={cartId}
             sliderClassName={sliderClassName}
             spaceBottomClass={spaceBottomClass}
             product={product}
@@ -63,8 +69,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    addToCart: (item, quantityCount) => {
-      cartHandler(dispatch, props).addToCart(item, quantityCount)
+    addToCart: (item, quantityCount, cartId) => {
+      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId)
     },
     addToWishlist: (item) => {
       wishListHandler(dispatch, props).addToWishList(item)

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getProductCartQuantity,
   defaultCurrency,
@@ -27,22 +27,26 @@ const ProductDescriptionInfo = ({
   addToWishlist,
   getSingleCategory,
 }) => {
+  const cartId = useSelector((state) =>
+    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+  );
+
   const [quantityCount, setQuantityCount] = useState(1);
   const [productStock, setProductStock] = useState(product.quantity);
-  const [category, setCategory] = useState({})
+  const [category, setCategory] = useState({});
 
   const productCartQty = getProductCartQuantity(cartItems, product);
 
   const fetchSingleCategory = async (categoryId) => {
-    const response = await getSingleCategory(categoryId)
-    if(response && response.status === ENUMS.httpStatus.OK) {
-      setCategory(response.data.data)
+    const response = await getSingleCategory(categoryId);
+    if (response && response.status === ENUMS.httpStatus.OK) {
+      setCategory(response.data.data);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchSingleCategory(product.categoryId)
-  },[product])
+    fetchSingleCategory(product.categoryId);
+  }, [product]);
 
   return (
     <div className="product-details-content ml-70">
@@ -54,11 +58,12 @@ const ProductDescriptionInfo = ({
               {defaultCurrency(currency, finalProductPrice)}
             </span>
             <span>
-            {`${defaultCurrency(currency, finalDiscountedPrice)} / ${
-              ENUMS.ProductUnit.find((item) => item.id === product.productUnit)
-                .content
-            }`}
-          </span>
+              {`${defaultCurrency(currency, finalDiscountedPrice)} / ${
+                ENUMS.ProductUnit.find(
+                  (item) => item.id === product.productUnit
+                ).content
+              }`}
+            </span>
           </Fragment>
         ) : (
           <span>
@@ -117,12 +122,12 @@ const ProductDescriptionInfo = ({
         <div className="pro-details-cart btn-hover">
           {productStock && productStock > 0 ? (
             <button
-              onClick={() => addToCart(product, quantityCount)}
+              onClick={() => addToCart(product, quantityCount, cartId)}
               disabled={productCartQty >= productStock}
             >
               {productCartQty >= productStock
-              ? "Out of Stock"
-              : strings['add_to_cart']}
+                ? "Out of Stock"
+                : strings["add_to_cart"]}
             </button>
           ) : (
             <button disabled>Out of Stock</button>
@@ -149,7 +154,7 @@ const ProductDescriptionInfo = ({
       {product.categoryId ? (
         <div className="pro-details-meta">
           <span>Categories :</span>
-          <ul>{category ? category.name : 'Không có loại'}</ul>
+          <ul>{category ? category.name : "Không có loại"}</ul>
         </div>
       ) : (
         ""
@@ -220,14 +225,18 @@ ProductDescriptionInfo.propTypes = {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    addToCart: (item, quantityCount) => {
-      cartHandler(dispatch, props).addToCart(item, quantityCount);
+    addToCart: (item, quantityCount, cartId) => {
+      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId);
     },
     addToWishlist: (item) => {
       wishListHandler(dispatch, props).addToWishList(item);
     },
-    getSingleCategory: (categoryId) => handlers(dispatch, props).getSingleCategory(categoryId)
+    getSingleCategory: (categoryId) =>
+      handlers(dispatch, props).getSingleCategory(categoryId),
   };
 };
 
-export default connect(null, mapDispatchToProps)(multilanguage(ProductDescriptionInfo));
+export default connect(
+  null,
+  mapDispatchToProps
+)(multilanguage(ProductDescriptionInfo));
