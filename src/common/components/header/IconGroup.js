@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import cartHandlers from "../../../modules/Shop/Cart/handlers";
-import userHandlers from "../../../modules/LoginAndRegister/handlers"
+import userHandlers from "../../../modules/LoginAndRegister/handlers";
 import { multilanguage } from "redux-multilanguage";
 
 const IconGroup = ({
@@ -17,7 +17,6 @@ const IconGroup = ({
   user,
   signOut,
 }) => {
-
   const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
@@ -100,11 +99,8 @@ const IconGroup = ({
       </div>
       <div
         className="same-style cart-wrap d-none d-lg-block"
-        onClick={(e) => handleCart(e)}
-        // onBlur={(e) => handleCart(e)}
-        // onMouseLeave={(e) => handleCart(e)}
       >
-        <button className="icon-cart">
+        <button className="icon-cart" onClick={(e) => handleCart(e)}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
             {cartData && cartData.length ? cartData.length : 0}
