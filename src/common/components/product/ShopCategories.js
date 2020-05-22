@@ -1,9 +1,13 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setActiveSort } from "../../helpers/product";
 
 const ShopCategories = ({ categories, getSortParams }) => {
   const [categoriesFilter, setCategoriesFilter] = useState([]);
+
+  useEffect(() => {
+    getSortParams(categoriesFilter)
+  }, [categoriesFilter])
 
   return (
     <div className="sidebar-widget">
@@ -15,7 +19,7 @@ const ShopCategories = ({ categories, getSortParams }) => {
               <div className="sidebar-widget-list-left">
                 <button
                   onClick={(e) => {
-                    // setCategoriesFilter([]);
+                    setCategoriesFilter([]);
                     setActiveSort(e);
                   }}
                 >
@@ -29,12 +33,14 @@ const ShopCategories = ({ categories, getSortParams }) => {
                   <div className="sidebar-widget-list-left">
                     <button
                       onClick={(e) => {
-                        setCategoriesFilter((prev) => {
-                          const index = prev.indexOf(category.id)
-                          index > -1 && prev.splice(index, 1)
-                          return index > -1 ? prev : [ ...prev, category.id ]
-                        }
-                        )
+                        // FIlter categories with Array 
+                        // setCategoriesFilter((prev) => {
+                        //   const index = prev.indexOf(category.id)
+                        //   index > -1 && prev.splice(index, 1)
+                        //   return index > -1 ? prev : [ ...prev, category.id ]
+                        // }
+                        // )
+                        setCategoriesFilter([category.id])
                         setActiveSort(e);
                       }}
                     >

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import MetaTags from "react-meta-tags";
 import Paginator from "react-hooks-paginator";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -26,6 +26,7 @@ const SingleProduct = ({
     total: 1,
     offset: 0,
   });
+  const [params, setParams] = useState({})
   const pageSize = 9
 
   const { pathname } = location;
@@ -39,29 +40,38 @@ const SingleProduct = ({
   }, [getCategories]);
 
   const fetchAllProducts = async (pageNumber, params) => {
+    console.log("run Fetch Product")
     const response = await getAllProducts(pageNumber, { ...params, pageSize });
     if (response && response.data) {
       setProducts(response.data);
-      setPagination({
-        current: response.pageNumber,
+      setPagination((prev) => ({
+        ...prev,
         pageSize: response.pageSize,
         total: response.pageSize * response.totalPage,
-      });
+      }));
     }
   };
 
   useEffect(() => {
-    fetchAllProducts();
-  }, []);
+    fetchAllProducts(pagination.current, params);
+    return () => null
+  }, [pagination.current, params]);
 
   const getLayout = (layout) => {
     setLayout(layout);
   };
 
-  // const getSortParams = (sortType, sortValue) => {
-  //   setSortType(sortType);
-  //   setSortValue(sortValue);
-  // }
+  const getSortParams = (sortValue) => {
+    let params
+    setParams((prev) => {
+      params = {
+        ...prev,
+        CategoryIds: sortValue[0]
+      }
+      return params
+    })
+    // fetchAllProducts(1, params)
+  }
 
   // const getFilterSortParams = (sortType, sortValue) => {
   //   setFilterSortType(sortType);
@@ -69,7 +79,10 @@ const SingleProduct = ({
   // }
 
   const handlePagination = (value) => {
-    fetchAllProducts(value)
+    setPagination(prev => ({
+      ...prev,
+      current: value
+    }))
     animateScroll.scrollTo(200)
   }
 
@@ -98,7 +111,7 @@ const SingleProduct = ({
                 <ShopSidebar
                   categories={categories}
                   sideSpaceClass="mr-30"
-                  // getSortParams={getSortParams}
+                  getSortParams={getSortParams}
                 />
               </div>
               <div className="col-lg-9 order-1 order-lg-2">

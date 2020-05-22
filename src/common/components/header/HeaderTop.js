@@ -30,7 +30,7 @@ const HeaderTop = ({
         <p>
           {strings['free_delivery']}{" "}
           <span>  
-            {defaultCurrency(currency, 10 * currency.currencyRate)}
+            {defaultCurrency(currency, 200000 * currency.currencyRate)}
           </span>
         </p>
       </div>
