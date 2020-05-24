@@ -4,7 +4,7 @@ import { UserOutlined } from '@ant-design/icons'
 
 const UserImage = ({ user }) => {
     return (
-        <Space style={{ alignItems: 'baseline' }}>
+        <Space style={{ alignItems: 'baseline', marginBottom: 30 }}>
             <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size={45}/>
             <Typography.Title level={4}>{user.customer.name || 'UserName'}</Typography.Title>
         </Space>
