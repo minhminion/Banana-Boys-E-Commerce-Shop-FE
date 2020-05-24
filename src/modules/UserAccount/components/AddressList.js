@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import {
-  Form,
   Input,
   Col,
   Row,
@@ -9,126 +8,85 @@ import {
   Button,
   Typography,
   Divider,
+  List,
+  Empty,
+  Pagination,
 } from "antd";
-import { cities, allDistricts } from "./../../../constant/address";
-const { Option } = Select;
+import AddressSingleItem from "./subComponents/AddressSingleItem";
+import { ENUMS } from "../../../constant";
 const { Title, Text } = Typography;
-const tailLayout = {
-  wrapperCol: { offset: 4, span: 20 },
-};
-const AddressList = ({ cartItems, user, goNext }) => {
-  const [districts, setDistricts] = useState(null);
-  const [form] = Form.useForm();
+const { Search } = Input;
 
-  useEffect(() => {
-    const cityCode = cities.find((city) => city.name === "Hồ Chí Minh").code;
-    setDistricts(
-      allDistricts.filter((district) => district.parent_code === cityCode)
-    );
-  }, []);
+const AddressList = ({ cartItems, user, getAllUserAddress }) => {
+  const history = useHistory();
+  const location = useLocation();
 
-  const handleCityChange = (value) => {
-    const districts = allDistricts.filter(
-      (district) => district.parent_code === value.key
-    );
-    setDistricts(districts);
-    form.setFieldsValue({ district: { label: districts[0].name } });
-  };
+  const [addresses, setAddresses] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalAddress, setTotalAddress] = useState(1)
 
-  const onDistrictChange = (value) => {};
+  const pageSize = 4
 
-  const onFinish = (values) => {
-    goNext();
-  };
+  const fetchUserAddresses =  async (pageNumber, params) => {
+    const result = await getAllUserAddress(pageNumber, {...params, pageSize})
+    if(result && result.status === ENUMS.httpStatus.OK) {
+      setAddresses(result.data.data)
+      setTotalAddress(result.data.totalPage * pageSize)
+    }
+  }
+
+  useEffect(() =>{
+    fetchUserAddresses(currentPage)
+  },[currentPage])
+
+  const handleOnPagination = (value) => {
+    setCurrentPage(value)
+  }
 
   return (
     <div className="billing-info-wrap">
       <Title level={3}>Thêm địa chỉ</Title>
       <Text>Để bảo đảm các đơn hàng được giao đến đúng địa chỉ của bạn.</Text>
       <Divider />
-      <Form
-        size="middle"
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        initialValues={{
-          city: { label: "Hồ Chí Minh" },
-          district: { label: "Quận 1" },
-        }}
-      >
-        <Row gutter={25}>
-          <Col span={12}>
-            <Form.Item
-              label="Thành phố"
-              name="city"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                labelInValue
-                showSearch
-                placeholder="Select a city"
-                optionFilterProp="children"
-                onSelect={handleCityChange}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                {cities &&
-                  cities.map((cities) => (
-                    <Option key={cities.code}>{cities.name}</Option>
-                  ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Quận/ Huyện"
-              name="district"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                labelInValue
-                placeholder="Select a district"
-                disabled={!districts}
-                onChange={onDistrictChange}
-              >
-                {districts &&
-                  districts.map((district) => (
-                    <Option
-                      key={district.code}
-                    >{`Quận ${district.name}`}</Option>
-                  ))}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item
-          label="Địa chỉ nhà"
-          name="streetAddress"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập địa chỉ nhà của bạn!",
-            },
-          ]}
-        >
-          <Input placeholder="Nhập địa chỉ nhà" />
-        </Form.Item>
-        <Form.Item {...tailLayout}>
-          <Button style={{ width: "70%" }} type="primary" htmlType="submit">
-            Xác nhận
+      <Row style={{ marginBottom: 30 }} gutter={20}>
+        <Col span={20}>
+          <Search
+            size="large"
+            placeholder="Tìm kiếm theo ID đơn hàng hoặc Tên Sản phẩm"
+            onSearch={(value) => console.log(value)}
+          />
+        </Col>
+        <Col span={4}>
+          <Button
+            size="large"
+            type="primary"
+            onClick={() => history.push(location.pathname + "/add")}
+          >
+            Thêm địa chỉ
           </Button>
-        </Form.Item>
-      </Form>
+        </Col>
+      </Row>
+      {addresses && addresses.length ? (
+        <List
+          itemLayout="horizontal"
+          dataSource={addresses}
+          renderItem={(address) => (
+            <List.Item
+              style={{
+                border: "1px solid #d9d9d9",
+                borderRadius: 10,
+                padding: "20px 30px",
+                marginBottom: 20,
+              }}
+            >
+              <AddressSingleItem address={address} />
+            </List.Item>
+          )}
+        />
+      ) : (
+        <Empty style={{ margin: "150px auto" }} description={false} />
+      )}
+      <Pagination defaultCurrent={currentPage} pageSize={pageSize} total={totalAddress} onChange={handleOnPagination}/>
     </div>
   );
 };

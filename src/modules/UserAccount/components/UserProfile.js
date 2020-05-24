@@ -15,7 +15,6 @@ import {
   DatePicker,
 } from "antd";
 import { UserOutlined, UploadOutlined } from "@ant-design/icons";
-import { ENUMS } from "../../../constant";
 
 const { Title, Text } = Typography;
 

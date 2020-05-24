@@ -10,7 +10,9 @@ import UserProfile from "./UserProfile";
 import Breadcrumb from "../../../wrappers/Breadcrumb";
 import ChangePassword from "./ChangePassword";
 import UserOrderList from "./UserOrderList";
-import AddressList from "./AddressList";
+import AddAddress from "../containers/AddAddress";
+import AddressList from "../containers/AddressList";
+import EditAddress from "../containers/EditAddress";
 
 const { Content, Sider } = Layout;
 
@@ -47,8 +49,14 @@ const UserAccount = ({ strings, location, user }) => {
               <Route path={process.env.PUBLIC_URL + "/user/profile"}>
                 <UserProfile user={user} />
               </Route>
-              <Route path={process.env.PUBLIC_URL + "/user/address"}>
+              <Route exact path={process.env.PUBLIC_URL + "/user/address"}>
                 <AddressList />
+              </Route>
+              <Route exact path={process.env.PUBLIC_URL + "/user/address/add"}>
+                <AddAddress />
+              </Route>
+              <Route path={process.env.PUBLIC_URL + "/user/address/:addressId"}>
+                <EditAddress />
               </Route>
               <Route
                 path={process.env.PUBLIC_URL + "/user/change_password"}
