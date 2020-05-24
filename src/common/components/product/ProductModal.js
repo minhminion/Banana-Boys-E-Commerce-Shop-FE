@@ -8,6 +8,7 @@ import { connect, useSelector } from "react-redux";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { multilanguage } from "redux-multilanguage";
+import { DEFAULT_IMG_URL } from "../../configs";
 
 function ProductModal({
   product,
@@ -98,13 +99,15 @@ function ProductModal({
             <div className="col-md-5 col-sm-12 col-xs-12">
               <div className="product-large-image-wrapper">
                 <Swiper {...gallerySwiperParams}>
-                  {product.images ? (
-                    product.images.map((single, key) => {
+                  {product.productImages && product.productImages.length ? (
+                    product.productImages.map((single, key) => {
                       return (
                         <div key={key}>
                           <div className="single-image">
                             <img
-                              src={process.env.PUBLIC_URL + single}
+                              src={single && single.imgLocation
+                                ? DEFAULT_IMG_URL + single.imgLocation.replace("\\", "/")
+                                : process.env.PUBLIC_URL + "/img/products/3.jpg"}
                               className="img-fluid"
                               alt=""
                             />
@@ -127,20 +130,22 @@ function ProductModal({
               </div>
               <div className="product-small-image-wrapper mt-15">
                 <Swiper {...thumbnailSwiperParams}>
-                  {product.images &&
-                    product.images.map((single, key) => {
+                {product.productImages && product.productImages.length ? (
+                    product.productImages.map((single, key) => {
                       return (
                         <div key={key}>
                           <div className="single-image">
                             <img
-                              src={process.env.PUBLIC_URL + single}
+                              src={single && single.imgLocation
+                                ? DEFAULT_IMG_URL + single.imgLocation.replace("\\", "/")
+                                : process.env.PUBLIC_URL + "/img/products/3.jpg"}
                               className="img-fluid"
                               alt=""
                             />
                           </div>
                         </div>
-                      );
-                    })}
+                      )
+                    })) : null }
                 </Swiper>
               </div>
             </div>

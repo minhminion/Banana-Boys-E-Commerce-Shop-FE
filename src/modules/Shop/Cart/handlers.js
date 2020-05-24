@@ -53,6 +53,8 @@ export default (dispatch, props) => ({
             addToCard({
               isLogin: true,
               cartItemId: response.data.data.id,
+              // ...item,
+              // if Response return product Images
               ...response.data.data.product,
               quantity: response.data.data.quantity,
             })

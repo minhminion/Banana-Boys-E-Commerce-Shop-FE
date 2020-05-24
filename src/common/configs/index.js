@@ -1,4 +1,5 @@
 export const DEFAULT_URL = 'https://localhost:5001/api/v1'
+export const DEFAULT_IMG_URL = 'https://localhost:5001'
 export const FRONT_PAGE_URL = 'http://localhost:3001'
 export const firebaseConfig = {
     apiKey: "AIzaSyBZgXR-zV-8U1QREdDZw4h1-yrlxbPAaTI",

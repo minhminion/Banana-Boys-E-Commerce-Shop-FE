@@ -7,6 +7,7 @@ import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { DEFAULT_IMG_URL } from "../../configs";
 
 const ProductGridSingle = ({
   product,
@@ -22,7 +23,9 @@ const ProductGridSingle = ({
   const [modalShow, setModalShow] = useState(false);
 
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
 
   // THIS GET DISCOUNT BY %
@@ -45,9 +48,12 @@ const ProductGridSingle = ({
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               <img
                 className="default-img"
-                src={`${process.env.PUBLIC_URL}${
-                  product.images ? product.images[0] : "/img/products/3.jpg"
-                }`}
+                src={
+                  product.productImages && product.productImages.length
+                    ? DEFAULT_IMG_URL +
+                      product.productImages[0].imgLocation.replace("\\", "/")
+                    : process.env.PUBLIC_URL + "/img/products/3.jpg"
+                }
                 alt=""
               />
               {product.images && product.images.length > 1 ? (
