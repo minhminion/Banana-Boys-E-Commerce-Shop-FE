@@ -11,6 +11,7 @@ import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import { Col, Row } from "antd";
 import { useSelector } from "react-redux";
+import { DEFAULT_IMG_URL } from "../../../../common/configs";
 
 const Cart = ({
   location,
@@ -66,6 +67,7 @@ const Cart = ({
                         </thead>
                         <tbody>
                           {cartItems.map((cartItem, key) => {
+                          console.log('======== Bao Minh: cartItem', cartItem)
                             const discountedPrice = getDiscountPrice(
                               cartItem.price,
                               cartItem.discount
@@ -92,11 +94,9 @@ const Cart = ({
                                   >
                                     <img
                                       className="img-fluid"
-                                      src={`${process.env.PUBLIC_URL}${
-                                        cartItem.image
-                                          ? cartItem.image[0]
-                                          : "img/products/3.jpg"
-                                      } `}
+                                      src={cartItem.productImages && cartItem.productImages.length
+                                        ? DEFAULT_IMG_URL + cartItem.productImages[0].imgLocation.replace("\\", "/")
+                                        : process.env.PUBLIC_URL + "/img/products/3.jpg"}
                                       alt=""
                                     />
                                   </Link>

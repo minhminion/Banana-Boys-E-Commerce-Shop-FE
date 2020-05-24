@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { defaultCurrency } from "../../../helpers/product";
 import { multilanguage } from "redux-multilanguage";
+import { DEFAULT_IMG_URL } from "../../../configs";
 
 const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
   let cartTotalPrice = 0;
@@ -15,6 +16,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
         <Fragment>
           <ul>
             {cartData.map((single, key) => {
+            console.log('======== Bao Minh: MenuCart -> single', single)
               // const discountedPrice = getDiscountPrice(
               //   single.price,
               //   single.discount
@@ -37,7 +39,9 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
                     <Link to={process.env.PUBLIC_URL + "/product/" + single.id}>
                       <img
                         alt=""
-                        src={`${process.env.PUBLIC_URL}${single.image ? single.image[0] : '/img/products/3.jpg'} `}
+                        src={single.productImages && single.productImages.length
+                          ? DEFAULT_IMG_URL + single.productImages[0].imgLocation.replace("\\", "/")
+                          : process.env.PUBLIC_URL + "/img/products/3.jpg"}
                         className="img-fluid"
                       />
                     </Link>

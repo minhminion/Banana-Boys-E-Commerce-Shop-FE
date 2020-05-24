@@ -8,6 +8,7 @@ import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { useSelector } from "react-redux";
+import { DEFAULT_URL, DEFAULT_IMG_URL } from "../../configs";
 
 const ProductGridListSingle = ({
   cartId,
@@ -45,7 +46,11 @@ const ProductGridListSingle = ({
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               <img
                 className="default-img"
-                src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                src={
+                  product.productImages && product.productImages.length
+                    ? DEFAULT_IMG_URL + product.productImages[0].imgLocation.replace("\\", "/")
+                    : process.env.PUBLIC_URL + "/img/products/3.jpg"
+                }
                 alt=""
               />
               {product.images && product.images.length > 1 ? (
@@ -101,7 +106,9 @@ const ProductGridListSingle = ({
                     }
                     disabled={cartItem !== undefined && cartItem.quantity > 0}
                     title={
-                      cartItem !== undefined ? "Added to cart" : strings['add_to_cart']
+                      cartItem !== undefined
+                        ? "Added to cart"
+                        : strings["add_to_cart"]
                     }
                   >
                     {" "}
@@ -252,7 +259,7 @@ const ProductGridListSingle = ({
                         title={
                           cartItem !== undefined
                             ? "Added to cart"
-                            : strings['add_to_cart']
+                            : strings["add_to_cart"]
                         }
                       >
                         {" "}
