@@ -131,7 +131,7 @@ export async function fetchAuthLoading({ url, headers, ...options }) {
     let refreshToken = user.refreshToken;
 
     // Check exp to reduce refresh token 
-    if (moment.utc().unix() >= exp) {
+    if (moment.utc().unix() >= moment(exp)) {
       const result = await axios({
         method: "post",
         timeout: TIMEOUT,

@@ -38,6 +38,7 @@ function mapCookieToStorage() {
     initialState = {
       user: {
         user: user,
+        exp: getCookie('exp'),
         refreshToken: getCookie('refreshToken'),
         token: getCookie('token'),
       }
