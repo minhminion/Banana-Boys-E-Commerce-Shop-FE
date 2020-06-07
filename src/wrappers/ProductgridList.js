@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect, useSelector } from "react-redux";
-import wishListHandler from '../modules/Shop/WishList/handlers'
-import cartHandler from '../modules/Shop/Cart/handlers'
+import wishListHandler from "../modules/Shop/WishList/handlers";
+import cartHandler from "../modules/Shop/Cart/handlers";
 import ProductGridListSingle from "../common/components/product/ProductGridListSingle";
 
 const ProductGrid = ({
@@ -15,16 +15,18 @@ const ProductGrid = ({
   sliderClassName,
   spaceBottomClass,
 }) => {
-
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
 
   return (
     <Fragment>
-      {products.slice(0,9).map(product => {
+      {products.slice(0, 9).map((product) => {
         return (
           <ProductGridListSingle
+            key={product.id}
             cartId={cartId}
             sliderClassName={sliderClassName}
             spaceBottomClass={spaceBottomClass}
@@ -33,14 +35,11 @@ const ProductGrid = ({
             addToCart={addToCart}
             addToWishlist={addToWishlist}
             cartItem={
-              cartItems.filter(cartItem => cartItem.id === product.id)[0]
+              cartItems.filter((cartItem) => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
-                item => item.id === product.id
-              )[0]
+              wishlistItems.filter((item) => item.id === product.id)[0]
             }
-            key={product.id}
           />
         );
       })}
@@ -56,10 +55,10 @@ ProductGrid.propTypes = {
   products: PropTypes.array,
   sliderClassName: PropTypes.string,
   spaceBottomClass: PropTypes.string,
-  wishlistItems: PropTypes.array
+  wishlistItems: PropTypes.array,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     currency: state.currencyData,
     cartItems: state.cart,
@@ -69,12 +68,17 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    addToCart: (item, quantityCount, cartId) => {
-      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId)
+    addToCart: (item, quantityCount, cartId, tierId) => {
+      cartHandler(dispatch, props).addToCart(
+        item,
+        quantityCount,
+        cartId,
+        tierId
+      );
     },
     addToWishlist: (item) => {
-      wishListHandler(dispatch, props).addToWishList(item)
-    }
+      wishListHandler(dispatch, props).addToWishList(item);
+    },
   };
 };
 

@@ -21,11 +21,6 @@ const ProductImageDescription = ({
 
    // THIS GET DISCOUNT BY %
   // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
-  const discountedPrice = product.salePrice
-  const finalProductPrice = +(product.price * currency.currencyRate);
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  );
 
   return (
     <div
@@ -54,10 +49,7 @@ const ProductImageDescription = ({
             {/* product description info */}
             <ProductDescriptionInfo
               product={product}
-              discountedPrice={discountedPrice}
               currency={currency}
-              finalDiscountedPrice={finalDiscountedPrice}
-              finalProductPrice={finalProductPrice}
               cartItems={cartItems}
               wishlistItem={wishlistItem}
             />

@@ -22,12 +22,19 @@ const Wishlist = ({
   deleteFromWishList,
   deleteAllFromWishList,
   strings,
+  history
 }) => {
   const { pathname } = location;
 
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
+
+  if(!cartId) {
+    history.push('/login-register')
+  }
 
   return (
     <Fragment>
@@ -67,14 +74,6 @@ const Wishlist = ({
                         </thead>
                         <tbody>
                           {wishlistItems.map((wishlistItem, key) => {
-                            const discountedPrice = getDiscountPrice(
-                              wishlistItem.price,
-                              wishlistItem.discount
-                            );
-                            const finalProductPrice =
-                              wishlistItem.price * currency.currencyRate;
-                            const finalDiscountedPrice =
-                              discountedPrice * currency.currencyRate;
                             const cartItem = cartItems.filter(
                               (item) => item.id === wishlistItem.id
                             )[0];
@@ -91,8 +90,8 @@ const Wishlist = ({
                                     <img
                                       className="img-fluid"
                                       src={`${process.env.PUBLIC_URL}${
-                                        wishlistItem.image
-                                          ? wishlistItem.image[0]
+                                        wishlistItem.productImages && wishlistItem.productImages[0]
+                                          ? wishlistItem.productImages[0]
                                           : "img/products/3.jpg"
                                       } `}
                                       alt=""
@@ -113,18 +112,20 @@ const Wishlist = ({
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
+                                  {wishlistItem.productTiers &&
+                                  wishlistItem.productTiers[0].discountPercentage > 0? (
                                     <Fragment>
                                       <span className="amount old">
                                         {defaultCurrency(
                                           currency,
-                                          finalProductPrice
+                                          wishlistItem.productTiers[0].salePrice
                                         )}
                                       </span>
                                       <span className="amount">
                                         {defaultCurrency(
                                           currency,
-                                          finalDiscountedPrice
+                                          wishlistItem.productTiers[0]
+                                            .afterDiscountPrice
                                         )}
                                       </span>
                                     </Fragment>
@@ -132,17 +133,20 @@ const Wishlist = ({
                                     <span className="amount">
                                       {defaultCurrency(
                                         currency,
-                                        finalProductPrice
+                                        wishlistItem.productTiers[0]
+                                          .afterDiscountPrice
                                       )}
                                     </span>
                                   )}
                                 </td>
 
                                 <td className="product-wishlist-cart">
-                                  {wishlistItem.quantity &&
-                                  wishlistItem.quantity > 0 ? (
+                                  {wishlistItem.productTiers && wishlistItem.productTiers[0].quantity &&
+                                  wishlistItem.productTiers[0].quantity > 0 ? (
                                     <button
-                                      onClick={() => addToCart(wishlistItem, 1, cartId)}
+                                      onClick={() =>
+                                        addToCart(wishlistItem, 1, cartId, wishlistItem.productTiers[0].id)
+                                      }
                                       className={
                                         cartItem !== undefined &&
                                         cartItem.quantity > 0
@@ -156,7 +160,7 @@ const Wishlist = ({
                                       title={
                                         wishlistItem !== undefined
                                           ? "Added to cart"
-                                          : strings['add_to_cart']
+                                          : strings["add_to_cart"]
                                       }
                                     >
                                       {cartItem !== undefined &&
@@ -240,4 +244,4 @@ Wishlist.propTypes = {
   wishlistItems: PropTypes.array,
 };
 
-export default Wishlist
+export default Wishlist;

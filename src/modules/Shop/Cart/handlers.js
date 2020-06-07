@@ -28,7 +28,7 @@ export default (dispatch, props) => ({
       }
     }
   },
-  addToCart: async (item, quantityCount, cartId) => {
+  addToCart: async (item, quantityCount, cartId,tierId) => {
     if (cartId) {
       try {
         const response = await fetchAuthLoading({
@@ -38,6 +38,7 @@ export default (dispatch, props) => ({
             quantity: quantityCount,
             cartId: cartId,
             productId: item.id,
+            productTierId: tierId
           },
         });
         if (
@@ -55,7 +56,7 @@ export default (dispatch, props) => ({
               cartItemId: response.data.data.id,
               // ...item,
               // if Response return product Images
-              ...response.data.data.product,
+              ...response.data.data.productTier,
               quantity: response.data.data.quantity,
             })
           );
@@ -66,15 +67,15 @@ export default (dispatch, props) => ({
       }
     } else {
       notify({
-        message: "Đã thêm sản phầm vào giỏ",
-        type: "success",
+        message: "Vui lòng đăng nhập trước",
+        type: "error",
       });
-      dispatch(
-        addToCard({
-          ...item,
-          quantity: quantityCount,
-        })
-      );
+      // dispatch(
+      //   addToCard({
+      //     ...item,
+      //     quantity: quantityCount,
+      //   })
+      // );
     }
   },
   decreaseQuantity: async (item, cartId) => {

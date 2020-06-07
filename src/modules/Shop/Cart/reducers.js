@@ -31,7 +31,7 @@ const addCard = (cartItems, product) => {
 const addAllToCard = (cartItems) => {
   const cart = [];
   cartItems.map((cartItem) => {
-    const product = cartItem.product;
+    const product = cartItem.productTier;
     return cart.push({
       ...product,
       quantity: cartItem.quantity,

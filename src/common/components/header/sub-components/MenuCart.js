@@ -8,7 +8,11 @@ import { DEFAULT_IMG_URL } from "../../../configs";
 const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
   let cartTotalPrice = 0;
 
-  const cartId = user && user.customer ? user.customer.cart.id : null
+  const cartId = user && user.customer ? user.customer.cart.id : null;
+
+  if (!cartId) {
+    return <div className="shopping-cart-content"><p  className="text-center">Vui lòng đăng nhập</p></div>;
+  }
 
   return (
     <div className="shopping-cart-content">
@@ -16,22 +20,10 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
         <Fragment>
           <ul>
             {cartData.map((single, key) => {
-            console.log('======== Bao Minh: MenuCart -> single', single)
-              // const discountedPrice = getDiscountPrice(
-              //   single.price,
-              //   single.discount
-              // );
-              const discountedPrice = single.salePrice
-              const finalProductPrice = (
-                single.price * currency.currencyRate
-              );
-              const finalDiscountedPrice = (
-                discountedPrice * currency.currencyRate
-              );
+              const finalDiscountedPrice =
+                single.afterDiscountPrice * currency.currencyRate;
 
-              discountedPrice != null
-                ? (cartTotalPrice += finalDiscountedPrice * single.quantity)
-                : (cartTotalPrice += finalProductPrice * single.quantity);
+              cartTotalPrice += finalDiscountedPrice * single.quantity;
 
               return (
                 <li className="single-shopping-cart" key={key}>
@@ -39,9 +31,16 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
                     <Link to={process.env.PUBLIC_URL + "/product/" + single.id}>
                       <img
                         alt=""
-                        src={single.productImages && single.productImages.length
-                          ? DEFAULT_IMG_URL + single.productImages[0].imgLocation.replace("\\", "/")
-                          : process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                        src={
+                          single.product.productImages &&
+                          single.product.productImages.length
+                            ? DEFAULT_IMG_URL +
+                              single.product.productImages[0].imgLocation.replace(
+                                "\\",
+                                "/"
+                              )
+                            : process.env.PUBLIC_URL + "/img/products/3.jpg"
+                        }
                         className="img-fluid"
                       />
                     </Link>
@@ -49,17 +48,19 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
                   <div className="shopping-cart-title">
                     <h4>
                       <Link
-                        to={process.env.PUBLIC_URL + "/product/" + single.id}
+                        to={
+                          process.env.PUBLIC_URL +
+                          "/product/" +
+                          single.product.id
+                        }
                       >
                         {" "}
-                        {single.name}{" "}
+                        {single.product.name}{" "}
                       </Link>
                     </h4>
                     <h6>Số lượng: {single.quantity}</h6>
                     <span>
-                      {discountedPrice !== null
-                        ? defaultCurrency(currency,finalDiscountedPrice)
-                        : defaultCurrency(currency, finalProductPrice)}
+                      {defaultCurrency(currency, finalDiscountedPrice)}
                     </span>
                   </div>
                   <div className="shopping-cart-delete">
@@ -73,7 +74,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
           </ul>
           <div className="shopping-cart-total">
             <h4>
-              {strings['total']} :{" "}
+              {strings["total"]} :{" "}
               <span className="shop-total">
                 {defaultCurrency(currency, cartTotalPrice)}
               </span>
@@ -81,18 +82,18 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
           </div>
           <div className="shopping-cart-btn btn-hover text-center">
             <Link className="default-btn" to={process.env.PUBLIC_URL + "/cart"}>
-              {strings['view_cart']}
+              {strings["view_cart"]}
             </Link>
             <Link
               className="default-btn"
               to={process.env.PUBLIC_URL + "/checkout"}
             >
-              {strings['checkout']}
+              {strings["checkout"]}
             </Link>
           </div>
         </Fragment>
       ) : (
-        <p className="text-center">No items added to cart</p>
+        <p className="text-center">Không có sản phẩm trong giỏ hàng</p>
       )}
     </div>
   );
@@ -102,7 +103,7 @@ MenuCart.propTypes = {
   cartData: PropTypes.array,
   currency: PropTypes.object,
   deleteFromCart: PropTypes.func,
-  strings: PropTypes.object
+  strings: PropTypes.object,
 };
 
 export default multilanguage(MenuCart);
