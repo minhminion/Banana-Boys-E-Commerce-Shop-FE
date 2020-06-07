@@ -12,6 +12,7 @@ import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import { HeartOutlined } from "@ant-design/icons";
 import { multilanguage } from "redux-multilanguage";
 import { useSelector } from "react-redux";
+import { DEFAULT_IMG_URL } from "../../../../common/configs";
 
 const Wishlist = ({
   location,
@@ -22,7 +23,7 @@ const Wishlist = ({
   deleteFromWishList,
   deleteAllFromWishList,
   strings,
-  history
+  history,
 }) => {
   const { pathname } = location;
 
@@ -32,8 +33,8 @@ const Wishlist = ({
       : null
   );
 
-  if(!cartId) {
-    history.push('/login-register')
+  if (!cartId) {
+    history.push("/login-register");
   }
 
   return (
@@ -75,8 +76,9 @@ const Wishlist = ({
                         <tbody>
                           {wishlistItems.map((wishlistItem, key) => {
                             const cartItem = cartItems.filter(
-                              (item) => item.id === wishlistItem.id
+                              (item) => item.id === wishlistItem.productTierId
                             )[0];
+                            const product = wishlistItem.productTier.product;
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -84,16 +86,22 @@ const Wishlist = ({
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      wishlistItem.id
+                                      product.id
                                     }
                                   >
                                     <img
                                       className="img-fluid"
-                                      src={`${process.env.PUBLIC_URL}${
-                                        wishlistItem.productImages && wishlistItem.productImages[0]
-                                          ? wishlistItem.productImages[0]
-                                          : "img/products/3.jpg"
-                                      } `}
+                                      src={
+                                        product.productImages &&
+                                        product.productImages.length
+                                          ? DEFAULT_IMG_URL +
+                                            product.productImages[0].imgLocation.replace(
+                                              "\\",
+                                              "/"
+                                            )
+                                          : process.env.PUBLIC_URL +
+                                            "/img/products/3.jpg"
+                                      }
                                       alt=""
                                     />
                                   </Link>
@@ -104,27 +112,28 @@ const Wishlist = ({
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      wishlistItem.id
+                                      product.id
                                     }
                                   >
-                                    {wishlistItem.name}
+                                    {product.name}
                                   </Link>
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {wishlistItem.productTiers &&
-                                  wishlistItem.productTiers[0].discountPercentage > 0? (
+                                  {wishlistItem.productTier &&
+                                  wishlistItem.productTier.discountPercentage >
+                                    0 ? (
                                     <Fragment>
                                       <span className="amount old">
                                         {defaultCurrency(
                                           currency,
-                                          wishlistItem.productTiers[0].salePrice
+                                          wishlistItem.productTier.salePrice
                                         )}
                                       </span>
                                       <span className="amount">
                                         {defaultCurrency(
                                           currency,
-                                          wishlistItem.productTiers[0]
+                                          wishlistItem.productTier
                                             .afterDiscountPrice
                                         )}
                                       </span>
@@ -133,7 +142,7 @@ const Wishlist = ({
                                     <span className="amount">
                                       {defaultCurrency(
                                         currency,
-                                        wishlistItem.productTiers[0]
+                                        wishlistItem.productTier
                                           .afterDiscountPrice
                                       )}
                                     </span>
@@ -141,11 +150,17 @@ const Wishlist = ({
                                 </td>
 
                                 <td className="product-wishlist-cart">
-                                  {wishlistItem.productTiers && wishlistItem.productTiers[0].quantity &&
-                                  wishlistItem.productTiers[0].quantity > 0 ? (
+                                  {wishlistItem.productTier &&
+                                  wishlistItem.productTier.quantity &&
+                                  wishlistItem.productTier.quantity > 0 ? (
                                     <button
                                       onClick={() =>
-                                        addToCart(wishlistItem, 1, cartId, wishlistItem.productTiers[0].id)
+                                        addToCart(
+                                          wishlistItem,
+                                          1,
+                                          cartId,
+                                          wishlistItem.productTierId
+                                        )
                                       }
                                       className={
                                         cartItem !== undefined &&

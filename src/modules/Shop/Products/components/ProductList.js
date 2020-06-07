@@ -21,6 +21,7 @@ const SingleProduct = ({
   const [layout, setLayout] = useState("grid three-column");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  console.log('======== Bao Minh: categories', categories)
   const [pagination, setPagination] = useState({
     current: 1,
     total: 1,

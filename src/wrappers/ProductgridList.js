@@ -38,7 +38,7 @@ const ProductGrid = ({
               cartItems.filter((cartItem) => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter((item) => item.id === product.id)[0]
+              wishlistItems.filter((wishlistItem) => wishlistItem.productTierId === product.productTiers[0].id)[0]
             }
           />
         );

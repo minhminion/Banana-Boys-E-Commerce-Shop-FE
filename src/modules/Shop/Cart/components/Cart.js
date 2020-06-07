@@ -3,10 +3,7 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import {
-  getDiscountPrice,
-  defaultCurrency,
-} from "../../../../common/helpers/product";
+import { defaultCurrency } from "../../../../common/helpers/product";
 import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
 import { Col, Row } from "antd";

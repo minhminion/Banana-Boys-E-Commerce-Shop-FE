@@ -27,6 +27,9 @@ const handler = {
   [actions.ADD_TO_WISHLIST]: (state, action) => (
     [...updateWishList(state, action.payload)]
   ),
+  [actions.ADD_ALL_TO_WISHLIST]: (state, action) => (
+    [...action.payload]
+  ),
   [actions.DELETE_FROM_WISHLIST]: (state, action) => (
     [...remainingItems(state, action.payload)]
   ),

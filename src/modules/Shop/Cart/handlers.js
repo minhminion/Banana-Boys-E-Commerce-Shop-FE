@@ -52,7 +52,6 @@ export default (dispatch, props) => ({
           });
           dispatch(
             addToCard({
-              isLogin: true,
               cartItemId: response.data.data.id,
               // ...item,
               // if Response return product Images

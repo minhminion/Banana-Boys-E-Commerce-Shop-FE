@@ -11,7 +11,11 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
   const cartId = user && user.customer ? user.customer.cart.id : null;
 
   if (!cartId) {
-    return <div className="shopping-cart-content"><p  className="text-center">Vui lòng đăng nhập</p></div>;
+    return (
+      <div className="shopping-cart-content">
+        <p className="text-center">Vui lòng đăng nhập</p>
+      </div>
+    );
   }
 
   return (
@@ -20,6 +24,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
         <Fragment>
           <ul>
             {cartData.map((single, key) => {
+              console.log("======== Bao Minh: MenuCart -> single", single);
               const finalDiscountedPrice =
                 single.afterDiscountPrice * currency.currencyRate;
 
@@ -28,7 +33,11 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
               return (
                 <li className="single-shopping-cart" key={key}>
                   <div className="shopping-cart-img">
-                    <Link to={process.env.PUBLIC_URL + "/product/" + single.id}>
+                    <Link
+                      to={
+                        process.env.PUBLIC_URL + "/product/" + single.productId
+                      }
+                    >
                       <img
                         alt=""
                         src={
@@ -51,11 +60,10 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
                         to={
                           process.env.PUBLIC_URL +
                           "/product/" +
-                          single.product.id
+                          single.productId
                         }
                       >
-                        {" "}
-                        {single.product.name}{" "}
+                        {`${single.product.name} - loại ${single.tierId}`}
                       </Link>
                     </h4>
                     <h6>Số lượng: {single.quantity}</h6>

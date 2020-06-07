@@ -34,13 +34,13 @@ const createMiddlewares = sagaMiddleware => {
 function mapCookieToStorage() {
   let initialState;
   try {
-    const user = JSON.parse(getCookie("user"));
+    const user = JSON.parse(getCookie("user-customer"));
     initialState = {
       user: {
         user: user,
-        exp: getCookie('exp'),
-        refreshToken: getCookie('refreshToken'),
-        token: getCookie('token'),
+        exp: getCookie('exp-customer'),
+        refreshToken: getCookie('refreshToken-customer'),
+        token: getCookie('token-customer'),
       }
     }
     // const storage = JSON.parse(window.localStorage.getItem('persist:root'))

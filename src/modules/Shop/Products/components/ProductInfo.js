@@ -8,6 +8,8 @@ import ProductImageDescription from "../../../../wrappers/ProductImageDescriptio
 import ProductDescriptionTab from "../../../../wrappers/ProductDescriptionTab";
 import RelatedProductSlider from "../../../../wrappers/RelatedProductSlider";
 import { useParams } from "react-router";
+import { ENUMS } from "../../../../constant";
+import { Typography } from "antd";
 
 const ProductInfo = ({
   location,
@@ -24,12 +26,14 @@ const ProductInfo = ({
 
   const fetchSingleProduct = async (productId) => {
     const response = await getSingleProduct(productId);
-    setProduct(response.data.data);
+    if (response && response.data && response.status === ENUMS.httpStatus.OK) {
+      setProduct(response.data.data);
+    }
   };
 
   useEffect(() => {
     fetchSingleProduct(id);
-  },[id]);
+  }, [id]);
 
   return (
     <Fragment>
@@ -60,10 +64,7 @@ const ProductInfo = ({
             />
 
             {/* product description tab */}
-            <ProductDescriptionTab
-              product={product}
-              spaceBottomClass="pb-90"
-            />
+            <ProductDescriptionTab product={product} spaceBottomClass="pb-90" />
 
             {/* related product slider */}
             <RelatedProductSlider

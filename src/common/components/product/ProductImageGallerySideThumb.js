@@ -62,7 +62,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
       },
     },
   };
-
+  
   return (
     <Fragment>
       <div className="row row-5">
