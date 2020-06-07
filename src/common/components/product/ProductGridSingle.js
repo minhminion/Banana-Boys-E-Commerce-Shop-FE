@@ -8,6 +8,7 @@ import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { DEFAULT_IMG_URL } from "../../configs";
+import { ENUMS } from "../../../constant";
 
 const ProductGridSingle = ({
   product,
@@ -98,9 +99,9 @@ const ProductGridSingle = ({
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                {product.quantity && product.quantity > 0 ? (
+                {product.productTiers && product.productTiers[0].quantity > 0 ? (
                   <button
-                    onClick={() => addToCart(product, 1, cartId)}
+                    onClick={() => addToCart(product, 1, cartId, product.productTiers[0].id)}
                     className={
                       cartItem !== undefined && cartItem.quantity > 0
                         ? "active"
@@ -140,24 +141,49 @@ const ProductGridSingle = ({
             </h3>
             {product.rating && product.rating > 0 ? (
               <div className="product-rating">
-                <Rating ratingValue={product.rating} />
+                <Rating ratingValue={product.rating || 4} />
               </div>
             ) : (
-              <div className="pro-details-rating">
-                <Rating ratingValue={4} />
+              <div className="product-rating">
+                <Rating ratingValue={4.5} />
               </div>
             )}
             <div className="product-price">
-              {discountedPrice !== null ? (
-                <Fragment>
-                  <span>{defaultCurrency(currency, finalDiscountedPrice)}</span>{" "}
-                  <span className="old">
-                    {defaultCurrency(currency, finalProductPrice)}
-                  </span>
-                </Fragment>
-              ) : (
-                <span>{defaultCurrency(currency, finalProductPrice)} </span>
-              )}
+              {product.productTiers &&
+                product.productTiers.length &&
+                product.productTiers.map((productTier) => (
+                  <div key={productTier.id}>
+                    <span> Loại {productTier.tierId}:</span>
+                    {productTier.discountPercentage > 0 ? (
+                      <Fragment>
+                        <span className="old">
+                          {defaultCurrency(currency, productTier.salePrice)}
+                        </span>{" "}
+                        <span>
+                          {`${defaultCurrency(
+                            currency,
+                            productTier.afterDiscountPrice
+                          )} / ${
+                            ENUMS.ProductUnit.find(
+                              (item) => item.id === product.productUnit
+                            ).content
+                          }`}
+                        </span>
+                      </Fragment>
+                    ) : (
+                      <span>
+                        {`${defaultCurrency(
+                          currency,
+                          productTier.afterDiscountPrice
+                        )} / ${
+                          ENUMS.ProductUnit.find(
+                            (item) => item.id === product.productUnit
+                          ).content
+                        }`}
+                      </span>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

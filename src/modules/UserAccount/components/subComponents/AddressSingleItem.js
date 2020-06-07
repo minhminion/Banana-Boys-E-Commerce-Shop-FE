@@ -3,10 +3,9 @@ import { Descriptions, Typography, Button, Space } from "antd";
 import { CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router";
 const { Text } = Typography;
-const AddressSingleItem = ({ address }) => {
+const AddressSingleItem = ({ address, onChoice }) => {
+  const history = useHistory();
 
-  const history = useHistory()
-  
   return (
     <div style={{ width: "100%" }}>
       <Descriptions
@@ -14,12 +13,20 @@ const AddressSingleItem = ({ address }) => {
           <>
             <Text strong>Địa chỉ - {address.id}</Text>
             <Space style={{ float: "right" }}>
-              <Button type="ghost" onClick={() => history.push("/user/address/"+address.id)}>
+              <Button
+                type="ghost"
+                onClick={() => history.push("/user/address/" + address.id)}
+              >
                 <EditOutlined /> Chỉnh Sửa
               </Button>
               <Button type="ghost">
                 <CloseOutlined /> Xóa
               </Button>
+              {onChoice && (
+                <Button type="ghost" onClick={() => onChoice(address.id)}>
+                  <CloseOutlined /> Chọn
+                </Button>
+              )}
             </Space>
           </>
         }

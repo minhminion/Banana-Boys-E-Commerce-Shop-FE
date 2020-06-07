@@ -1,16 +1,16 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { getDiscountPrice, defaultCurrency } from "../../helpers/product";
+import { defaultCurrency } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
-import { useSelector } from "react-redux";
-import { DEFAULT_URL, DEFAULT_IMG_URL } from "../../configs";
+import { DEFAULT_IMG_URL } from "../../configs";
 
 const ProductGridListSingle = ({
+  key,
   cartId,
   product,
   currency,
@@ -33,7 +33,7 @@ const ProductGridListSingle = ({
   ).toFixed(2);
 
   return (
-    <Fragment>
+    <Fragment key={key}>
       <div
         className={`col-xl-4 col-sm-6 ${
           sliderClassName ? sliderClassName : ""
@@ -48,7 +48,8 @@ const ProductGridListSingle = ({
                 className="default-img"
                 src={
                   product.productImages && product.productImages.length
-                    ? DEFAULT_IMG_URL + product.productImages[0].imgLocation.replace("\\", "/")
+                    ? DEFAULT_IMG_URL +
+                      product.productImages[0].imgLocation.replace("\\", "/")
                     : process.env.PUBLIC_URL + "/img/products/3.jpg"
                 }
                 alt=""
@@ -96,7 +97,44 @@ const ProductGridListSingle = ({
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                {product.quantity && product.quantity > 0 ? (
+                {product.productTiers &&
+                product.productTiers.length &&
+                product.productTiers[0] &&
+                product.productTiers[0].quantity &&
+                product.productTiers[0].quantity > 0 ? (
+                  <button
+                    key={product.productTiers[0].id}
+                    onClick={() =>
+                      addToCart(product, 1, cartId, product.productTiers[0].id)
+                    }
+                    className={
+                      cartItem !== undefined && cartItem.quantity > 0
+                        ? "active"
+                        : ""
+                    }
+                    disabled={cartItem !== undefined && cartItem.quantity > 0}
+                    title={
+                      cartItem !== undefined
+                        ? "Added to cart"
+                        : strings["add_to_cart"]
+                    }
+                  >
+                    {" "}
+                    <i className="pe-7s-cart"></i>{" "}
+                    {cartItem !== undefined && cartItem.quantity > 0
+                      ? strings["added_to_cart"]
+                      : strings["add_to_cart"]}
+                  </button>
+                ) : (
+                  <button
+                    key={product.productTiers[0].id}
+                    disabled
+                    className="active"
+                  >
+                    {strings["out_of_stock"]}
+                  </button>
+                )}
+                {/* {product.quantity && product.quantity > 0 ? (
                   <button
                     onClick={() => addToCart(product, 1, cartId)}
                     className={
@@ -121,7 +159,7 @@ const ProductGridListSingle = ({
                   <button disabled className="active">
                     {strings["out_of_stock"]}
                   </button>
-                )}
+                )} */}
               </div>
               <div className="pro-same-action pro-quickview">
                 <button onClick={() => setModalShow(true)} title="Quick View">
@@ -138,7 +176,7 @@ const ProductGridListSingle = ({
             </h3>
             {product.rating && product.rating > 0 ? (
               <div className="product-rating">
-                <Rating ratingValue={product.rating} />
+                <Rating ratingValue={product.rating || 4} />
               </div>
             ) : (
               <div className="product-rating">
@@ -146,28 +184,41 @@ const ProductGridListSingle = ({
               </div>
             )}
             <div className="product-price">
-              {discountedPrice !== null ? (
-                <Fragment>
-                  <span className="old">
-                    {defaultCurrency(currency, finalProductPrice)}
-                  </span>{" "}
-                  <span>{`${defaultCurrency(currency, finalDiscountedPrice)} / 
-                  ${
-                    ENUMS.ProductUnit.find(
-                      (item) => item.id === product.productUnit
-                    ).content
-                  }`}</span>
-                </Fragment>
-              ) : (
-                <span>
-                  {`${defaultCurrency(currency, finalProductPrice)} / 
-                  ${
-                    ENUMS.ProductUnit.find(
-                      (item) => item.id === product.productUnit
-                    ).content
-                  }`}
-                </span>
-              )}
+              {product.productTiers &&
+                product.productTiers.length &&
+                product.productTiers.map((productTier) => (
+                  <div key={productTier.id}>
+                    <span> Loại {productTier.tierId}:</span>
+                    {productTier.discountPercentage > 0 ? (
+                      <Fragment>
+                        <span className="old">
+                          {defaultCurrency(currency, productTier.salePrice)}
+                        </span>{" "}
+                        <span>
+                          {`${defaultCurrency(
+                            currency,
+                            productTier.afterDiscountPrice
+                          )} / ${
+                            ENUMS.ProductUnit.find(
+                              (item) => item.id === product.productUnit
+                            ).content
+                          }`}
+                        </span>
+                      </Fragment>
+                    ) : (
+                      <span>
+                        {`${defaultCurrency(
+                          currency,
+                          productTier.afterDiscountPrice
+                        )} / ${
+                          ENUMS.ProductUnit.find(
+                            (item) => item.id === product.productUnit
+                          ).content
+                        }`}
+                      </span>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -215,23 +266,46 @@ const ProductGridListSingle = ({
                   </Link>
                 </h3>
                 <div className="product-list-price">
-                  {discountedPrice !== null ? (
-                    <Fragment>
-                      <span>
-                        {defaultCurrency(currency, finalDiscountedPrice)}
-                      </span>{" "}
-                      <span className="old">
-                        {defaultCurrency(currency, finalProductPrice)}
-                      </span>
-                    </Fragment>
-                  ) : (
-                    <span>{defaultCurrency(currency, finalProductPrice)}</span>
-                  )}
+                  {product.productTiers &&
+                    product.productTiers.length &&
+                    product.productTiers.map((productTier) => (
+                      <div key={productTier.id}>
+                        <span> Loại {productTier.tierId}:</span>
+                        {productTier.discountPercentage > 0 ? (
+                          <Fragment>
+                            <span className="old">
+                              {defaultCurrency(currency, productTier.salePrice)}
+                            </span>{" "}
+                            <span>
+                              {`${defaultCurrency(
+                                currency,
+                                productTier.afterDiscountPrice
+                              )} / ${
+                                ENUMS.ProductUnit.find(
+                                  (item) => item.id === product.productUnit
+                                ).content
+                              }`}
+                            </span>
+                          </Fragment>
+                        ) : (
+                          <span>
+                            {`${defaultCurrency(
+                              currency,
+                              productTier.afterDiscountPrice
+                            )} / ${
+                              ENUMS.ProductUnit.find(
+                                (item) => item.id === product.productUnit
+                              ).content
+                            }`}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                 </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="rating-review">
                     <div className="product-list-rating">
-                      <Rating ratingValue={product.rating} />
+                      <Rating ratingValue={product.rating || 4} />
                     </div>
                   </div>
                 ) : (
@@ -245,29 +319,46 @@ const ProductGridListSingle = ({
 
                 <div className="shop-list-actions d-flex align-items-center">
                   <div className="shop-list-btn btn-hover">
-                    {product.quantity && product.quantity > 0 ? (
-                      <button
-                        onClick={() => addToCart(product, 1, cartId)}
-                        className={
-                          cartItem !== undefined && cartItem.quantity > 0
-                            ? "active"
-                            : ""
-                        }
-                        disabled={
-                          cartItem !== undefined && cartItem.quantity > 0
-                        }
-                        title={
-                          cartItem !== undefined
-                            ? "Added to cart"
-                            : strings["add_to_cart"]
-                        }
-                      >
-                        {" "}
-                        <i className="pe-7s-cart"></i>{" "}
-                        {cartItem !== undefined && cartItem.quantity > 0
-                          ? strings["added_to_cart"]
-                          : strings["add_to_cart"]}
-                      </button>
+                    {product.productTiers && product.productTiers.length ? (
+                      <>
+                        {product.productTiers[0].quantity &&
+                        product.productTiers[0].quantity > 0 ? (
+                          <button
+                            key={product.productTiers[0].tierId}
+                            onClick={() =>
+                              addToCart(
+                                product,
+                                1,
+                                cartId,
+                                product.productTiers[0].id
+                              )
+                            }
+                            className={
+                              cartItem !== undefined && cartItem.quantity > 0
+                                ? "active"
+                                : ""
+                            }
+                            disabled={
+                              cartItem !== undefined && cartItem.quantity > 0
+                            }
+                            title={
+                              cartItem !== undefined
+                                ? "Added to cart"
+                                : strings["add_to_cart"]
+                            }
+                          >
+                            {" "}
+                            <i className="pe-7s-cart"></i>{" "}
+                            {cartItem !== undefined && cartItem.quantity > 0
+                              ? strings["added_to_cart"]
+                              : strings["add_to_cart"]}
+                          </button>
+                        ) : (
+                          <button disabled className="active">
+                            {strings["out_of_stock"]}
+                          </button>
+                        )}
+                      </>
                     ) : (
                       <button disabled className="active">
                         {strings["out_of_stock"]}
@@ -327,5 +418,4 @@ ProductGridListSingle.propTypes = {
   wishlistItem: PropTypes.object,
   strings: PropTypes.object,
 };
-
 export default multilanguage(ProductGridListSingle);

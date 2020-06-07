@@ -81,8 +81,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    addToCart: (item, quantityCount, cartId) => {
-      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId)
+    addToCart: (item, quantityCount, cartId, tierId) => {
+      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId, tierId)
     },
     addToWishlist: (item) => {
       wishListHandler(dispatch, props).addToWishList(item)

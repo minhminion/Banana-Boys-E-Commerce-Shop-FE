@@ -13,14 +13,12 @@ import cartHandler from "../../../modules/Shop/Cart/handlers";
 import { ENUMS } from "../../../constant";
 import handlers from "../../../modules/Shop/Products/handlers";
 import { multilanguage } from "redux-multilanguage";
+import { Space, Checkbox } from "antd";
 
 const ProductDescriptionInfo = ({
   strings,
   product,
-  discountedPrice,
   currency,
-  finalDiscountedPrice,
-  finalProductPrice,
   cartItems,
   wishlistItem,
   addToCart,
@@ -28,12 +26,17 @@ const ProductDescriptionInfo = ({
   getSingleCategory,
 }) => {
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
 
   const [quantityCount, setQuantityCount] = useState(1);
-  const [productStock, setProductStock] = useState(product.quantity);
+  const [productStock, setProductStock] = useState(
+    product.productTiers ? product.productTiers[0].quantity : 1
+  );
   const [category, setCategory] = useState({});
+  const [selectedTier, setSelectedTier] = useState(product.productTiers[0].id);
 
   const productCartQty = getProductCartQuantity(cartItems, product);
 
@@ -44,6 +47,14 @@ const ProductDescriptionInfo = ({
     }
   };
 
+  const handleSelectTier = (e) => {
+    setSelectedTier(e.target.value);
+    setProductStock(
+      product.productTiers &&
+        product.productTiers.find((item) => item.id === e.target.value).quantity
+    );
+  };
+
   useEffect(() => {
     fetchSingleCategory(product.categoryId);
   }, [product]);
@@ -52,27 +63,46 @@ const ProductDescriptionInfo = ({
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
       <div className="product-details-price">
-        {discountedPrice !== null ? (
-          <Fragment>
-            <span className="old">
-              {defaultCurrency(currency, finalProductPrice)}
-            </span>
-            <span>
-              {`${defaultCurrency(currency, finalDiscountedPrice)} / ${
-                ENUMS.ProductUnit.find(
-                  (item) => item.id === product.productUnit
-                ).content
-              }`}
-            </span>
-          </Fragment>
-        ) : (
-          <span>
-            {`${defaultCurrency(currency, finalProductPrice)} / ${
-              ENUMS.ProductUnit.find((item) => item.id === product.productUnit)
-                .content
-            }`}
-          </span>
-        )}
+        {product.productTiers &&
+          product.productTiers.length &&
+          product.productTiers.map((productTier) => (
+            <div key={productTier.id} style={{ marginBottom: 20 }}>
+              <Checkbox
+                value={productTier.id}
+                checked={selectedTier === productTier.id}
+                onChange={handleSelectTier}
+              />
+              <span> Loại {productTier.tierId}:</span>
+              {productTier.discountPercentage > 0 ? (
+                <>
+                  <span className="old">
+                    {defaultCurrency(currency, productTier.salePrice)}
+                  </span>
+                  <span>
+                    {`${defaultCurrency(
+                      currency,
+                      productTier.afterDiscountPrice
+                    )} / ${
+                      ENUMS.ProductUnit.find(
+                        (item) => item.id === product.productUnit
+                      ).content
+                    }`}
+                  </span>
+                </>
+              ) : (
+                <span>
+                  {`${defaultCurrency(
+                    currency,
+                    productTier.afterDiscountPrice
+                  )} / ${
+                    ENUMS.ProductUnit.find(
+                      (item) => item.id === product.productUnit
+                    ).content
+                  }`}
+                </span>
+              )}
+            </div>
+          ))}
       </div>
       {product.rating && product.rating > 0 ? (
         <div className="pro-details-rating-wrap">
@@ -122,7 +152,9 @@ const ProductDescriptionInfo = ({
         <div className="pro-details-cart btn-hover">
           {productStock && productStock > 0 ? (
             <button
-              onClick={() => addToCart(product, quantityCount, cartId)}
+              onClick={() =>
+                addToCart(product, quantityCount, cartId, selectedTier)
+              }
               disabled={productCartQty >= productStock}
             >
               {productCartQty >= productStock
@@ -225,8 +257,13 @@ ProductDescriptionInfo.propTypes = {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    addToCart: (item, quantityCount, cartId) => {
-      cartHandler(dispatch, props).addToCart(item, quantityCount, cartId);
+    addToCart: (item, quantityCount, cartId, tierId) => {
+      cartHandler(dispatch, props).addToCart(
+        item,
+        quantityCount,
+        cartId,
+        tierId
+      );
     },
     addToWishlist: (item) => {
       wishListHandler(dispatch, props).addToWishList(item);

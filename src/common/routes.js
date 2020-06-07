@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
 import { Route, Switch } from "react-router";
 import UnderContruct from "../pages/UnderContruct";
-import UserAccount from "../modules/UserAccount/containers/UserAccount";
 
 import LoginRegister from "../modules/LoginAndRegister/Containers/TabsLoginAndRegister";
 
@@ -16,8 +15,8 @@ const ProductList = lazy(() =>
   import("../modules/Shop/Products/containers/ProductList")
 );
 const NotFound = lazy(() => import("../pages/NotFound"));
-const Checkout = lazy(() => import("../pages/Checkout"));
-const MyAccount = lazy(() => import("../pages/MyAccount"));
+const Checkout = lazy(() => import("../modules/Shop/Checkout/containers/Checkout"));
+const UserAccount = lazy(() => import("../modules/UserAccount/containers/UserAccount"));
 const Contact = lazy(() => import("../pages/Contact"));
 const Home = lazy(() => import("../pages/Home"));
 const ProductInfo = lazy(() =>

@@ -311,21 +311,22 @@
                 font-weight: 500;
                 margin: 0 9px;
                 position: relative;
-                &::before {
-                    position: absolute;
-                    content: "";
-                    right: -13px;
-                    top: 10px;
-                    width: 7px;
-                    height: 2px;
-                    background-color: #000;
-                }
+                
                 &:last-child:before {
                     display: none;
                 }
                 &.old {
                     color: #8e8e8e;
                     text-decoration: line-through;
+                    &::before {
+                        position: absolute;
+                        content: "";
+                        right: -13px;
+                        top: 10px;
+                        width: 7px;
+                        height: 2px;
+                        background-color: #000;
+                    }
                 }
             }
         }
@@ -405,11 +406,10 @@
         line-height: 1;
     }
     .product-details-price {
-        display: flex;
-        align-items: center;
         margin: 15px 0 26px;
         span {
             font-size: 24px;
+            margin: 0 2px;
             color: #fe5252;
             &.old {
                 color: #333;

@@ -29,7 +29,9 @@ const Cart = ({
   let cartTotalPrice = 0;
 
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
 
   return (
@@ -67,21 +69,9 @@ const Cart = ({
                         </thead>
                         <tbody>
                           {cartItems.map((cartItem, key) => {
-                          console.log('======== Bao Minh: cartItem', cartItem)
-                            const discountedPrice = getDiscountPrice(
-                              cartItem.price,
-                              cartItem.discount
-                            );
-                            const finalProductPrice =
-                              cartItem.price * currency.currencyRate;
-                            const finalDiscountedPrice =
-                              discountedPrice * currency.currencyRate;
+                            cartTotalPrice +=
+                              cartItem.afterDiscountPrice * cartItem.quantity;
 
-                            discountedPrice != null
-                              ? (cartTotalPrice +=
-                                  finalDiscountedPrice * cartItem.quantity)
-                              : (cartTotalPrice +=
-                                  finalProductPrice * cartItem.quantity);
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -89,14 +79,23 @@ const Cart = ({
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      cartItem.id
+                                      cartItem.productId
                                     }
                                   >
                                     <img
                                       className="img-fluid"
-                                      src={cartItem.productImages && cartItem.productImages.length
-                                        ? DEFAULT_IMG_URL + cartItem.productImages[0].imgLocation.replace("\\", "/")
-                                        : process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                                      src={
+                                        cartItem.product &&
+                                        cartItem.product.productImages &&
+                                        cartItem.product.productImages.length
+                                          ? DEFAULT_IMG_URL +
+                                            cartItem.product.productImages[0].imgLocation.replace(
+                                              "\\",
+                                              "/"
+                                            )
+                                          : process.env.PUBLIC_URL +
+                                            "/img/products/3.jpg"
+                                      }
                                       alt=""
                                     />
                                   </Link>
@@ -107,26 +106,26 @@ const Cart = ({
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      cartItem.id
+                                      cartItem.productId
                                     }
                                   >
-                                    {cartItem.name}
+                                    {cartItem.product && cartItem.product.name}
                                   </Link>
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
+                                  {cartItem.discountPercentage > 0 ? (
                                     <Fragment>
                                       <span className="amount old">
                                         {defaultCurrency(
                                           currency,
-                                          finalProductPrice
+                                          cartItem.salePrice
                                         )}
                                       </span>
                                       <span className="amount">
                                         {defaultCurrency(
                                           currency,
-                                          finalDiscountedPrice
+                                          cartItem.afterDiscountPrice
                                         )}
                                       </span>
                                     </Fragment>
@@ -134,7 +133,7 @@ const Cart = ({
                                     <span className="amount">
                                       {defaultCurrency(
                                         currency,
-                                        finalProductPrice
+                                        cartItem.afterDiscountPrice
                                       )}
                                     </span>
                                   )}
@@ -144,7 +143,9 @@ const Cart = ({
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                      onClick={() => decreaseQuantity(cartItem, cartId)}
+                                      onClick={() =>
+                                        decreaseQuantity(cartItem, cartId)
+                                      }
                                     >
                                       -
                                     </button>
@@ -157,7 +158,12 @@ const Cart = ({
                                     <button
                                       className="inc qtybutton"
                                       onClick={() =>
-                                        addToCart(cartItem, quantityCount, cartId)
+                                        addToCart(
+                                          cartItem,
+                                          quantityCount,
+                                          cartId,
+                                          cartItem.id
+                                        )
                                       }
                                       disabled={
                                         cartItem !== undefined &&
@@ -171,20 +177,18 @@ const Cart = ({
                                   </div>
                                 </td>
                                 <td className="product-subtotal">
-                                  {discountedPrice !== null
-                                    ? defaultCurrency(
-                                        currency,
-                                        finalDiscountedPrice * cartItem.quantity
-                                      )
-                                    : defaultCurrency(
-                                        currency,
-                                        finalProductPrice * cartItem.quantity
-                                      )}
+                                  {defaultCurrency(
+                                    currency,
+                                    cartItem.afterDiscountPrice *
+                                      cartItem.quantity
+                                  )}
                                 </td>
 
                                 <td className="product-remove">
                                   <button
-                                    onClick={() => deleteFromCart(cartItem, cartId)}
+                                    onClick={() =>
+                                      deleteFromCart(cartItem, cartId)
+                                    }
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>

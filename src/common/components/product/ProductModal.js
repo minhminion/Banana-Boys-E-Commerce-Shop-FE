@@ -9,6 +9,7 @@ import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { multilanguage } from "redux-multilanguage";
 import { DEFAULT_IMG_URL } from "../../configs";
+import { Checkbox } from "antd";
 
 function ProductModal({
   product,
@@ -21,25 +22,39 @@ function ProductModal({
   addtocart,
   ...props
 }) {
-
   const cartId = useSelector((state) =>
-    state.user.user && state.user.user.customer ? state.user.user.customer.cart.id : null
+    state.user.user && state.user.user.customer
+      ? state.user.user.customer.cart.id
+      : null
   );
 
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
-  const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [quantityCount, setQuantityCount] = useState(1);
 
-  const addToCart = () => {
+  const [selectedTier, setSelectedTier] = useState(product.productTiers[0].id);
+  const [productQuantity, setProductStock] = useState(
+    product.productTiers ? product.productTiers[0].quantity : 1
+  );
+
+  const addToCart = (product, quantityCount, cartId, selectedTier) => {
     setQuantityCount(1);
-    addtocart(product, quantityCount, cartId);
+    addtocart(product, quantityCount, cartId, selectedTier);
   };
   const addToWishlist = props.addtowishlist;
 
   const cartItems = props.cartitems;
 
   const productCartQty = getProductCartQuantity(cartItems, product);
+
+  const handleSelectTier = (e) => {
+    setSelectedTier(e.target.value);
+    setProductStock(
+      product.productTiers &&
+        product.productTiers.find((item) => item.id === e.target.value)
+          .quantity
+    );
+  };
 
   useEffect(() => {
     if (
@@ -105,9 +120,13 @@ function ProductModal({
                         <div key={key}>
                           <div className="single-image">
                             <img
-                              src={single && single.imgLocation
-                                ? DEFAULT_IMG_URL + single.imgLocation.replace("\\", "/")
-                                : process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                              src={
+                                single && single.imgLocation
+                                  ? DEFAULT_IMG_URL +
+                                    single.imgLocation.replace("\\", "/")
+                                  : process.env.PUBLIC_URL +
+                                    "/img/products/3.jpg"
+                              }
                               className="img-fluid"
                               alt=""
                             />
@@ -130,22 +149,27 @@ function ProductModal({
               </div>
               <div className="product-small-image-wrapper mt-15">
                 <Swiper {...thumbnailSwiperParams}>
-                {product.productImages && product.productImages.length ? (
-                    product.productImages.map((single, key) => {
-                      return (
-                        <div key={key}>
-                          <div className="single-image">
-                            <img
-                              src={single && single.imgLocation
-                                ? DEFAULT_IMG_URL + single.imgLocation.replace("\\", "/")
-                                : process.env.PUBLIC_URL + "/img/products/3.jpg"}
-                              className="img-fluid"
-                              alt=""
-                            />
+                  {product.productImages && product.productImages.length
+                    ? product.productImages.map((single, key) => {
+                        return (
+                          <div key={key}>
+                            <div className="single-image">
+                              <img
+                                src={
+                                  single && single.imgLocation
+                                    ? DEFAULT_IMG_URL +
+                                      single.imgLocation.replace("\\", "/")
+                                    : process.env.PUBLIC_URL +
+                                      "/img/products/3.jpg"
+                                }
+                                className="img-fluid"
+                                alt=""
+                              />
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })) : null }
+                        );
+                      })
+                    : null}
                 </Swiper>
               </div>
             </div>
@@ -153,28 +177,46 @@ function ProductModal({
               <div className="product-details-content quickview-content">
                 <h2>{product.name}</h2>
                 <div className="product-details-price">
-                  {discountedprice !== null ? (
-                    <Fragment>
-                      <span className="old">
-                        {defaultCurrency(currency, finalproductprice)}
-                      </span>{" "}
-                      <span>
-                        {`${defaultCurrency(currency, finaldiscountedprice)} / ${
-                          ENUMS.ProductUnit.find(
-                            (item) => item.id === product.productUnit
-                          ).content
-                        }`}
-                      </span>
-                    </Fragment>
-                  ) : (
-                    <span>
-                      {`${defaultCurrency(currency, finalproductprice)} / ${
-                        ENUMS.ProductUnit.find(
-                          (item) => item.id === product.productUnit
-                        ).content
-                      }`}
-                    </span>
-                  )}
+                  {product.productTiers &&
+                    product.productTiers.length &&
+                    product.productTiers.map((productTier) => (
+                      <div key={productTier.id}>
+                        <Checkbox
+                          value={productTier.id}
+                          checked={selectedTier === productTier.id}
+                          onChange={handleSelectTier}
+                        />
+                        <span> Loại {productTier.tierId}:</span>
+                        {productTier.discountPercentage > 0 ? (
+                          <>
+                            <span className="old">
+                              {defaultCurrency(currency, productTier.salePrice)}
+                            </span>
+                            <span>
+                              {`${defaultCurrency(
+                                currency,
+                                productTier.afterDiscountPrice
+                              )} / ${
+                                ENUMS.ProductUnit.find(
+                                  (item) => item.id === product.productUnit
+                                ).content
+                              }`}
+                            </span>
+                          </>
+                        ) : (
+                          <span>
+                            {`${defaultCurrency(
+                              currency,
+                              productTier.afterDiscountPrice
+                            )} / ${
+                              ENUMS.ProductUnit.find(
+                                (item) => item.id === product.productUnit
+                              ).content
+                            }`}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                 </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="pro-details-rating-wrap">
@@ -226,12 +268,19 @@ function ProductModal({
                   <div className="pro-details-cart btn-hover">
                     {productQuantity && productQuantity > 0 ? (
                       <button
-                        onClick={() => addToCart(product, quantityCount, cartId)}
+                        onClick={() =>
+                          addToCart(
+                            product,
+                            quantityCount,
+                            cartId,
+                            selectedTier
+                          )
+                        }
                         disabled={productCartQty >= productQuantity}
                       >
                         {productCartQty >= productQuantity
                           ? "Out of Stock"
-                          : strings['add_to_cart']}
+                          : strings["add_to_cart"]}
                       </button>
                     ) : (
                       <button disabled>Out of Stock</button>

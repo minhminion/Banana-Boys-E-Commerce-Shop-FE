@@ -17,6 +17,9 @@ const IconGroup = ({
   user,
   signOut,
 }) => {
+
+  const cartId = user && user.customer ? user.customer.cart.id : null;
+
   const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
@@ -90,7 +93,7 @@ const IconGroup = ({
         </div>
       </div>
       <div className="same-style header-wishlist">
-        <Link to={process.env.PUBLIC_URL + "/wishlist"}>
+        <Link to={cartId ? process.env.PUBLIC_URL + "/wishlist" : process.env.PUBLIC_URL + "/login-register"}>
           <i className="pe-7s-like" />
           <span className="count-style">
             {wishlistData && wishlistData.length ? wishlistData.length : 0}
