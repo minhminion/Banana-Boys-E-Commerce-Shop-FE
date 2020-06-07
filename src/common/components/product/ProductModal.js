@@ -255,7 +255,7 @@ function ProductModal({
                     <button
                       onClick={() =>
                         setQuantityCount(
-                          quantityCount < productQuantity - productCartQty
+                          quantityCount < Math.floor(productQuantity) - productCartQty
                             ? quantityCount + 1
                             : quantityCount
                         )
@@ -266,7 +266,7 @@ function ProductModal({
                     </button>
                   </div>
                   <div className="pro-details-cart btn-hover">
-                    {productQuantity && productQuantity > 0 ? (
+                    {productQuantity && Math.floor(productQuantity) > 0 ? (
                       <button
                         onClick={() =>
                           addToCart(

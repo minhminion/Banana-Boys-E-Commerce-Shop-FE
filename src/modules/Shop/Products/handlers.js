@@ -5,7 +5,7 @@ import { ENUMS } from "../../../constant";
 export default (dispatch, props) => ({
   getCategories: async (params) => {
     try {
-      const response = await fetchAuthLoading({
+      const response = await fetchLoading({
         url: ENDPOINTS.getCategories,
         method: 'GET',
         ...params

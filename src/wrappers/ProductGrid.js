@@ -49,7 +49,7 @@ const ProductGrid = ({
             }
             wishlistItem={
               wishlistItems.filter(
-                wishlistItem => wishlistItem.id === product.id
+                wishlistItem => wishlistItem.productTierId === product.productTiers[0].id
               )[0]
             }
             key={product.id}

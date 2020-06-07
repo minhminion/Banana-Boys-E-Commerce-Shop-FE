@@ -11,12 +11,13 @@ import userHandler from '../../modules/LoginAndRegister/handlers'
 import 'react-chat-widget/lib/styles.css';
 import ChatBox from '../components/widgets/ChatBox/ChatBox'
 import LoadingBar from 'react-redux-loading-bar'
-import handlers from '../../modules/Shop/Cart/handlers'
+import cartHandlers from '../../modules/Shop/Cart/handlers'
+import wishListHandlers from '../../modules/Shop/WishList/handlers'
 
 const MainPage = (props) => {
   const [loading, setLoading] = useState(false)
 
-  const { user, getUser, store, getAllCartDetails } = props
+  const { user, getUser, store, getAllCartDetails, getAllWishList } = props
 
   const checkUser = useCallback( async () => {
       if (user && user.id) {
@@ -33,9 +34,10 @@ const MainPage = (props) => {
   const getUserCart = useCallback( async () => {
       if (user && user.id && user.customer ) {
         await getAllCartDetails()
+        await getAllWishList()
       }
     },
-    [user, getAllCartDetails],
+    [user, getAllCartDetails, getAllWishList],
   )
 
   useEffect(() => {
@@ -81,7 +83,8 @@ export default connect(
     }
   }, (dispatch, props) => ({
     dispatch,
-    ...handlers(dispatch, props),
+    ...cartHandlers(dispatch, props),
+    ...wishListHandlers(dispatch, props),
     ...userHandler(dispatch, props)
   })
 )(MainPage)

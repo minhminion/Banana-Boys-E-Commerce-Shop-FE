@@ -139,7 +139,7 @@ const ProductDescriptionInfo = ({
           <button
             onClick={() =>
               setQuantityCount(
-                quantityCount < productStock - productCartQty
+                quantityCount < Math.floor(productStock) - productCartQty
                   ? quantityCount + 1
                   : quantityCount
               )
@@ -155,9 +155,9 @@ const ProductDescriptionInfo = ({
               onClick={() =>
                 addToCart(product, quantityCount, cartId, selectedTier)
               }
-              disabled={productCartQty >= productStock}
+              disabled={productCartQty >= Math.floor(productStock)}
             >
-              {productCartQty >= productStock
+              {productCartQty >= Math.floor(productStock)
                 ? "Out of Stock"
                 : strings["add_to_cart"]}
             </button>

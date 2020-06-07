@@ -10,7 +10,7 @@ const addCard = (cartItems, product) => {
       ...cartItems,
       {
         ...product,
-        quantity: product.quantity ? product.quantity : 1,
+        quantity: product.quantity || 1,
         cartItemId: product.cartItemId || uuid(),
       },
     ];
@@ -19,9 +19,7 @@ const addCard = (cartItems, product) => {
       item.cartItemId === cartItem.cartItemId
         ? {
             ...item,
-            quantity: product.quantity
-              ? product.isLogin ? product.quantity : item.quantity + product.quantity
-              : item.quantity + 1,
+            quantity: product.quantity || item.quantity + 1,
           }
         : item
     );

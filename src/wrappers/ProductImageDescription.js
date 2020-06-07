@@ -16,7 +16,7 @@ const ProductImageDescription = ({
   wishlistItems,
 }) => {
   const wishlistItem = wishlistItems.filter(
-    wishlistItem => wishlistItem.id === product.id
+    wishlistItem => wishlistItem.productTierId === product.productTiers[0].id
   )[0];
 
    // THIS GET DISCOUNT BY %

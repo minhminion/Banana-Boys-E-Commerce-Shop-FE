@@ -12,35 +12,35 @@ export const defaultState = {
 
 const handlers = {
   [clearAll]: (state, action) => {
-    setCookie('user', '')
-    setCookie('token', '')
-    setCookie('refreshToken', '')
-    setCookie('exp', '')
+    setCookie('user-customer', '')
+    setCookie('token-customer', '')
+    setCookie('refreshToken-customer', '')
+    setCookie('exp-customer', '')
     return { ...defaultState };
   },
   [actions.setUserInformation]: (state, action) => {
-    setCookie("user", JSON.stringify(action.payload));
+    setCookie("user-customer", JSON.stringify(action.payload));
     return {
       ...state,
       user: action.payload,
     };
   },
   [actions.setUserToken]: (state, action) => {
-    setCookie("token", action.payload);
+    setCookie("token-customer", action.payload);
     return {
       ...state,
       token: action.payload,
     };
   },
   [actions.setUserRefreshToken]: (state, action) => {
-    setCookie("refreshToken", action.payload);
+    setCookie("refreshToken-customer", action.payload);
     return {
       ...state,
       refreshToken: action.payload,
     };
   },
   [actions.setUserTokenExp]: (state, action) => {
-    setCookie("exp", action.payload);
+    setCookie("exp-customer", action.payload);
     return {
       ...state,
       exp: action.payload,

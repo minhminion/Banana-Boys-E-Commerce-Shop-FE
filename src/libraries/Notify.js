@@ -10,7 +10,7 @@ export const checkError = (error) => {
       if (Array.isArray(error)) {
         error.map((a) => (
           notification.error({
-            message: a.message
+            message: a
           })
         ))
       } else {
