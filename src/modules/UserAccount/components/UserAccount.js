@@ -23,6 +23,7 @@ const UserAccount = ({
   changeInfoCustomer,
   history,
   getInfoCustomer,
+  changePassword,
 }) => {
   const { pathname } = location;
 
@@ -74,7 +75,11 @@ const UserAccount = ({
                 path={process.env.PUBLIC_URL + "/user/change_password"}
                 component={() => "Change Password"}
               >
-                <ChangePassword />
+                <ChangePassword
+                  user={user}
+                  changePassword={changePassword}
+                  history={history}
+                />
               </Route>
               <Route path={process.env.PUBLIC_URL + "/user/orders"}>
                 <UserOrderList />

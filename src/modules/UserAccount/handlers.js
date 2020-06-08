@@ -74,4 +74,14 @@ export default (dispatch, props) => ({
       console.log("======== Tu Linh: error", error);
     }
   },
+  changePassword: async (userId, data) => {
+    try {
+      const response = await fetchAuthLoading({
+        url: ENDPOINTS.changePassword(userId),
+        method: "PUT",
+        data: data,
+      });
+      return response;
+    } catch (error) {}
+  },
 });
