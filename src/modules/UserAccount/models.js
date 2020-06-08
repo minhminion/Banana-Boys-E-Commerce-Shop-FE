@@ -6,6 +6,7 @@ export const ENDPOINTS = {
   getSingleUserAddress: (addressId) => `${DEFAULT_URL}/addresses/${addressId}`,
   changeInfoCustomer: (customerId) => `${DEFAULT_URL}/customers/${customerId}`,
   getInfoCustomer: (userId) => `${DEFAULT_URL}/users/${userId}`,
+  changePassword: (userId) => `${DEFAULT_URL}/users/${userId}`,
 };
 
 export const LIMIT = 20;
