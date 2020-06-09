@@ -42,15 +42,14 @@ export default (dispatch, props) => ({
       return { success: false, error: { message: 'Server error' } }
     }
   },
-  getAllProducts: async (pageNumber = 1, params) => {
+  getAllProducts: async (params) => {
     try {
       const response = await fetchLoading({
         url: ENDPOINTS.createProduct,
         method: 'GET',
         params: {
+          pageNumber: 1,
           ...params,
-          // pageSize: 4,
-          pageNumber,
         }
       })
       return response.data

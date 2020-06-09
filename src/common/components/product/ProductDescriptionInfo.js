@@ -63,21 +63,34 @@ const ProductDescriptionInfo = ({
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
       <div className="product-details-price">
-        {product.productTiers &&
-          product.productTiers.length &&
-          product.productTiers.map((productTier) => (
-            <div key={productTier.id} style={{ marginBottom: 20 }}>
-              <Checkbox
-                value={productTier.id}
-                checked={selectedTier === productTier.id}
-                onChange={handleSelectTier}
-              />
-              <span> Loại {productTier.tierId}:</span>
-              {productTier.discountPercentage > 0 ? (
-                <>
-                  <span className="old">
-                    {defaultCurrency(currency, productTier.salePrice)}
-                  </span>
+        <Space direction="vertical">
+          {product.productTiers &&
+            product.productTiers.length &&
+            product.productTiers.map((productTier) => (
+              <div key={productTier.id} style={{ marginBottom: 20 }}>
+                <Checkbox
+                  value={productTier.id}
+                  checked={selectedTier === productTier.id}
+                  onChange={handleSelectTier}
+                />
+                <span> Loại {productTier.tierId}:</span>
+                {productTier.discountPercentage > 0 ? (
+                  <>
+                    <span className="old">
+                      {defaultCurrency(currency, productTier.salePrice)}
+                    </span>
+                    <span>
+                      {`${defaultCurrency(
+                        currency,
+                        productTier.afterDiscountPrice
+                      )} / ${
+                        ENUMS.ProductUnit.find(
+                          (item) => item.id === product.productUnit
+                        ).content
+                      }`}
+                    </span>
+                  </>
+                ) : (
                   <span>
                     {`${defaultCurrency(
                       currency,
@@ -88,21 +101,10 @@ const ProductDescriptionInfo = ({
                       ).content
                     }`}
                   </span>
-                </>
-              ) : (
-                <span>
-                  {`${defaultCurrency(
-                    currency,
-                    productTier.afterDiscountPrice
-                  )} / ${
-                    ENUMS.ProductUnit.find(
-                      (item) => item.id === product.productUnit
-                    ).content
-                  }`}
-                </span>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))}
+        </Space>
       </div>
       {product.rating && product.rating > 0 ? (
         <div className="pro-details-rating-wrap">

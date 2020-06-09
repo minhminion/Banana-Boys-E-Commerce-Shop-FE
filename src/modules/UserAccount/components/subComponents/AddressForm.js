@@ -86,7 +86,7 @@ const AddressForm = ({ data, onFinish }) => {
             <Input placeholder="Nhập số điện thoại" />
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Form.Item
             label="Thành phố"
             name="city"
@@ -113,7 +113,7 @@ const AddressForm = ({ data, onFinish }) => {
             </Select>
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Form.Item
             label="Quận/ Huyện"
             name="district"
@@ -134,6 +134,20 @@ const AddressForm = ({ data, onFinish }) => {
                   <Option key={district.code}>{`Quận ${district.name}`}</Option>
                 ))}
             </Select>
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label="Phường/Xã"
+            name="ward"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập xã của bạn!",
+              },
+            ]}
+          >
+            <Input placeholder="Nhập phường/xã" />
           </Form.Item>
         </Col>
       </Row>

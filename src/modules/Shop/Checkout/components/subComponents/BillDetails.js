@@ -20,10 +20,12 @@ import {
 import { cities, allDistricts } from "../../../../../constant/address";
 import AddressList from "./AddressList";
 import AddressForm from "../../../../UserAccount/components/subComponents/AddressForm";
+import { notify } from "../../../../../libraries/Notify";
+import { ENUMS } from "../../../../../constant";
 const { Title } = Typography;
 const { Option } = Select;
 
-const BillDetails = ({ cartItems, user, goNext, getAllUserAddress }) => {
+const BillDetails = ({ cartItems, user, goNext, getAllUserAddress, createUserAddress, onSubmit }) => {
   const [districts, setDistricts] = useState(null);
   const [showAdditional, setShowAdditional] = useState(false);
   const [isNewAddress, setIsNewAddress] = useState(false);
@@ -42,21 +44,21 @@ const BillDetails = ({ cartItems, user, goNext, getAllUserAddress }) => {
     setShowAdditional((prev) => !prev);
   };
 
-  // ON SELECT CITY IN FORM
-  const handleCityChange = (value) => {
-    const districts = allDistricts.filter(
-      (district) => district.parent_code === value.key
-    );
-    setDistricts(districts);
-    form.setFieldsValue({ district: { label: districts[0].name } });
+  const onAddNewAddress = async (values) => {
+    const result = await createUserAddress({
+      name: values.name,
+      phone: values.phone,
+      streetLocation: values.streetLocation,
+      city: values.city.label,
+      district: values.district.label,
+      ward: values.ward
+    });
+    if (result && result.status === ENUMS.httpStatus.CREATED) {
+      notify({ message: "Lưu thành công địa chỉ mới", type: 'success' })
+      setIsNewAddress(false)
+    }
   };
 
-  // ON SELECT DISTRICT IN FORM
-  const onDistrictChange = (value) => {};
-
-  const onFinish = (values) => {
-    goNext();
-  };
 
   // MESSAGE WHEN ERROR
   const validateMessages = {
@@ -103,182 +105,18 @@ const BillDetails = ({ cartItems, user, goNext, getAllUserAddress }) => {
 
   if (cartItems && cartItems.length >= 1) {
     return (
-      <div className="billing-info-wrap">
+      <div>
         <Title level={2} style={{ textAlign: "center" }}>
           Địa chỉ thanh toán
         </Title>
-        <Button type='primary' size='large' onClick={handleToggleChoiceAddress}>
-          {!isNewAddress ? 'Sử dụng địa chỉ mới' : 'Địa chỉ đã lưu' }
+        <Button type="primary" size="large" onClick={handleToggleChoiceAddress}>
+          {!isNewAddress ? "Sử dụng địa chỉ mới" : "Địa chỉ đã lưu"}
         </Button>
         <Divider />
         {!isNewAddress ? (
-          <AddressList getAllUserAddress={getAllUserAddress} />
+          <AddressList getAllUserAddress={getAllUserAddress} onSubmit={onSubmit} goNext={goNext}/>
         ) : (
-          <AddressForm />
-          // <Form
-          //   size="middle"
-          //   form={form}
-          //   layout="vertical"
-          //   validateMessages={validateMessages}
-          //   onFinish={onFinish}
-          //   initialValues={{
-          //     email: user.email || "",
-          //     phone: user.customer ? user.customer.phone : "",
-          //     city: { label: "Hồ Chí Minh" },
-          //     district: { label: "Quận 1" },
-          //   }}
-          // >
-          //   <Row gutter={25}>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="First Name"
-          //         name="firstName"
-          //         rules={[
-          //           {
-          //             required: true,
-          //             whitespace: true,
-          //           },
-          //         ]}
-          //       >
-          //         <Input placeholder="First name" />
-          //       </Form.Item>
-          //     </Col>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="Last Name"
-          //         name="lastName"
-          //         rules={[
-          //           {
-          //             required: true,
-          //             whitespace: true,
-          //           },
-          //         ]}
-          //       >
-          //         <Input placeholder="Last name" />
-          //       </Form.Item>
-          //     </Col>
-          //   </Row>
-          //   <Row gutter={25}>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="Phone"
-          //         name="phone"
-          //         rules={[
-          //           {
-          //             required: true,
-          //             pattern: new RegExp(/\d+/g),
-          //           },
-          //         ]}
-          //       >
-          //         <Input placeholder="Phone number" />
-          //       </Form.Item>
-          //     </Col>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="Email"
-          //         name="email"
-          //         rules={[
-          //           {
-          //             required: true,
-          //             whitespace: true,
-          //             type: "email",
-          //           },
-          //         ]}
-          //       >
-          //         <Input placeholder="Email" />
-          //       </Form.Item>
-          //     </Col>
-          //   </Row>
-          //   <Row gutter={25}>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="City"
-          //         name="city"
-          //         rules={[
-          //           {
-          //             required: true,
-          //           },
-          //         ]}
-          //       >
-          //         <Select
-          //           labelInValue
-          //           showSearch
-          //           placeholder="Select a city"
-          //           optionFilterProp="children"
-          //           onSelect={handleCityChange}
-          //           filterOption={(input, option) =>
-          //             option.children
-          //               .toLowerCase()
-          //               .indexOf(input.toLowerCase()) >= 0
-          //           }
-          //         >
-          //           {cities &&
-          //             cities.map((cities) => (
-          //               <Option key={cities.code}>{cities.name}</Option>
-          //             ))}
-          //         </Select>
-          //       </Form.Item>
-          //     </Col>
-          //     <Col span={12}>
-          //       <Form.Item
-          //         label="District"
-          //         name="district"
-          //         rules={[
-          //           {
-          //             required: true,
-          //           },
-          //         ]}
-          //       >
-          //         <Select
-          //           labelInValue
-          //           placeholder="Select a district"
-          //           disabled={!districts}
-          //           onChange={onDistrictChange}
-          //         >
-          //           {districts &&
-          //             districts.map((district) => (
-          //               <Option
-          //                 key={district.code}
-          //               >{`Quận ${district.name}`}</Option>
-          //             ))}
-          //         </Select>
-          //       </Form.Item>
-          //     </Col>
-          //   </Row>
-          //   <Form.Item
-          //     label="Street Address"
-          //     name="streetAddress"
-          //     rules={[
-          //       {
-          //         required: true,
-          //         whitespace: true,
-          //       },
-          //     ]}
-          //   >
-          //     <Input placeholder="Street Address" />
-          //   </Form.Item>
-          //   <Title
-          //     level={3}
-          //     onClick={toggleAdditional}
-          //     style={{ cursor: "pointer", width: "fit-content" }}
-          //   >
-          //     Additional information
-          //     <span style={{ marginLeft: 10, verticalAlign: "text-top" }}>
-          //       {showAdditional ? (
-          //         <MinusCircleOutlined />
-          //       ) : (
-          //         <PlusCircleOutlined />
-          //       )}
-          //     </span>
-          //   </Title>
-          //   {showAdditional && additionalForm}
-          //   <Button htmlType="submit" className="button">
-          //     <Space style={{ alignItems: "flex-end" }}>
-          //       <span>Next</span>
-          //       <ArrowRightOutlined />
-          //     </Space>
-          //   </Button>
-          // </Form>
+          <AddressForm onFinish={onAddNewAddress}/>
         )}
       </div>
     );

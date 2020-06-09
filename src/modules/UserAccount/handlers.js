@@ -16,7 +16,6 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
     }
   },
   createUserAddress: async (newAddress) => {
@@ -30,7 +29,6 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
     }
   },
   getSingleUserAddress: async (addressId) => {
@@ -41,7 +39,6 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
     }
   },
   editSingleUserAddress: async (addressId, data) => {
@@ -53,7 +50,6 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
     }
   }
 });

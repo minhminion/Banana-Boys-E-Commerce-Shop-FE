@@ -1,25 +1,69 @@
-
 import React, { Fragment, useState, useEffect } from "react";
 import MetaTags from "react-meta-tags";
 import MainLayoutShop from "../../../../common/HOCS/MainLayoutShop";
 import Breadcrumb from "../../../../wrappers/Breadcrumb";
-import { getDiscountPrice, defaultCurrency } from "../../../../common/helpers/product";
+import {
+  getDiscountPrice,
+  defaultCurrency,
+} from "../../../../common/helpers/product";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { Steps, Result, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import YouOrder from "./subComponents/YouOrder";
 import BillDetails from "./subComponents/BillDetails";
+import { ENUMS } from "../../../../constant";
 
 const { Step } = Steps;
 
-const Checkout = ({ history, location, cartItems, currency, user, getAllUserAddress }) => {
+const Checkout = ({
+  history,
+  location,
+  cartItems,
+  currency,
+  user,
+  getAllUserAddress,
+  createUserAddress,
+  createOrderProducts,
+  getAllCartDetails
+}) => {
   const { pathname } = location;
 
   const [currentStep, setCurrentStep] = useState(0);
 
+  const [orderDetails, setOrderDetails] = useState({});
+
   useEffect(() => {
     user && user.id && setCurrentStep(1);
   }, [user]);
+
+  useEffect(() => {
+    const orderItems =
+      cartItems &&
+      cartItems.map((item) => ({
+        quantity: item.quantity,
+        productTierId: item.id,
+      }));
+    setOrderDetails((prev) => ({ ...prev, orderItems }));
+  }, [cartItems]);
+
+  const handleOnChangeOrderDetails = (data) => {
+    setOrderDetails((prev) => ({ ...prev, ...data }));
+  };
+
+  const handleCreateOrderProducts = async (paymentId) => {
+    const result = await createOrderProducts({
+      ...orderDetails,
+      paymentMethodId: paymentId,
+    });
+    console.log(
+      "======== Bao Minh: handleCreateOrderProducts -> result",
+      result
+    );
+    if (result && result.status === ENUMS.httpStatus.CREATED) {
+      await getAllCartDetails()
+      history.push("/");
+    }
+  };
 
   const steps = [
     {
@@ -32,7 +76,7 @@ const Checkout = ({ history, location, cartItems, currency, user, getAllUserAddr
             <Button
               className="button"
               type="primary"
-              style={{ margin: 'auto' }}
+              style={{ margin: "auto" }}
               onClick={() =>
                 history.push(process.env.PUBLIC_URL + "/login-register")
               }
@@ -49,7 +93,9 @@ const Checkout = ({ history, location, cartItems, currency, user, getAllUserAddr
         <BillDetails
           goNext={() => setCurrentStep(2)}
           user={user}
+          onSubmit={handleOnChangeOrderDetails}
           getAllUserAddress={getAllUserAddress}
+          createUserAddress={createUserAddress}
           cartItems={cartItems}
         />
       ),
@@ -58,6 +104,7 @@ const Checkout = ({ history, location, cartItems, currency, user, getAllUserAddr
       title: "Pay",
       content: (
         <YouOrder
+          onSubmit={handleCreateOrderProducts}
           cartItems={cartItems}
           getDiscountPrice={getDiscountPrice}
           defaultCurrency={defaultCurrency}
