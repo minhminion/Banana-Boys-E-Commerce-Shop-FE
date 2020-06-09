@@ -3,7 +3,7 @@
   .checkout-step {
     margin-bottom: 30px;
   }
-  .checkout-content{
+  .checkout-content {
     margin: auto;
     width: 90%;
     @media #{$md-layout} {
@@ -13,13 +13,13 @@
       width: 100%;
     }
     .billing-info-wrap {
-      .ant-select{
-        .ant-select-selector{
+      .ant-select {
+        .ant-select-selector {
           height: 45px !important ;
           padding: 8px 11px 4px 11px;
-          .ant-select-selection-search{
+          .ant-select-selection-search {
             padding-top: 8px;
-            input{
+            input {
               padding: 0;
             }
           }
@@ -168,8 +168,8 @@
   }
 }
 
-.checkout-payment{
-  .product-variation{
+.checkout-payment {
+  .product-variation {
     position: relative;
     overflow: hidden;
     font-weight: 500;
@@ -178,19 +178,20 @@
     border: 1px solid #f0f0f0;
     border-radius: 2px;
     padding: 18px 20px;
-    transition-property: color, background-color, border-color, box-shadow, -webkit-box-shadow;
+    transition-property: color, background-color, border-color, box-shadow,
+      -webkit-box-shadow;
     transition-duration: 0.3s, 0.3s, 0.3s, 0.3s, 0.3s;
     transition-timing-function: ease, ease, ease, ease, ease;
     transition-delay: 0s, 0s, 0s, 0s, 0s;
-    &:hover{
+    &:hover {
       color: $red-color;
       // border-color: $red-color;
     }
-    &.active{
+    &.active {
       color: $red-color;
       border-color: $red-color;
-      &::after{
-        content: '';
+      &::after {
+        content: "";
         position: absolute;
         top: 0px;
         right: -21px;
@@ -201,6 +202,28 @@
         border-top: 20px solid $red-color;
         clear: both;
       }
+    }
+  }
+}
+
+.address-item {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0;
+    bottom: 0px;
+    width: 0;
+    background-color: $red-color;
+    transition: 0.3s ease-in-out all;
+    clear: both;
+  }
+  &.active {
+    border-color: $red-color !important;
+    &::after {
+      width: 15px;
     }
   }
 }

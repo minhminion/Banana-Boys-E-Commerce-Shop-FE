@@ -9,7 +9,7 @@ import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { multilanguage } from "redux-multilanguage";
 import { DEFAULT_IMG_URL } from "../../configs";
-import { Checkbox } from "antd";
+import { Checkbox, Space } from "antd";
 
 function ProductModal({
   product,
@@ -51,8 +51,7 @@ function ProductModal({
     setSelectedTier(e.target.value);
     setProductStock(
       product.productTiers &&
-        product.productTiers.find((item) => item.id === e.target.value)
-          .quantity
+        product.productTiers.find((item) => item.id === e.target.value).quantity
     );
   };
 
@@ -177,21 +176,37 @@ function ProductModal({
               <div className="product-details-content quickview-content">
                 <h2>{product.name}</h2>
                 <div className="product-details-price">
-                  {product.productTiers &&
-                    product.productTiers.length &&
-                    product.productTiers.map((productTier) => (
-                      <div key={productTier.id}>
-                        <Checkbox
-                          value={productTier.id}
-                          checked={selectedTier === productTier.id}
-                          onChange={handleSelectTier}
-                        />
-                        <span> Loại {productTier.tierId}:</span>
-                        {productTier.discountPercentage > 0 ? (
-                          <>
-                            <span className="old">
-                              {defaultCurrency(currency, productTier.salePrice)}
-                            </span>
+                  <Space direction='vertical'>
+                    {product.productTiers &&
+                      product.productTiers.length &&
+                      product.productTiers.map((productTier) => (
+                        <div key={productTier.id}>
+                          <Checkbox
+                            value={productTier.id}
+                            checked={selectedTier === productTier.id}
+                            onChange={handleSelectTier}
+                          />
+                          <span> Loại {productTier.tierId}:</span>
+                          {productTier.discountPercentage > 0 ? (
+                            <>
+                              <span className="old">
+                                {defaultCurrency(
+                                  currency,
+                                  productTier.salePrice
+                                )}
+                              </span>
+                              <span>
+                                {`${defaultCurrency(
+                                  currency,
+                                  productTier.afterDiscountPrice
+                                )} / ${
+                                  ENUMS.ProductUnit.find(
+                                    (item) => item.id === product.productUnit
+                                  ).content
+                                }`}
+                              </span>
+                            </>
+                          ) : (
                             <span>
                               {`${defaultCurrency(
                                 currency,
@@ -202,21 +217,10 @@ function ProductModal({
                                 ).content
                               }`}
                             </span>
-                          </>
-                        ) : (
-                          <span>
-                            {`${defaultCurrency(
-                              currency,
-                              productTier.afterDiscountPrice
-                            )} / ${
-                              ENUMS.ProductUnit.find(
-                                (item) => item.id === product.productUnit
-                              ).content
-                            }`}
-                          </span>
-                        )}
-                      </div>
-                    ))}
+                          )}
+                        </div>
+                      ))}
+                  </Space>
                 </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="pro-details-rating-wrap">
@@ -255,7 +259,8 @@ function ProductModal({
                     <button
                       onClick={() =>
                         setQuantityCount(
-                          quantityCount < Math.floor(productQuantity) - productCartQty
+                          quantityCount <
+                            Math.floor(productQuantity) - productCartQty
                             ? quantityCount + 1
                             : quantityCount
                         )

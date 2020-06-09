@@ -21,14 +21,15 @@ const SingleProduct = ({
   const [layout, setLayout] = useState("grid three-column");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  console.log('======== Bao Minh: categories', categories)
   const [pagination, setPagination] = useState({
     current: 1,
     total: 1,
     offset: 0,
   });
-  const [params, setParams] = useState({})
-  const pageSize = 9
+  const [params, setParams] = useState({
+    pageSize: 9,
+    pageNumber: 1,
+  });
 
   const { pathname } = location;
 
@@ -40,52 +41,56 @@ const SingleProduct = ({
     fetchCategories();
   }, [getCategories]);
 
-  const fetchAllProducts = async (pageNumber, params) => {
-    console.log("run Fetch Product")
-    const response = await getAllProducts(pageNumber, { ...params, pageSize });
-    if (response && response.data) {
-      setProducts(response.data);
-      setPagination((prev) => ({
-        ...prev,
-        pageSize: response.pageSize,
-        total: response.pageSize * response.totalPage,
-      }));
-    }
-  };
+  
 
   useEffect(() => {
-    fetchAllProducts(pagination.current, params);
-    return () => null
-  }, [pagination.current, params]);
+    const fetchAllProducts = async (params) => {
+      const response = await getAllProducts(params);
+      if (response && response.data) {
+        setProducts(response.data);
+        setPagination((prev) => ({
+          ...prev,
+          pageSize: response.pageSize,
+          total: response.pageSize * response.totalPage,
+        }));
+      }
+    };
+    fetchAllProducts(params);
+  }, [params, getAllProducts]);
 
   const getLayout = (layout) => {
     setLayout(layout);
   };
 
   const getSortParams = (sortValue) => {
-    let params
-    setParams((prev) => {
-      params = {
-        ...prev,
-        CategoryIds: sortValue[0]
-      }
-      return params
-    })
-    // fetchAllProducts(1, params)
+    setParams((prev) => ({
+      ...prev,
+      CategoryIds: sortValue[0],
+    }));
+  };
+
+  const getSearchByName = (name) => {
+    setParams((prev) => ({
+      ...prev,
+      name: name,
+    }));
   }
 
-  // const getFilterSortParams = (sortType, sortValue) => {
-  //   setFilterSortType(sortType);
-  //   setFilterSortValue(sortValue);
-  // }
+  const getFilterTierPrice = (params) => {
+    setParams((prev) => ({
+      ...prev,
+      ...params,
+    }));
+  }
+
 
   const handlePagination = (value) => {
-    setPagination(prev => ({
+    setParams((prev) => ({
       ...prev,
-      current: value
-    }))
-    animateScroll.scrollTo(200)
-  }
+      pageNumber: value,
+    }));
+    animateScroll.scrollTo(200);
+  };
 
   return (
     <Fragment>
@@ -112,7 +117,9 @@ const SingleProduct = ({
                 <ShopSidebar
                   categories={categories}
                   sideSpaceClass="mr-30"
+                  getSearchByName={getSearchByName}
                   getSortParams={getSortParams}
+                  getFilterTierPrice={getFilterTierPrice}
                 />
               </div>
               <div className="col-lg-9 order-1 order-lg-2">
@@ -132,11 +139,13 @@ const SingleProduct = ({
                   <Paginator
                     offset={pagination.offset}
                     totalRecords={pagination.total}
-                    pageLimit={pageSize}
-                    setOffset={(value) => setPagination(prev => ({
-                      ...prev,
-                      offset: value
-                    }))}
+                    pageLimit={params.pageSize}
+                    setOffset={(value) =>
+                      setPagination((prev) => ({
+                        ...prev,
+                        offset: value,
+                      }))
+                    }
                     pageNeighbours={2}
                     currentPage={pagination.current}
                     setCurrentPage={handlePagination}

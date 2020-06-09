@@ -233,9 +233,9 @@ const Wishlist = ({
                       <HeartOutlined />
                     </div>
                     <div className="item-empty-area__text">
-                      No items found in wishlist <br />{" "}
+                      Không tìm thấy sản phẩm yêu thích <br />{" "}
                       <Link to={process.env.PUBLIC_URL + "/shop"}>
-                        Add Items
+                        Tiếp tục mua hàng
                       </Link>
                     </div>
                   </div>

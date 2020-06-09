@@ -8,6 +8,7 @@ import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { DEFAULT_IMG_URL } from "../../configs";
+import { Space } from "antd";
 
 const ProductGridListSingle = ({
   key,
@@ -266,16 +267,32 @@ const ProductGridListSingle = ({
                   </Link>
                 </h3>
                 <div className="product-list-price">
-                  {product.productTiers &&
-                    product.productTiers.length &&
-                    product.productTiers.map((productTier) => (
-                      <div key={productTier.id}>
-                        <span> Loại {productTier.tierId}:</span>
-                        {productTier.discountPercentage > 0 ? (
-                          <Fragment>
-                            <span className="old">
-                              {defaultCurrency(currency, productTier.salePrice)}
-                            </span>{" "}
+                  <Space direction="vertical">
+                    {product.productTiers &&
+                      product.productTiers.length &&
+                      product.productTiers.map((productTier) => (
+                        <div key={productTier.id}>
+                          <span> Loại {productTier.tierId}:</span>
+                          {productTier.discountPercentage > 0 ? (
+                            <Fragment>
+                              <span className="old">
+                                {defaultCurrency(
+                                  currency,
+                                  productTier.salePrice
+                                )}
+                              </span>{" "}
+                              <span>
+                                {`${defaultCurrency(
+                                  currency,
+                                  productTier.afterDiscountPrice
+                                )} / ${
+                                  ENUMS.ProductUnit.find(
+                                    (item) => item.id === product.productUnit
+                                  ).content
+                                }`}
+                              </span>
+                            </Fragment>
+                          ) : (
                             <span>
                               {`${defaultCurrency(
                                 currency,
@@ -286,21 +303,10 @@ const ProductGridListSingle = ({
                                 ).content
                               }`}
                             </span>
-                          </Fragment>
-                        ) : (
-                          <span>
-                            {`${defaultCurrency(
-                              currency,
-                              productTier.afterDiscountPrice
-                            )} / ${
-                              ENUMS.ProductUnit.find(
-                                (item) => item.id === product.productUnit
-                              ).content
-                            }`}
-                          </span>
-                        )}
-                      </div>
-                    ))}
+                          )}
+                        </div>
+                      ))}
+                  </Space>
                 </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="rating-review">

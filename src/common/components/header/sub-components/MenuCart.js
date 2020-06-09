@@ -24,7 +24,6 @@ const MenuCart = ({ cartData, currency, deleteFromCart, strings, user }) => {
         <Fragment>
           <ul>
             {cartData.map((single, key) => {
-              console.log("======== Bao Minh: MenuCart -> single", single);
               const finalDiscountedPrice =
                 single.afterDiscountPrice * currency.currencyRate;
 

@@ -15,7 +15,7 @@ const AddAddress = ({ createUserAddress }) => {
       streetLocation: values.streetLocation,
       city: values.city.label,
       district: values.district.label,
-      ward: 'Phường 4'
+      ward: values.ward
     });
     if (result && result.status === ENUMS.httpStatus.CREATED) {
       notify({ message: "Lưu thành công địa chỉ mới", type: 'success' })

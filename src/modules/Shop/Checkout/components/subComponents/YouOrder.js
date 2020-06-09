@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Col, Row, Typography, Space } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
+import { notify } from "../../../../../libraries/Notify";
+import { ENUMS } from "../../../../../constant";
 
 const { Title, Text } = Typography;
 
 const YouOrder = ({
   cartItems,
   defaultCurrency,
-  getDiscountPrice,
+  onSubmit,
   currency,
   cartTotalPrice,
 }) => {
@@ -15,14 +17,25 @@ const YouOrder = ({
 
   const payments = [
     {
-      id: "credit",
+      id: ENUMS.MethodOfPayment.BK,
       content: "Thẻ tín dụng",
     },
     {
-      id: "cod",
+      id: ENUMS.MethodOfPayment.COD,
       content: "Thanh toán khi nhận hàng ( COD )",
     },
   ];
+
+  const handleCreateOrder = () => {
+    if(paymentChoice === null) {
+      notify({
+        message: 'Vui lòng chọn phương thức thanh toán',
+        type: 'warning'
+      })
+    } else {
+      onSubmit(paymentChoice)
+    }
+  }
 
   return (
     <Row>
@@ -50,23 +63,20 @@ const YouOrder = ({
             <div className="your-order-product-info">
               <div className="your-order-top">
                 <ul>
-                  <li>Product</li>
-                  <li>Total</li>
+                  <li>Sản phẩm</li>
+                  <li>Tổng tiền</li>
                 </ul>
               </div>
               <div className="your-order-middle">
                 <ul>
                   {cartItems.map((cartItem, key) => {
-                    const discountedPrice = getDiscountPrice(
-                      cartItem.price,
-                      cartItem.discount
-                    );
+                    const discountedPrice = cartItems.afterDiscountPrice
                     const finalProductPrice =
-                      cartItem.price * currency.currencyRate;
+                      cartItem.salePrice * currency.currencyRate;
                     const finalDiscountedPrice =
                       discountedPrice * currency.currencyRate;
 
-                    discountedPrice != null
+                    cartItems.discountPercentage > 0
                       ? (cartTotalPrice +=
                           finalDiscountedPrice * cartItem.quantity)
                       : (cartTotalPrice +=
@@ -74,10 +84,10 @@ const YouOrder = ({
                     return (
                       <li key={key}>
                         <span className="order-middle-left">
-                          {cartItem.name} X {cartItem.quantity}
+                          {cartItem.product.name} X {cartItem.quantity}
                         </span>{" "}
                         <span className="order-price">
-                          {discountedPrice !== null
+                          { cartItems.discountPercentage > 0
                             ? defaultCurrency(
                                 currency,
                                 finalDiscountedPrice * cartItem.quantity
@@ -94,8 +104,8 @@ const YouOrder = ({
               </div>
               <div className="your-order-bottom">
                 <ul>
-                  <li className="your-order-shipping">Shipping</li>
-                  <li>Free shipping</li>
+                  <li className="your-order-shipping">Vận chuyển</li>
+                  <li>Miễn phí</li>
                 </ul>
               </div>
               <div className="your-order-total">
@@ -108,7 +118,7 @@ const YouOrder = ({
             <div className="payment-method"></div>
           </div>
           <div className="place-order mt-25">
-            <button className="btn-hover">Place Order</button>
+            <button className="btn-hover" onClick={handleCreateOrder}>Thanh toán</button>
           </div>
         </div>
       </Col>

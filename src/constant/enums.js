@@ -12,8 +12,8 @@ export const FilterOrder =
 }
 
 export const MethodOfPayment = {
-  COD: 0,
-  BK: 1,
+  COD: 1,
+  BK: 2,
 };
 
 export const NotificationType = {

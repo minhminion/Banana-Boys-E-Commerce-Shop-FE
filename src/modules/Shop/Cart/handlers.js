@@ -22,7 +22,6 @@ export default (dispatch, props) => ({
         return response.data;
       }
     } catch (error) {
-      console.log('======== Bao Minh: error', error)
       if (error.response) {
         return { success: false, error: error.response.data };
       }
