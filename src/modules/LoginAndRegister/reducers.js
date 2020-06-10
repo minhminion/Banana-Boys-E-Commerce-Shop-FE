@@ -1,21 +1,22 @@
-import { handleActions } from 'redux-actions'
-import * as actions from './actions'
-import { clearAll } from '../../common/redux/actions/common'
-import { setCookie } from '../../common/utils/cookie';
+import { handleActions } from "redux-actions";
+import * as actions from "./actions";
+
+import { clearAll } from "../../common/redux/actions/common";
+import { setCookie } from "../../common/utils/cookie";
 
 export const defaultState = {
   token: null,
   exp: null,
-  // THiS is MOCK EXAMPLE FOR USER API 
-  user: {}
-}
+  // THiS is MOCK EXAMPLE FOR USER API
+  user: {},
+};
 
 const handlers = {
   [clearAll]: (state, action) => {
-    setCookie('user-customer', '')
-    setCookie('token-customer', '')
-    setCookie('refreshToken-customer', '')
-    setCookie('exp-customer', '')
+    setCookie("user-customer", "");
+    setCookie("token-customer", "");
+    setCookie("refreshToken-customer", "");
+    setCookie("exp-customer", "");
     return { ...defaultState };
   },
   [actions.setUserInformation]: (state, action) => {
@@ -48,4 +49,4 @@ const handlers = {
   },
 };
 
-export default handleActions(handlers, defaultState)
+export default handleActions(handlers, defaultState);

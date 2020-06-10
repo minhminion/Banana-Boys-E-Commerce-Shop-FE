@@ -16,7 +16,14 @@ import EditAddress from "../containers/EditAddress";
 
 const { Content, Sider } = Layout;
 
-const UserAccount = ({ strings, location, user }) => {
+const UserAccount = ({
+  strings,
+  location,
+  user,
+  changeInfoCustomer,
+  history,
+  getInfoCustomer,
+}) => {
   const { pathname } = location;
 
   return (
@@ -47,7 +54,12 @@ const UserAccount = ({ strings, location, user }) => {
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             <Switch>
               <Route path={process.env.PUBLIC_URL + "/user/profile"}>
-                <UserProfile user={user} />
+                <UserProfile
+                  user={user}
+                  changeInfoCustomer={changeInfoCustomer}
+                  history={history}
+                  getInfoCustomer={getInfoCustomer}
+                />
               </Route>
               <Route exact path={process.env.PUBLIC_URL + "/user/address"}>
                 <AddressList />
