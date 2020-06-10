@@ -9,10 +9,11 @@ import { Switch, Route } from "react-router";
 import UserProfile from "./UserProfile";
 import Breadcrumb from "../../../wrappers/Breadcrumb";
 import ChangePassword from "./ChangePassword";
-import UserOrderList from "./UserOrderList";
+import UserOrderList from "../containers/UserOrderList";
 import AddAddress from "../containers/AddAddress";
 import AddressList from "../containers/AddressList";
 import EditAddress from "../containers/EditAddress";
+import UserOrderDetails from "../containers/UserOrderDetails";
 
 const { Content, Sider } = Layout;
 
@@ -81,8 +82,11 @@ const UserAccount = ({
                   history={history}
                 />
               </Route>
-              <Route path={process.env.PUBLIC_URL + "/user/orders"}>
+              <Route exact path={process.env.PUBLIC_URL + "/user/orders"}>
                 <UserOrderList />
+              </Route>
+              <Route path={process.env.PUBLIC_URL + "/user/orders/:orderId"}>
+                <UserOrderDetails />
               </Route>
             </Switch>
           </Content>

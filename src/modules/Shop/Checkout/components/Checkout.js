@@ -24,11 +24,16 @@ const Checkout = ({
   getAllUserAddress,
   createUserAddress,
   createOrderProducts,
-  getAllCartDetails
+  getAllCartDetails,
+  deleteSingleUserAddress
 }) => {
   const { pathname } = location;
 
   const [currentStep, setCurrentStep] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo(0, 100)
+  },[currentStep])
 
   const [orderDetails, setOrderDetails] = useState({});
 
@@ -36,15 +41,15 @@ const Checkout = ({
     user && user.id && setCurrentStep(1);
   }, [user]);
 
-  useEffect(() => {
-    const orderItems =
-      cartItems &&
-      cartItems.map((item) => ({
-        quantity: item.quantity,
-        productTierId: item.id,
-      }));
-    setOrderDetails((prev) => ({ ...prev, orderItems }));
-  }, [cartItems]);
+  // useEffect(() => {
+  //   const orderItems =
+  //     cartItems &&
+  //     cartItems.map((item) => ({
+  //       quantity: item.quantity,
+  //       productTierId: item.id,
+  //     }));
+  //   setOrderDetails((prev) => ({ ...prev, orderItems }));
+  // }, [cartItems]);
 
   const handleOnChangeOrderDetails = (data) => {
     setOrderDetails((prev) => ({ ...prev, ...data }));
@@ -55,13 +60,9 @@ const Checkout = ({
       ...orderDetails,
       paymentMethodId: paymentId,
     });
-    console.log(
-      "======== Bao Minh: handleCreateOrderProducts -> result",
-      result
-    );
     if (result && result.status === ENUMS.httpStatus.CREATED) {
       await getAllCartDetails()
-      history.push("/");
+      history.push("/orderSuccess");
     }
   };
 
@@ -96,6 +97,7 @@ const Checkout = ({
           onSubmit={handleOnChangeOrderDetails}
           getAllUserAddress={getAllUserAddress}
           createUserAddress={createUserAddress}
+          deleteSingleUserAddress={deleteSingleUserAddress}
           cartItems={cartItems}
         />
       ),
@@ -106,6 +108,7 @@ const Checkout = ({
         <YouOrder
           onSubmit={handleCreateOrderProducts}
           cartItems={cartItems}
+          deleteSingleUserAddress={deleteSingleUserAddress}
           getDiscountPrice={getDiscountPrice}
           defaultCurrency={defaultCurrency}
           currency={currency}

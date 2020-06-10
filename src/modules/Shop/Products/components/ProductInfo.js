@@ -18,22 +18,103 @@ const ProductInfo = ({
   currency,
   wishlistItems,
   getSingleProduct,
+  createProductRates,
+  getAllProductRates,
 }) => {
+  const initialParams = {
+    pageNumber: 1,
+    pageSize: 4,
+  };
+
   const { pathname } = location;
   const { id } = useParams();
 
   const [product, setProduct] = useState({});
+  const [productRates, setProductRates] = useState([]);
+  const [searchParams, setSearchParams] = useState(initialParams);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 4,
+  });
 
-  const fetchSingleProduct = async (productId) => {
-    const response = await getSingleProduct(productId);
-    if (response && response.data && response.status === ENUMS.httpStatus.OK) {
-      setProduct(response.data.data);
+  useEffect(() => {
+    const fetchSingleProduct = async (productId) => {
+      const response = await getSingleProduct(productId);
+      if (
+        response &&
+        response.data &&
+        response.status === ENUMS.httpStatus.OK
+      ) {
+        setProduct(response.data.data);
+      }
+    };
+
+    fetchSingleProduct(id);
+    return () => {
+      setProduct({});
+    };
+  }, [id]);
+
+  useEffect(() => {
+    const fetchProductRates = async (productId, params) => {
+      const response = await getAllProductRates(productId, params);
+      if (
+        response &&
+        response.data &&
+        response.status === ENUMS.httpStatus.OK
+      ) {
+        setProductRates(response.data.data);
+        setPagination({
+          current: response.data.pageNumber,
+          pageSize: response.data.pageSize,
+          total: response.data.pageSize * response.data.totalPage,
+        });
+      }
+    };
+    fetchProductRates(id, searchParams);
+  }, [id, searchParams, getAllProductRates]);
+
+  const handleOnPaging = (value) => {
+    setSearchParams((prev) => ({ ...prev, pageNumber: value }));
+  };
+
+  // const handleCreateProductRates = async (values) => {
+  //   const data = {
+  //     ...values,
+  //     productTierId: parseInt(id),
+  //   };
+  //   const result = await createProductRates(data);
+  //   if (result && result.status === ENUMS.httpStatus.CREATED) {
+  //     setSearchParams(initialParams);
+  //   }
+  // };
+  
+  // WHEN COMMENT CAN UPLOAD IMAGES
+  const handleCreateProductRates = async (values) => {
+    let formData = new FormData();
+    // fields is the form content, append it to formData
+    Object.keys(values).map((item) => {
+      if (item !== "images") {
+        formData.append(item, values[item]);
+      } else if (values["images"]) {
+        const images = values[item].fileList.map((value) => value.originFileObj);
+        for (let i = 0; i < images.length; i++) {
+          formData.append("images", images[i], images[i].name);
+        }
+      }
+    });
+
+    formData.append("productTierId", parseInt(id));
+
+    const result = await createProductRates(formData);
+    if (result && result.status === ENUMS.httpStatus.CREATED) {
+      setSearchParams(initialParams);
     }
   };
 
-  useEffect(() => {
-    fetchSingleProduct(id);
-  }, [id]);
+  if (!product) {
+    return null;
+  }
 
   return (
     <Fragment>
@@ -64,7 +145,14 @@ const ProductInfo = ({
             />
 
             {/* product description tab */}
-            <ProductDescriptionTab product={product} spaceBottomClass="pb-90" />
+            <ProductDescriptionTab
+              product={product}
+              productRates={productRates}
+              onChangePaging={handleOnPaging}
+              pagination={pagination}
+              spaceBottomClass="pb-90"
+              handleCreateProductRates={handleCreateProductRates}
+            />
 
             {/* related product slider */}
             <RelatedProductSlider

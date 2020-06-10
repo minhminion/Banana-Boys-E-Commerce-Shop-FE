@@ -93,12 +93,6 @@ const UserProfile = ({
             <Form.Item
               name="name"
               label="Họ tên sửa đổi"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập họ tên của bạn!",
-                },
-              ]}
             >
               <Input
                 style={{ width: "75%", fontSize: "15px" }}
@@ -113,10 +107,6 @@ const UserProfile = ({
               name="phone"
               label="Số điện thoại sửa đổi"
               rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập số điện thoại của bạn!",
-                },
                 {
                   pattern: new RegExp(/(03|07|08|09|01[2|6|8|9])+([0-9]{8})\b/),
                   message: "Số điện thoại không hợp lệ!",

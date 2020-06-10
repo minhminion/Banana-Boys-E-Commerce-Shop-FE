@@ -2,6 +2,9 @@ import { fetchAuthLoading } from "../../common/effects";
 import { ENDPOINTS } from "./models";
 import { address } from "../../constant";
 import { setUserInformation } from "../LoginAndRegister/actions";
+import { ENUMS } from "../../constant";
+import checkError from "../../libraries/CheckError";
+
 
 export default (dispatch, props) => ({
   getAllUserAddress: async (pageNumber, params) => {
@@ -11,11 +14,17 @@ export default (dispatch, props) => ({
         method: "GET",
         params: {
           pageNumber,
-          ...params,
-        },
-      });
-      return response;
-    } catch (error) {}
+          ...params
+        }
+      }) 
+      return response
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
   },
   createUserAddress: async (newAddress) => {
     try {
@@ -23,20 +32,32 @@ export default (dispatch, props) => ({
         url: ENDPOINTS.getAllUserAddress,
         method: "POST",
         data: {
-          ...newAddress,
-        },
-      });
-      return response;
-    } catch (error) {}
+          ...newAddress
+        }
+      }) 
+      return response
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
   },
   getSingleUserAddress: async (addressId) => {
     try {
       const response = await fetchAuthLoading({
         url: ENDPOINTS.getSingleUserAddress(addressId),
         method: "GET",
-      });
-      return response;
-    } catch (error) {}
+      }) 
+      return response
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
   },
   editSingleUserAddress: async (addressId, data) => {
     try {
@@ -47,7 +68,6 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      console.log("======== Bao Minh: error", error);
     }
   },
   changeInfoCustomer: async (customerId, data) => {
@@ -71,7 +91,6 @@ export default (dispatch, props) => ({
       console.log(response);
       return response;
     } catch (error) {
-      console.log("======== Tu Linh: error", error);
     }
   },
   changePassword: async (userId, data) => {
@@ -82,6 +101,65 @@ export default (dispatch, props) => ({
         data: data,
       });
       return response;
-    } catch (error) {}
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
+  },
+  deleteSingleUserAddress: async (addressId) => {
+    try {
+      const response = await fetchAuthLoading({
+        url: ENDPOINTS.getSingleUserAddress(addressId),
+        method: "DELETE",
+      }) 
+      return response
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
+  },
+  getAllOrderDetails: async (params) => {
+    try {
+      const result = await fetchAuthLoading({
+        url: ENDPOINTS.orderDetails,
+        method: "GET",
+        params: {
+          pageNumber: 1,
+          ...params,
+        },
+      });
+      if (result && result.data && result.status === ENUMS.httpStatus.OK) {
+        return result.data;
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
+  },
+  getSingleOrderDetails: async (orderId) => {
+    try {
+      const result = await fetchAuthLoading({
+        url: ENDPOINTS.orderDetailsWithParams(orderId),
+        method: "GET",
+      });
+      if (result && result.data && result.status === ENUMS.httpStatus.OK) {
+        return result.data;
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        checkError(error.response.data);
+      } else {
+        checkError("Server error !");
+      }
+    }
   },
 });

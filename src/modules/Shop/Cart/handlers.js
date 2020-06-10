@@ -13,12 +13,17 @@ import { ENUMS } from "../../../constant";
 export default (dispatch, props) => ({
   getAllCartDetails: async () => {
     try {
+      console.log("======== Bao Minh: props", props);
       const response = await fetchAuthLoading({
         url: ENDPOINTS.cartDetails,
         method: "GET",
       });
-      if (response && response.data && response.status === ENUMS.httpStatus.OK) {
-        dispatch(addAllToCard(response.data.data))
+      if (
+        response &&
+        response.data &&
+        response.status === ENUMS.httpStatus.OK
+      ) {
+        dispatch(addAllToCard(response.data.data));
         return response.data;
       }
     } catch (error) {
@@ -27,7 +32,7 @@ export default (dispatch, props) => ({
       }
     }
   },
-  addToCart: async (item, quantityCount, cartId,tierId) => {
+  addToCart: async (item, quantityCount, cartId, tierId, isIncreases) => {
     if (cartId) {
       try {
         const response = await fetchAuthLoading({
@@ -37,7 +42,7 @@ export default (dispatch, props) => ({
             quantity: quantityCount,
             cartId: cartId,
             productId: item.id,
-            productTierId: tierId
+            productTierId: tierId,
           },
         });
         if (
@@ -45,15 +50,15 @@ export default (dispatch, props) => ({
           response.data &&
           response.status === ENUMS.httpStatus.CREATED
         ) {
-          notify({
-            message: "Đã thêm sản phầm vào giỏ",
-            type: "success",
-          });
+          if (!isIncreases) {
+            notify({
+              message: "Đã thêm sản phầm vào giỏ",
+              type: "success",
+            });
+          }
           dispatch(
             addToCard({
               cartItemId: response.data.data.id,
-              // ...item,
-              // if Response return product Images
               ...response.data.data.productTier,
               quantity: response.data.data.quantity,
             })
@@ -68,12 +73,6 @@ export default (dispatch, props) => ({
         message: "Vui lòng đăng nhập trước",
         type: "error",
       });
-      // dispatch(
-      //   addToCard({
-      //     ...item,
-      //     quantity: quantityCount,
-      //   })
-      // );
     }
   },
   decreaseQuantity: async (item, cartId) => {
@@ -83,18 +82,14 @@ export default (dispatch, props) => ({
           url: ENDPOINTS.cartDetailsAPI(item.cartItemId),
           method: "PUT",
           data: {
-            quantity: item.quantity - 1
-          }
+            quantity: item.quantity - 1,
+          },
         });
         if (
           response &&
           response.data &&
           response.status === ENUMS.httpStatus.OK
         ) {
-          notify({
-            message: "Item Decremented From Cart",
-            type: "warning",
-          });
           dispatch(decreaseQuantity(item));
           return response.data;
         }
@@ -105,13 +100,8 @@ export default (dispatch, props) => ({
         });
       }
     } else {
-      notify({
-        message: "Item Decremented From Cart",
-        type: "warning",
-      });
       dispatch(decreaseQuantity(item));
     }
-    
   },
   deleteFromCart: async (item, cartId) => {
     if (cartId) {
@@ -150,10 +140,7 @@ export default (dispatch, props) => ({
           url: ENDPOINTS.cartDetails,
           method: "DELETE",
         });
-        if (
-          response &&
-          response.status === ENUMS.httpStatus.NO_CONTENT
-        ) {
+        if (response && response.status === ENUMS.httpStatus.NO_CONTENT) {
           notify({
             message: "Xóa giỏ hàng thành công",
             type: "success",
@@ -172,7 +159,7 @@ export default (dispatch, props) => ({
       dispatch(deleteAllFromCart());
     }
   },
-    
+
   cartItemStock: (item) => {
     if (item.stock) {
       return item.stock;

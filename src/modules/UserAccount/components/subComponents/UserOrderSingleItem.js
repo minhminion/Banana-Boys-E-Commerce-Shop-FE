@@ -11,99 +11,83 @@ import {
 import { ENUMS } from "../../../../constant";
 import { useEffect } from "react";
 import moment from "moment";
-import { defaultCurrency } from "../../../../common/helpers/product";
-import { OrderStatus } from "../../../../constant/enums";
+import { GiftTwoTone, ArrowRightOutlined } from "@ant-design/icons";
+import { useHistory, useLocation } from "react-router";
 
 const { Text } = Typography;
 
 const UserOrderSingleItem = ({ order }) => {
   const [status, setStatus] = useState({});
 
-  const getOrderStatus = (status) => {
-    switch (status) {
-      case ENUMS.OrderStatus.New:
-        return {
-          content: "Chờ xác nhận",
-          color: "#52c41a",
-        };
-      case ENUMS.OrderStatus.Processing:
-        return {
-          content: "Đang xử lý",
-          color: "#1890ff",
-        };
-      case ENUMS.OrderStatus.Delivering:
-        return {
-          content: "Đang giao hàng",
-          color: "#1890ff",
-        };
-      case ENUMS.OrderStatus.Succeeded:
-        return {
-          content: "Đã giao",
-          color: "#ff4d4f",
-        };
-      case ENUMS.OrderStatus.Boom:
-        return {
-          content: "Hàng bị boom",
-          color: "#ff4d4f",
-        };
-      case ENUMS.OrderStatus.Canceled:
-        return {
-          content: "Đã bị hủy",
-          color: "#ff4d4f",
-        };
-      default:
-        return {
-          content: "Đã giao",
-          color: "#ff4d4f",
-        };
-    }
-  };
+  const history = useHistory()
+  const location = useLocation()
 
   useEffect(() => {
-    setStatus(getOrderStatus(order.status));
+    setStatus(ENUMS.getOrderStatus(order.orderStatus));
   }, []);
 
   return (
     <div style={{ width: "100%" }}>
-      <Space>
-        <Text>ID Đơn hàng : {order.id}</Text>
-        <Divider type="vertical" />
-        <Text
-          style={{
-            color: status.color,
-            display: "block",
-            width: 80,
-            textAlign: "center",
-          }}
-        >
-          {status.content}
-        </Text>
-        <Divider type="vertical" />
-        <Text>Ngày đặt : {moment().format("HH:mm DD-MM-YYYY")}</Text>
-      </Space>
-      <Divider />
-      <Row gutter={[20, 20]}>
-        <Col lg={{span:6}} md={{ span: 12 }}>
-          <Statistic title="Số lượng sản phẩm" value={10} />
+      {order.isGift ? (
+        <GiftTwoTone
+          twoToneColor="#FA3C5A"
+          style={{ fontSize: 18, position: "absolute" }}
+        />
+      ) : null}
+      <Row gutter={[0, 20]} style={{ textAlign: "center" }}>
+        <Col lg={8} md={24} sm={24}>
+          <Text strong>ID Đơn hàng : </Text>
+          {order.code}
         </Col>
-        <Col lg={{span: 6}} md={{ span: 12 }}>
+        <Col lg={8} md={12} sm={12}>
+          <Text strong>Tình trạng : </Text>
+          <Text
+            style={{
+              color: status.color,
+            }}
+          >
+            {status.content}
+          </Text>
+        </Col>
+        <Col lg={8} md={12} sm={12}>
+          <Text strong>Ngày đặt : </Text>
+          {moment(moment.utc(order.createdAt))
+            .local()
+            .format("HH:mm DD-MM-YYYY")}
+        </Col>
+      </Row>
+      <Divider />
+      <Row gutter={[0, 20]}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }}>
           <Statistic
+            style={{ textAlign: "center", borderRight: "1px solid #d9d9d9" }}
+            title="Số lượng sản phẩm"
+            value={order.orderItems ? order.orderItems.length : 0}
+          />
+        </Col>
+        <Col lg={{ span: 6 }} md={{ span: 12 }}>
+          <Statistic
+            style={{ textAlign: "center", borderRight: "1px solid #d9d9d9" }}
             title="Tổng hóa đơn"
-            value={new Intl.NumberFormat().format(200000)}
+            value={new Intl.NumberFormat().format(order.totalAmount || 0)}
             prefix={<span>&#8363;</span>}
           />
         </Col>
-        <Col lg={{span: 6}} md={{ span: 12 }}>
-          <Statistic title="Phương thức thanh toán" value="COD" precision={2} />
-        </Col>
-        <Col lg={{span: 6}} md={{ span: 12 }}>
-          <Progress
-            className="order-progress"
-            showInfo={false}
-            percent={(order.status * 100) / 5}
-            steps={5}
-            strokeColor="#1890ff"
+        <Col lg={{ span: 6 }} md={{ span: 12 }}>
+          <Statistic
+            style={{ textAlign: "center", borderRight: "1px solid #d9d9d9" }}
+            title="Phương thức thanh toán"
+            value={ENUMS.getMethodOfPayment(order.paymentMethodId).content}
+            precision={2}
           />
+        </Col>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} style={{ display: 'flex' , justifyContent: 'center', alignItems: 'center'}}>
+          <div className="iconButton activated primary" onClick={() => history.push(`${location.pathname}/${order.id}`)}>
+            <ArrowRightOutlined
+              style={{ fontSize: 40 }}
+              className="iconFont level-3"
+            />
+          </div>
         </Col>
       </Row>
     </div>

@@ -17,31 +17,43 @@ import { ENUMS } from "../../../constant";
 const { Title, Text } = Typography;
 const { Search } = Input;
 
-const AddressList = ({ cartItems, user, getAllUserAddress }) => {
+const AddressList = ({
+  cartItems,
+  user,
+  getAllUserAddress,
+  deleteSingleUserAddress,
+}) => {
   const history = useHistory();
   const location = useLocation();
 
-  const [addresses, setAddresses] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalAddress, setTotalAddress] = useState(1)
+  const [addresses, setAddresses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalAddress, setTotalAddress] = useState(1);
 
-  const pageSize = 4
+  const pageSize = 4;
 
-  const fetchUserAddresses =  async (pageNumber, params) => {
-    const result = await getAllUserAddress(pageNumber, {...params, pageSize})
-    if(result && result.status === ENUMS.httpStatus.OK) {
-      setAddresses(result.data.data)
-      setTotalAddress(result.data.totalPage * pageSize)
+  const fetchUserAddresses = async (pageNumber = 1, params) => {
+    const result = await getAllUserAddress(pageNumber, { ...params, pageSize });
+    if (result && result.status === ENUMS.httpStatus.OK) {
+      setAddresses(result.data.data);
+      setTotalAddress(result.data.totalPage * pageSize);
     }
-  }
+  };
 
-  useEffect(() =>{
-    fetchUserAddresses(currentPage)
-  },[currentPage])
+  useEffect(() => {
+    fetchUserAddresses(currentPage);
+  }, [currentPage]);
 
   const handleOnPagination = (value) => {
-    setCurrentPage(value)
-  }
+    setCurrentPage(value);
+  };
+
+  const handleDeleteAddress = async (addressId) => {
+    const result = await deleteSingleUserAddress(addressId);
+    if (result && result.status === ENUMS.httpStatus.NO_CONTENT) {
+      setCurrentPage(null);
+    }
+  };
 
   return (
     <div className="billing-info-wrap">
@@ -67,26 +79,36 @@ const AddressList = ({ cartItems, user, getAllUserAddress }) => {
         </Col>
       </Row>
       {addresses && addresses.length ? (
-        <List
-          itemLayout="horizontal"
-          dataSource={addresses}
-          renderItem={(address) => (
-            <List.Item
-              style={{
-                border: "1px solid #d9d9d9",
-                borderRadius: 10,
-                padding: "20px 30px",
-                marginBottom: 20,
-              }}
-            >
-              <AddressSingleItem address={address} />
-            </List.Item>
-          )}
-        />
+        <>
+          <List
+            itemLayout="horizontal"
+            dataSource={addresses}
+            renderItem={(address) => (
+              <List.Item
+                style={{
+                  border: "1px solid #d9d9d9",
+                  borderRadius: 10,
+                  padding: "20px 30px",
+                  marginBottom: 20,
+                }}
+              >
+                <AddressSingleItem
+                  address={address}
+                  handleDeleteAddress={handleDeleteAddress}
+                />
+              </List.Item>
+            )}
+          />
+          <Pagination
+            defaultCurrent={currentPage}
+            pageSize={pageSize}
+            total={totalAddress}
+            onChange={handleOnPagination}
+          />
+        </>
       ) : (
         <Empty style={{ margin: "150px auto" }} description={false} />
       )}
-      <Pagination defaultCurrent={currentPage} pageSize={pageSize} total={totalAddress} onChange={handleOnPagination}/>
     </div>
   );
 };

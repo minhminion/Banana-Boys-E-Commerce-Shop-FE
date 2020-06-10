@@ -5,7 +5,7 @@ import MainPage from "./MainPage";
 import { loadLanguages, multilanguage } from "redux-multilanguage";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import { ConfigProvider } from "antd";
-import vi_VN from 'antd/es/locale/vi_VN';
+import vi_VN from "antd/es/locale/vi_VN";
 
 const Root = (props) => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const Root = (props) => {
       <PersistGate persistor={persistor}>
         <ConfigProvider locale={vi_VN}>
           <BreadcrumbsProvider>
-            <MainPage store={store} history={history} persistor={persistor} />
+              <MainPage store={store} history={history} persistor={persistor} />
           </BreadcrumbsProvider>
         </ConfigProvider>
       </PersistGate>

@@ -160,11 +160,11 @@ const ProductDescriptionInfo = ({
               disabled={productCartQty >= Math.floor(productStock)}
             >
               {productCartQty >= Math.floor(productStock)
-                ? "Out of Stock"
+                ? "Hết hàng"
                 : strings["add_to_cart"]}
             </button>
           ) : (
-            <button disabled>Out of Stock</button>
+            <button disabled>Hết hàng</button>
           )}
         </div>
         <div className="pro-details-wishlist">

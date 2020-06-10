@@ -1,91 +1,27 @@
-import React, { Component } from 'react'
+
+import React from 'react'
 import { Modal } from 'antd'
+import { useModal } from '../../hooks/useModal'
 
-let instanceModalComponent
-class ModalComponent extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      isShow: false,
-      params: {},
-      component: undefined
-    }
+const Modal1 = () => {
 
-    this.activateModal = this.activateModal.bind(this)
-    this.deactivateModal = this.deactivateModal.bind(this)
-    this.getApplicationNode = this.getApplicationNode.bind(this)
-  }
+  const {hide, isShow, params, component, title} = useModal()
 
-  activateModal (component, params) {
-    this.setState({
-      isShow: true,
-      component,
-      params
-    })
-  }
-
-  deactivateModal () {
-    const { deactiveCallback } = this.state
-    deactiveCallback && deactiveCallback()
-    this.setState({
-      isShow: false,
-      title: '',
-      component: undefined
-    })
-  }
-
-  getApplicationNode () {
-    return document.getElementById('application')
-  }
-
-  componentDidMount () {
-    const { global } = this.props
-    if (global) {
-      instanceModalComponent = this
-    }
-  }
-
-  componentWillUnmount () {
-    const { global } = this.props
-    if (global) {
-      instanceModalComponent = null
-    }
-  }
-
-  render () {
-    // const { classes } = this.props
-    const { isShow, component, params } = this.state
-    if (!isShow || !component) {
-      return null
-    }
-    return (
+  return (
       <Modal
-        title='Notification'
-        visible
+        title={title || "Notification"}
+        visible={isShow}
         closable
-        onCancel={this.deactivateModal}
+        onCancel={hide}
         footer={null}
         bodyStyle={{
-          padding: 0,
           ...(params.bodyStyle || {})
         }}
         {...params}
       >
         {component}
       </Modal>
-    )
-  }
+  )
 }
 
-export default {
-  Component: ModalComponent,
-  show (component, params = {}) {
-    instanceModalComponent && instanceModalComponent.activateModal(component, params)
-  },
-  hide () {
-    instanceModalComponent && instanceModalComponent.deactivateModal()
-  },
-  getApplicationNode () {
-    return (instanceModalComponent && instanceModalComponent.getApplicationNode()) || undefined
-  }
-}
+export default Modal1
