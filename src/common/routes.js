@@ -19,6 +19,7 @@ const Checkout = lazy(() => import("../modules/Shop/Checkout/containers/Checkout
 const UserAccount = lazy(() => import("../modules/UserAccount/containers/UserAccount"));
 const Contact = lazy(() => import("../pages/Contact"));
 const Home = lazy(() => import("../pages/Home"));
+const OrderSuccess = lazy(() => import("../pages/OrderSuccess"));
 const ProductInfo = lazy(() =>
   import("../modules/Shop/Products/containers/ProductInfo")
 );
@@ -56,6 +57,7 @@ const Routes = (props) => {
           component={UserAccount}
         />
         <Route path={process.env.PUBLIC_URL + "/contact"} component={Contact} />
+        <Route exact path={process.env.PUBLIC_URL + "/orderSuccess"} component={OrderSuccess} />
         <Route exact path={process.env.PUBLIC_URL} component={Home} />
         <Route exact component={NotFound} />
       </Switch>

@@ -1,6 +1,7 @@
 import { fetch, fetchLoading, fetchAuthLoading } from "../../../common/effects";
 import { ENDPOINTS } from "./models";
 import { ENUMS } from "../../../constant";
+import { checkError } from "../../../libraries/Notify";
 
 export default (dispatch, props) => ({
   getCategories: async (params) => {
@@ -77,6 +78,44 @@ export default (dispatch, props) => ({
       return response
     } catch (error) {
       return { success: false, message: 'Server Error' }
+    }
+  },
+  // ============ Rating ============
+  createProductRates: async (data) => {
+    try {
+      const response = await fetchAuthLoading({
+        url: ENDPOINTS.productRates,
+        method: "POST",
+        data
+      });
+      
+        return response;
+    } catch (error) {
+      if (error.response && error.response.errors) {
+        checkError(error.response.errors);
+      } else {
+        checkError("Server error !");
+      }
+    }
+  },
+  getAllProductRates: async (productId,params) => {
+    try {
+      const response = await fetchLoading({
+        url: ENDPOINTS.productRates,
+        method: "GET",
+        params:{
+          productId,
+          ...params
+        }
+      });
+      
+        return response;
+    } catch (error) {
+      if (error.response && error.response.errors) {
+        checkError(error.response.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   }
 })

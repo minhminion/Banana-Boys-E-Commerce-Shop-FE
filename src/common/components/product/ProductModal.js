@@ -40,6 +40,7 @@ function ProductModal({
   const addToCart = (product, quantityCount, cartId, selectedTier) => {
     setQuantityCount(1);
     addtocart(product, quantityCount, cartId, selectedTier);
+    props.onHide()
   };
   const addToWishlist = props.addtowishlist;
 
@@ -273,13 +274,13 @@ function ProductModal({
                   <div className="pro-details-cart btn-hover">
                     {productQuantity && Math.floor(productQuantity) > 0 ? (
                       <button
-                        onClick={() =>
+                        onClick={() => {
                           addToCart(
                             product,
                             quantityCount,
                             cartId,
                             selectedTier
-                          )
+                          )}
                         }
                         disabled={productCartQty >= productQuantity}
                       >

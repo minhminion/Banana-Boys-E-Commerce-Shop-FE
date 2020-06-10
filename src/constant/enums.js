@@ -23,12 +23,12 @@ export const NotificationType = {
 };
 
 export const OrderStatus = {
-  New: 0,
-  Processing: 1,
-  Delivering: 2,
-  Canceled: 3,
-  Boom: 4,
-  Succeeded: 5,
+  New: 1,
+  Processing: 2,
+  Delivering: 3,
+  Canceled: 4,
+  Boom: 5,
+  Succeeded: 6,
 };
 
 export const PriceCurrency = {
@@ -98,6 +98,61 @@ export const ProductUnit = [
     type: 'Pack'
   },
 ]
+
+export const getOrderStatus = (status) => {
+  switch (status) {
+    case OrderStatus.New:
+      return {
+        content: "Chờ xác nhận",
+        color: "#52c41a",
+      };
+    case OrderStatus.Processing:
+      return {
+        content: "Chờ lấy hàng",
+        color: "#1890ff",
+      };
+    case OrderStatus.Delivering:
+      return {
+        content: "Đang giao",
+        color: "#1890ff",
+      };
+    case OrderStatus.Succeeded:
+      return {
+        content: "Hoàn tất",
+        color: "#1890ff",
+      };
+    case OrderStatus.Canceled:
+      return {
+        content: "Đã hủy",
+        color: "#1890ff",
+      };
+    default:
+      return {
+        content: "Đã hủy",
+        color: "#ff4d4f",
+      };
+  }
+}
+
+export const getMethodOfPayment = (method) => {
+  switch (method) {
+    case MethodOfPayment.COD:
+      return {
+        content: "COD",
+        color: "#1890ff",
+      };
+    case MethodOfPayment.BK:
+      return {
+        content: "Bảo kim",
+        color: "#52c41a",
+      };
+    default:
+      return {
+        content: "Không",
+        color: "#ff4d4f",
+      };
+  }
+};
 
 export { httpStatus }
 

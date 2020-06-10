@@ -27,7 +27,7 @@ const SingleProduct = ({
     offset: 0,
   });
   const [params, setParams] = useState({
-    pageSize: 9,
+    pageSize: 5,
     pageNumber: 1,
   });
 
@@ -50,6 +50,7 @@ const SingleProduct = ({
         setProducts(response.data);
         setPagination((prev) => ({
           ...prev,
+          current: response.pageNumber,
           pageSize: response.pageSize,
           total: response.pageSize * response.totalPage,
         }));

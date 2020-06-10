@@ -7,6 +7,8 @@ export const ENDPOINTS = {
   changeInfoCustomer: (customerId) => `${DEFAULT_URL}/customers/${customerId}`,
   getInfoCustomer: (userId) => `${DEFAULT_URL}/users/${userId}`,
   changePassword: (userId) => `${DEFAULT_URL}/users/${userId}`,
+  orderDetails: `${DEFAULT_URL}/Orders`,
+  orderDetailsWithParams:(orderId) => `${DEFAULT_URL}/Orders/${orderId}` 
 };
 
 export const LIMIT = 20;

@@ -159,7 +159,8 @@ const Cart = ({
                                           cartItem,
                                           quantityCount,
                                           cartId,
-                                          cartItem.id
+                                          cartItem.id,
+                                          true
                                         )
                                       }
                                       disabled={

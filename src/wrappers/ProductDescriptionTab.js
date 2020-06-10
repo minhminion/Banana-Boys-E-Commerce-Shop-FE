@@ -1,9 +1,95 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { DEFAULT_IMG_URL } from "../common/configs/index";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import {
+  Row,
+  Col,
+  Form,
+  Rate,
+  Typography,
+  Button,
+  Comment,
+  Tooltip,
+  List,
+  Space,
+  Avatar,
+  Pagination,
+  Upload,
+  message,
+  Modal,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import TextArea from "antd/lib/input/TextArea";
+import moment from "moment";
+import { useForm } from "antd/lib/form/util";
+import { useSelector } from "react-redux";
 
-const ProductDescriptionTab = ({ spaceBottomClass, product }) => {
+const { Text, Title } = Typography;
+
+const ProductDescriptionTab = ({
+  spaceBottomClass,
+  product,
+  handleCreateProductRates,
+  productRates,
+  onChangePaging,
+  pagination,
+}) => {
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 1000);
+  };
+
+  useEffect(() => {
+    moment.locale("vi");
+  }, []);
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const isImage = file.type.indexOf("image");
+      if (isImage < 0) {
+        message.error("Vui lòng chọn file định dạng JPG");
+        resolve();
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const user = useSelector((state) => (state.user ? state.user.user : null));
+
+  const [fileList, setFileList] = useState([]);
+  const [preview, setPreview] = useState({});
+
+  const handlePreviewImage = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreview({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle:
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+    });
+  };
+
+  const handleCancelPreview = () => setPreview({ previewVisible: false });
+
+  const handleChangeImage = ({ fileList }) => setFileList(fileList);
+
+  const [form] = useForm();
+
+  const handleSubmitComment = (values) => {
+    handleCreateProductRates && handleCreateProductRates(values);
+    form.resetFields();
+    setFileList([])
+  };
+
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
@@ -16,10 +102,12 @@ const ProductDescriptionTab = ({ spaceBottomClass, product }) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="productDescription">Description</Nav.Link>
+                <Nav.Link eventKey="productDescription">Mô tả</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="productReviews">Reviews(2)</Nav.Link>
+                <Nav.Link eventKey="productReviews">{`Đánh giá(${
+                  productRates.length || 0
+                })`}</Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content className="description-review-bottom">
@@ -30,7 +118,8 @@ const ProductDescriptionTab = ({ spaceBottomClass, product }) => {
                       <span>Trọng lượng</span> 400 g / Quả
                     </li>
                     <li>
-                      <span>Xuất xứ</span>{product.origin}{" "}
+                      <span>Xuất xứ</span>
+                      {product.origin || ""}{" "}
                     </li>
                     <li>
                       <span>Materials</span> 60% cotton, 40% polyester
@@ -43,143 +132,182 @@ const ProductDescriptionTab = ({ spaceBottomClass, product }) => {
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {product.description}
+                {product.description || ""}
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
-                <div className="row">
-                  <div className="col-lg-7">
-                    <div className="review-wrapper">
-                      <div className="single-review">
-                        <div className="review-img">
-                          <img
-                            src={
-                              process.env.PUBLIC_URL +
-                              "/assets/img/testimonial/1.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="review-content">
-                          <div className="review-top-wrap">
-                            <div className="review-left">
-                              <div className="review-name">
-                                <h4>White Lewis</h4>
-                              </div>
-                              <div className="review-rating">
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                              </div>
-                            </div>
-                            <div className="review-left">
-                              <button>Reply</button>
-                            </div>
-                          </div>
-                          <div className="review-bottom">
-                            <p>
-                              Vestibulum ante ipsum primis aucibus orci
-                              luctustrices posuere cubilia Curae Suspendisse
-                              viverra ed viverra. Mauris ullarper euismod
-                              vehicula. Phasellus quam nisi, congue id nulla.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="single-review child-review">
-                        <div className="review-img">
-                          <img
-                            src={
-                              process.env.PUBLIC_URL +
-                              "/assets/img/testimonial/2.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="review-content">
-                          <div className="review-top-wrap">
-                            <div className="review-left">
-                              <div className="review-name">
-                                <h4>White Lewis</h4>
-                              </div>
-                              <div className="review-rating">
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                              </div>
-                            </div>
-                            <div className="review-left">
-                              <button>Reply</button>
-                            </div>
-                          </div>
-                          <div className="review-bottom">
-                            <p>
-                              Vestibulum ante ipsum primis aucibus orci
-                              luctustrices posuere cubilia Curae Suspendisse
-                              viverra ed viverra. Mauris ullarper euismod
-                              vehicula. Phasellus quam nisi, congue id nulla.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-5">
-                    <div className="ratting-form-wrapper pl-50">
-                      <h3>Add a Review</h3>
-                      <div className="ratting-form">
-                        <form action="#">
-                          <div className="star-box">
-                            <span>Your rating:</span>
-                            <div className="ratting-star">
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="rating-form-style mb-10">
-                                <input placeholder="Name" type="text" />
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="rating-form-style mb-10">
-                                <input placeholder="Email" type="email" />
-                              </div>
-                            </div>
-                            <div className="col-md-12">
-                              <div className="rating-form-style form-submit">
-                                <textarea
-                                  name="Your Review"
-                                  placeholder="Message"
-                                  defaultValue={""}
+                <Row gutter={40}>
+                  <Col lg={user && user.id ? 14 : 24} md={24}>
+                    <List
+                      className="comment-list"
+                      itemLayout="horizontal"
+                      dataSource={productRates}
+                      renderItem={(item) => (
+                        <List.Item>
+                          <Comment
+                            // actions={item.actions}
+                            author={
+                              <Space>
+                                <Text style={{ fontSize: 14 }} strong>
+                                  {item.customer
+                                    ? item.customer.name
+                                    : "Người bí ẩn"}
+                                </Text>
+                                <Rate
+                                  disabled
+                                  style={{ fontSize: 14 }}
+                                  value={item.starNum}
                                 />
-                                <input type="submit" defaultValue="Submit" />
+                              </Space>
+                            }
+                            avatar={
+                              <Avatar
+                                style={{
+                                  verticalAlign: "middle",
+                                }}
+                                size="large"
+                              >
+                                {
+                                  (item.customer
+                                    ? item.customer.name
+                                    : "Người bí ẩn"
+                                  ).split("")[0]
+                                }
+                              </Avatar>
+                            }
+                            content={
+                              <>
+                                <Upload
+                                  disabled
+                                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                  listType="picture-card"
+                                  // fileList={fileList}
+                                  // WHEN COMMENT HAVE IMAGE
+                                  fileList={
+                                    item.ratingImages
+                                      ? item.ratingImages.map((image) => ({
+                                          uid: image.id,
+                                          name: image.imgName,
+                                          status: "done",
+                                          url:
+                                            DEFAULT_IMG_URL +
+                                            image.imgLocation.replace(
+                                              "\\",
+                                              "/"
+                                            ),
+                                        }))
+                                      : []
+                                  }
+                                  onPreview={handlePreviewImage}
+                                  onChange={handleChangeImage}
+                                />
+                                {item.comment}
+                              </>
+                            }
+                            datetime={
+                              <Tooltip
+                                title={moment(moment.utc(item.createdAt))
+                                  .local()
+                                  .format("YYYY-MM-DD HH:mm:ss")}
+                              >
+                                <span>
+                                  {moment(moment.utc(item.createdAt))
+                                    .local()
+                                    .fromNow()
+                                    .toLocaleUpperCase("vn")}
+                                </span>
+                              </Tooltip>
+                            }
+                          />
+                        </List.Item>
+                      )}
+                    />
+                    {productRates && productRates.length > 0 ? (
+                      <Pagination {...pagination} onChange={onChangePaging} />
+                    ) : null}
+                  </Col>
+                  {user && user.id ? (
+                    <Col lg={10} md={24}>
+                      <Title level={3} style={{ marginBottom: 20 }}>
+                        Nhận xét của bạn
+                      </Title>
+                      <Form
+                        form={form}
+                        onFinish={handleSubmitComment}
+                        labelCol={{ span: 4 }}
+                        wrapperCol={{ span: 20 }}
+                        initialValues={{
+                          starNum: 4,
+                        }}
+                      >
+                        <Form.Item
+                          label={<Text strong>Đánh giá</Text>}
+                          name="starNum"
+                        >
+                          <Rate />
+                        </Form.Item>
+                        <Form.Item
+                          label={<Text strong>Hình ảnh</Text>}
+                          name="images"
+                        >
+                          <Upload
+                            customRequest={dummyRequest}
+                            listType="picture-card"
+                            accept="image/x-png,image/gif,image/jpeg"
+                            fileList={fileList}
+                            onPreview={handlePreviewImage}
+                            onChange={handleChangeImage}
+                          >
+                            {fileList.length >= 8 ? null : (
+                              <div>
+                                <PlusOutlined />
+                                <div className="ant-upload-text">Đăng</div>
                               </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                            )}
+                          </Upload>
+                        </Form.Item>
+
+                        <Form.Item
+                          label={<Text strong>Nhận xét</Text>}
+                          name="comment"
+                        >
+                          <TextArea
+                            rows={6}
+                            placeholder="Nhận xét của bạn..."
+                          />
+                        </Form.Item>
+
+                        <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                          <Button type="primary" htmlType="submit">
+                            Gửi
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    </Col>
+                  ) : null}
+                </Row>
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
         </div>
       </div>
+      <Modal
+        visible={preview.previewVisible}
+        title={preview.previewTitle}
+        footer={null}
+        onCancel={handleCancelPreview}
+      >
+        <img
+          alt="example"
+          style={{ width: "100%" }}
+          src={preview.previewImage}
+        />
+      </Modal>
     </div>
   );
 };
 
 ProductDescriptionTab.propTypes = {
-  spaceBottomClass: PropTypes.string
+  spaceBottomClass: PropTypes.string,
 };
 
 export default ProductDescriptionTab;

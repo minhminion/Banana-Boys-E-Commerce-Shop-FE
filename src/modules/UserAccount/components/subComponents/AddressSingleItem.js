@@ -3,7 +3,7 @@ import { Descriptions, Typography, Button, Space } from "antd";
 import { CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router";
 const { Text } = Typography;
-const AddressSingleItem = ({ address, onChoice }) => {
+const AddressSingleItem = ({ address, onChoice, handleDeleteAddress }) => {
   const history = useHistory();
 
   return (
@@ -19,7 +19,10 @@ const AddressSingleItem = ({ address, onChoice }) => {
               >
                 <EditOutlined /> Chỉnh Sửa
               </Button>
-              <Button type="ghost">
+              <Button
+                type="ghost"
+                onClick={() => handleDeleteAddress(address.id)}
+              >
                 <CloseOutlined /> Xóa
               </Button>
               {onChoice && (

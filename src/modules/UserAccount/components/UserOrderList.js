@@ -7,8 +7,10 @@ import {
   Skeleton,
   Avatar,
   List,
+  Pagination,
 } from "antd";
 import UserOrderSingleItem from "./subComponents/UserOrderSingleItem";
+import { ENUMS } from "../../../constant";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -36,12 +38,50 @@ const mockData = [
   },
 ];
 
-const UserOrderList = () => {
-  const [orders, setOrders] = useState([]);
+const UserOrderList = ({ getAllOrderDetails }) => {
+  const initialParams = {
+    pageNumber: 1,
+    pageSize: 5,
+    isGift: 1,
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [searchParams, setSearchParams] = useState(initialParams);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    total: 1,
+    pageSize: 5,
+  });
 
   useEffect(() => {
-    setOrders(mockData);
-  }, []);
+    const fetchAllProducts = async (params) => {
+      setLoading(true);
+      const response = await getAllOrderDetails(params);
+      if (response && response.data) {
+        setData(response.data);
+        setPagination({
+          current: response.pageNumber,
+          pageSize: response.pageSize,
+          total: response.pageSize * response.totalPage,
+        });
+      }
+      setLoading(false);
+    };
+    fetchAllProducts(searchParams);
+  }, [searchParams, getAllOrderDetails]);
+
+  const handleOnPagination = (pagination, filters, sorter, extra) => {
+    const params = {
+      pageNumber: pagination,
+    };
+    window.scrollTo(0, 150);
+    setSearchParams((prev) => ({ ...prev, ...params }));
+  };
+
+  const handleOnSearch = (value) => {
+    setSearchParams((prev) => ({ ...prev, code: value }));
+  }
 
   return (
     <div>
@@ -50,26 +90,34 @@ const UserOrderList = () => {
       <Search
         style={{ marginBottom: 30 }}
         size="large"
-        placeholder="Tìm kiếm theo ID đơn hàng hoặc Tên Sản phẩm"
-        onSearch={(value) => console.log(value)}
+        placeholder="Tìm kiếm theo mã đơn hàng..."
+        onSearch={handleOnSearch}
       />
-      {orders && orders.length ? (
-        <List
-          itemLayout="horizontal"
-          dataSource={orders}
-          renderItem={(order) => (
-            <List.Item
-              style={{
-                border: "1px solid #d9d9d9",
-                borderRadius: 10,
-                padding: "20px 30px",
-                marginBottom: 20,
-              }}
-            >
-              <UserOrderSingleItem order={order} />
-            </List.Item>
-          )}
-        />
+      {data && data.length ? (
+        <>
+          <List
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={(order) => (
+              <List.Item
+                style={{
+                  border: "1px solid #d9d9d9",
+                  borderRadius: 10,
+                  padding: "20px 30px",
+                  marginBottom: 20,
+                }}
+              >
+                <UserOrderSingleItem order={order} />
+              </List.Item>
+            )}
+          />
+          <Pagination
+            defaultCurrent={pagination.current}
+            pageSize={pagination.pageSize}
+            total={pagination.total}
+            onChange={handleOnPagination}
+          />
+        </>
       ) : (
         <Empty style={{ margin: "150px auto" }} description={false} />
       )}

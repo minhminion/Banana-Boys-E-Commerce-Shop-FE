@@ -19,11 +19,17 @@ import AddressSingleItem from "../../../../UserAccount/components/subComponents/
 import TextArea from "antd/lib/input/TextArea";
 import { notify } from "../../../../../libraries/Notify";
 import { getNodeText } from "@testing-library/react";
+import moment from "moment";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
 
-const AddressList = ({ getAllUserAddress, onSubmit, goNext }) => {
+const AddressList = ({
+  getAllUserAddress,
+  onSubmit,
+  goNext,
+  deleteSingleUserAddress,
+}) => {
   const [addresses, setAddresses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalAddress, setTotalAddress] = useState(1);
@@ -46,29 +52,35 @@ const AddressList = ({ getAllUserAddress, onSubmit, goNext }) => {
     setCurrentPage(value);
   };
 
-  const handleDeleteAddress = (addressId) => {
-    setCurrentPage(1);
-  };
-
   const handleChoiceAddress = (addressId) => {
     setSelectedAddressId(addressId);
   };
 
+  const handleDeleteAddress = async (addressId) => {
+    const result = await deleteSingleUserAddress(addressId);
+    if (result && result.status === ENUMS.httpStatus.NO_CONTENT) {
+      setCurrentPage(null);
+    }
+  };
+
   const handleComfirmChoiceAddress = (values) => {
-    if( !selectedAddressId) {
+    if (!selectedAddressId) {
       notify({
-        message: 'Vui lòng chọn địa chỉ',
-        type: 'warning'
-      })
+        message: "Vui lòng chọn địa chỉ",
+        type: "warning",
+      });
     } else {
       const data = {
         ...values,
-        addressId: selectedAddressId
-      }
-      onSubmit(data)
-      goNext()
+        idealShipTime: values.idealShipTime
+          ? moment(moment.utc(values.idealShipTime)).local().format("DD/MM/YYYY HH:mm:ss")
+          : moment(moment.utc()).local().add(7, 'days').format("DD/MM/YYYY HH:mm:ss"),
+        addressId: selectedAddressId,
+      };
+      onSubmit(data);
+      goNext();
     }
-  }
+  };
 
   return (
     <div className="billing-info-wrap">
@@ -84,46 +96,53 @@ const AddressList = ({ getAllUserAddress, onSubmit, goNext }) => {
       <Row gutter={20}>
         <Col lg={14} md={24}>
           {addresses && addresses.length ? (
-            <List
-              itemLayout="horizontal"
-              dataSource={addresses}
-              renderItem={(address) => (
-                <List.Item
-                  className={`address-item ${
-                    address.id === selectedAddressId ? "active" : ""
-                  }`}
-                  style={{
-                    border: "1px solid #d9d9d9",
-                    borderRadius: 10,
-                    padding: "20px 30px",
-                    marginBottom: 20,
-                  }}
-                >
-                  <AddressSingleItem
-                    address={address}
-                    onDelete={handleDeleteAddress}
-                    onChoice={handleChoiceAddress}
-                  />
-                </List.Item>
-              )}
-            />
+            <>
+              <List
+                itemLayout="horizontal"
+                dataSource={addresses}
+                renderItem={(address) => (
+                  <List.Item
+                    className={`address-item ${
+                      address.id === selectedAddressId ? "active" : ""
+                    }`}
+                    style={{
+                      border: "1px solid #d9d9d9",
+                      borderRadius: 10,
+                      padding: "20px 30px",
+                      marginBottom: 20,
+                    }}
+                  >
+                    <AddressSingleItem
+                      address={address}
+                      handleDeleteAddress={handleDeleteAddress}
+                      onDelete={handleDeleteAddress}
+                      onChoice={handleChoiceAddress}
+                    />
+                  </List.Item>
+                )}
+              />
+              <Pagination
+                style={{ marginBottom: 20 }}
+                defaultCurrent={currentPage}
+                pageSize={pageSize}
+                total={totalAddress}
+                onChange={handleOnPagination}
+              />
+            </>
           ) : (
             <Empty style={{ margin: "150px auto" }} description={false} />
           )}
-          <Pagination
-            style={{ marginBottom: 20 }}
-            defaultCurrent={currentPage}
-            pageSize={pageSize}
-            total={totalAddress}
-            onChange={handleOnPagination}
-          />
         </Col>
         <Col lg={10} md={24}>
           <Title level={3}>Yêu cầu của khách hàng</Title>
           <Text>
             Banana Boys cam đoan sẽ thực hiện mọi yêu cầu của khách hàng
           </Text>
-          <Form style={{ marginTop: 20 }} layout="vertical" onFinish={handleComfirmChoiceAddress}>
+          <Form
+            style={{ marginTop: 20 }}
+            layout="vertical"
+            onFinish={handleComfirmChoiceAddress}
+          >
             <Form.Item label="Ngày giao hàng :" name="idealShipTime">
               <DatePicker />
             </Form.Item>

@@ -45,7 +45,7 @@ const AddressForm = ({ data, onFinish }) => {
           ? {
               city: { label: data.district },
               district: { label: data.district },
-              ward: "Phưởng 4",
+              ward: 4,
               streetLocation: data.streetLocation,
               name: data.name,
               phone: data.phone,

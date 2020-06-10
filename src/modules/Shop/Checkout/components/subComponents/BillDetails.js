@@ -25,24 +25,16 @@ import { ENUMS } from "../../../../../constant";
 const { Title } = Typography;
 const { Option } = Select;
 
-const BillDetails = ({ cartItems, user, goNext, getAllUserAddress, createUserAddress, onSubmit }) => {
-  const [districts, setDistricts] = useState(null);
-  const [showAdditional, setShowAdditional] = useState(false);
+const BillDetails = ({
+  cartItems,
+  user,
+  goNext,
+  getAllUserAddress,
+  createUserAddress,
+  onSubmit,
+  deleteSingleUserAddress,
+}) => {
   const [isNewAddress, setIsNewAddress] = useState(false);
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    // THIS FUNCTION TO GET CITY AND DISTRICT OF USER
-    const cityCode = cities.find((city) => city.name === "Hồ Chí Minh").code;
-    setDistricts(
-      allDistricts.filter((district) => district.parent_code === cityCode)
-    );
-  }, []);
-
-  // Toggle to show Addtional infomation
-  const toggleAdditional = () => {
-    setShowAdditional((prev) => !prev);
-  };
 
   const onAddNewAddress = async (values) => {
     const result = await createUserAddress({
@@ -51,14 +43,13 @@ const BillDetails = ({ cartItems, user, goNext, getAllUserAddress, createUserAdd
       streetLocation: values.streetLocation,
       city: values.city.label,
       district: values.district.label,
-      ward: values.ward
+      ward: values.ward,
     });
     if (result && result.status === ENUMS.httpStatus.CREATED) {
-      notify({ message: "Lưu thành công địa chỉ mới", type: 'success' })
-      setIsNewAddress(false)
+      notify({ message: "Lưu thành công địa chỉ mới", type: "success" });
+      setIsNewAddress(false);
     }
   };
-
 
   // MESSAGE WHEN ERROR
   const validateMessages = {
@@ -77,32 +68,6 @@ const BillDetails = ({ cartItems, user, goNext, getAllUserAddress, createUserAdd
     setIsNewAddress((prev) => !prev);
   };
 
-  const additionalForm = (
-    <Fragment>
-      <Form.Item label="Delivery in" style={{ marginBottom: 0 }}>
-        <Form.Item name="startDelivery" style={{ display: "inline-block" }}>
-          <DatePicker />
-        </Form.Item>
-        <span
-          style={{
-            display: "inline-block",
-            width: "24px",
-            lineHeight: "32px",
-            textAlign: "center",
-          }}
-        >
-          -
-        </span>
-        <Form.Item name="endDelivery" style={{ display: "inline-block" }}>
-          <DatePicker />
-        </Form.Item>
-      </Form.Item>
-      <Form.Item label="Note" name="note">
-        <Input.TextArea />
-      </Form.Item>
-    </Fragment>
-  );
-
   if (cartItems && cartItems.length >= 1) {
     return (
       <div>
@@ -114,9 +79,14 @@ const BillDetails = ({ cartItems, user, goNext, getAllUserAddress, createUserAdd
         </Button>
         <Divider />
         {!isNewAddress ? (
-          <AddressList getAllUserAddress={getAllUserAddress} onSubmit={onSubmit} goNext={goNext}/>
+          <AddressList
+            deleteSingleUserAddress={deleteSingleUserAddress}
+            getAllUserAddress={getAllUserAddress}
+            onSubmit={onSubmit}
+            goNext={goNext}
+          />
         ) : (
-          <AddressForm onFinish={onAddNewAddress}/>
+          <AddressForm onFinish={onAddNewAddress} />
         )}
       </div>
     );
