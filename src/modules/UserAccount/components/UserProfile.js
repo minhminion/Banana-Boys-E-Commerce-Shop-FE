@@ -13,6 +13,7 @@ import {
   Space,
   Radio,
   DatePicker,
+  notification,
 } from "antd";
 import { UserOutlined, UploadOutlined } from "@ant-design/icons";
 
@@ -27,9 +28,35 @@ const tailLayout = {
   wrapperCol: { offset: 5, span: 19 },
 };
 
-const UserProfile = ({ user }) => {
-  console.log(user);
-  console.log(user.customer.gender);
+const notificationSuccess = (type) => {
+  notification[type]({
+    message: "Thay đổi thành công",
+  });
+};
+
+const notificationError = (type) => {
+  notification[type]({
+    message: "Thay đổi thất bại",
+  });
+};
+
+const UserProfile = ({
+  user,
+  changeInfoCustomer,
+  history,
+  getInfoCustomer,
+}) => {
+  const onFinish = async (values) => {
+    const customerId = user.customer.id;
+    const result = await changeInfoCustomer(customerId, values);
+    if (result) {
+      await getInfoCustomer(user.id);
+      notificationSuccess("success");
+    } else {
+      notificationError("error");
+    }
+  };
+
   const uploadProps = {
     name: "file",
     action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
@@ -55,7 +82,7 @@ const UserProfile = ({ user }) => {
       <Divider />
       <Row gutter={20}>
         <Col span={16}>
-          <Form {...layout} style={{ marginRight: 50 }}>
+          <Form onFinish={onFinish} {...layout} style={{ marginRight: 50 }}>
             <Form.Item label="Email đăng nhập">
               {/* {user.email.replace(/(?!^).(?=[^@]+@)/g, "*")} */}
               <span style={{ fontSize: "17px" }}>{user.email}</span>
@@ -108,7 +135,7 @@ const UserProfile = ({ user }) => {
                 <Radio value={2}>Khác</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item name="birthDay" label="Ngày sinh">
+            <Form.Item name="birthday" label="Ngày sinh">
               <DatePicker style={{ width: "75%" }} />
             </Form.Item>
             <Form.Item {...tailLayout}>
