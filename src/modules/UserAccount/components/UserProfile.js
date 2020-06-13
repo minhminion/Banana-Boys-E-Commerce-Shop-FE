@@ -46,9 +46,23 @@ const UserProfile = ({
   history,
   getInfoCustomer,
 }) => {
+  const cleanObj = (obj) => {
+    var propNames = Object.getOwnPropertyNames(obj);
+    for (var i = 0; i < propNames.length; i++) {
+      var propName = propNames[i];
+      if (obj[propName] === null || obj[propName] === undefined) {
+        delete obj[propName];
+      }
+    }
+    return obj;
+  };
+
   const onFinish = async (values) => {
     const customerId = user.customer.id;
-    const result = await changeInfoCustomer(customerId, values);
+    const result = await changeInfoCustomer(customerId, {
+      ...user.customer,
+      ...cleanObj(values),
+    });
     if (result) {
       await getInfoCustomer(user.id);
       notificationSuccess("success");
@@ -90,10 +104,7 @@ const UserProfile = ({
             <Form.Item label="Họ tên ">
               <span style={{ fontSize: "17px" }}>{user.customer.name}</span>
             </Form.Item>
-            <Form.Item
-              name="name"
-              label="Họ tên sửa đổi"
-            >
+            <Form.Item name="name" label="Họ tên sửa đổi" rules={[]}>
               <Input
                 style={{ width: "75%", fontSize: "15px" }}
                 placeholder="Họ tên bạn muốn sửa đổi"

@@ -20,7 +20,7 @@ const openNotificationWithIcon = (type) => {
 
 const notificationError = (type) => {
   notification[type]({
-    message: "Thay đổi không thành công",
+    message: "Thay đổi thất bại",
   });
 };
 

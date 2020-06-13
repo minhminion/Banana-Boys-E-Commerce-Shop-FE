@@ -21,10 +21,10 @@ const config = {
   ],
 };
 
-const openNotificationWithIcon = type => {
+const openNotificationWithIcon = (type) => {
   notification[type]({
-    message: 'Đăng ký thành công',
-    description: 'Bạn hãy đăng nhập để thỏa sức mua sắm. '
+    message: "Đăng ký thành công",
+    description: "Bạn hãy đăng nhập để thỏa sức mua sắm. ",
   });
 };
 
@@ -37,7 +37,7 @@ const Register = (props) => {
       const error = result.error;
       checkError(error.errors);
     } else {
-      openNotificationWithIcon('success')
+      openNotificationWithIcon("success");
       history.push("/");
     }
   }
@@ -74,7 +74,7 @@ const Register = (props) => {
           },
           {
             pattern: new RegExp(/(03|07|08|09|01[2|6|8|9])+([0-9]{8})\b/),
-            message: "Số điện thoại không hợp lệ!"
+            message: "Số điện thoại không hợp lệ!",
           },
         ]}
       >
@@ -140,7 +140,7 @@ const Register = (props) => {
         <Input.Password placeholder="Xác nhận mật khẩu" />
       </Form.Item>
 
-      <Form.Item
+      {/* <Form.Item
         name="address"
         label={<span>Địa chỉ</span>}
         rules={[
@@ -152,7 +152,7 @@ const Register = (props) => {
         ]}
       >
         <Input placeholder="Nhập địa chỉ" />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item name="gender" label={<span>Giới tính</span>}>
         <Radio.Group>
           <Radio value={0}>Nam</Radio>
