@@ -61,6 +61,7 @@ const UserAccount = ({
                   changeInfoCustomer={changeInfoCustomer}
                   history={history}
                   getInfoCustomer={getInfoCustomer}
+                  location={location}
                 />
               </Route>
               <Route exact path={process.env.PUBLIC_URL + "/user/address"}>

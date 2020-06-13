@@ -77,9 +77,10 @@ export default (dispatch, props) => ({
         method: "PUT",
         data: data,
       });
-      console.log(response);
       return response;
-    } catch (error) {}
+    } catch (error) {
+      console.log("======== Tu Linh: error", error);
+    }
   },
   getInfoCustomer: async (userId) => {
     try {
@@ -89,7 +90,6 @@ export default (dispatch, props) => ({
       });
       dispatch(setUserInformation(response.data.data));
       console.log(response);
-      return response;
     } catch (error) {
     }
   },
