@@ -15,7 +15,6 @@ const ProductImageDescription = ({
   cartItems,
   wishlistItems,
 }) => {
-  // console.log('======== Bao Minh: product', product)
   const wishlistItem = wishlistItems.filter(
     wishlistItem => wishlistItem.productTierId === product.productTiers[0].id
   )[0];

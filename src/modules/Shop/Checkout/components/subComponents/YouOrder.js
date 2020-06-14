@@ -74,21 +74,11 @@ const YouOrder = ({
       card: cardElement,
     });
 
-    if (error) {
-      console.log("======== Bao Minh: error", error);
-    } else {
-      console.log(
-        "======== Bao Minh: handleSubmit -> paymentMethod",
-        paymentMethod
-      );
-    }
-
     try {
       if (error) {
         message.warning("Vui lòng kiểm tra lại mã thẻ");
       } else {
         const result = await onSubmit(paymentChoice);
-        console.log('======== Bao Minh: result', result)
         if (paymentMethod && result) {
           const { paymentIntent } = await stripe.confirmCardPayment(
             result.data.data.stripeClientSecret,
@@ -97,7 +87,6 @@ const YouOrder = ({
             }
           );
 
-          console.log("======== Bao Minh: paymentIntent", paymentIntent);
           if (paymentIntent.status === "succeeded") {
             history.push("/orderSuccess");
           } else {
@@ -115,7 +104,6 @@ const YouOrder = ({
       }
     } catch (error) {
 
-      console.log('======== Bao Minh: error', error)
     }
   };
 
