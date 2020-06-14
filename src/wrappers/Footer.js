@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { animateScroll } from "react-scroll";
-import FooterNewsletter from '../common/components/footer/FooterNewsletter'
-import FooterCopyright from '../common/components/footer/FooterCopyright'
+import FooterNewsletter from "../common/components/footer/FooterNewsletter";
+import FooterCopyright from "../common/components/footer/FooterCopyright";
 
 const Footer = ({
   backgroundColorClass,
@@ -11,7 +11,7 @@ const Footer = ({
   spaceBottomClass,
   containerClass,
   extraFooterClass,
-  sideMenu
+  sideMenu,
 }) => {
   const [scroll, setScroll] = useState(0);
   const [top, setTop] = useState(0);
@@ -60,26 +60,28 @@ const Footer = ({
           >
             <div className="footer-widget mb-30 ml-30">
               <div className="footer-title">
-                <h3>ABOUT US</h3>
+                <h3>VỀ CHÚNG TÔI</h3>
               </div>
               <div className="footer-list">
                 <ul>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/about"}>About us</Link>
+                    <Link to={process.env.PUBLIC_URL + "/about"}>
+                      Về chúng tôi
+                    </Link>
                   </li>
                   <li>
                     <Link to={process.env.PUBLIC_URL + "#/"}>
-                      Store location
+                      Vị trí cửa hàng
                     </Link>
                   </li>
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/contact"}>
-                      Contact
+                      Liên hệ
                     </Link>
                   </li>
                   <li>
                     <Link to={process.env.PUBLIC_URL + "#/"}>
-                      Orders tracking
+                      Theo dõi đơn hàng
                     </Link>
                   </li>
                 </ul>
@@ -99,23 +101,25 @@ const Footer = ({
               }`}
             >
               <div className="footer-title">
-                <h3>USEFUL LINKS</h3>
+                <h3>LIÊN KẾT HỮU ÍCH</h3>
               </div>
               <div className="footer-list">
                 <ul>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "#/"}>Returns</Link>
+                    <Link to={process.env.PUBLIC_URL + "#/"}>Trả hàng</Link>
                   </li>
                   <li>
                     <Link to={process.env.PUBLIC_URL + "#/"}>
-                      Support Policy
+                      Chính sách hỗ trợ
                     </Link>
                   </li>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "#/"}>Size guide</Link>
+                    <Link to={process.env.PUBLIC_URL + "#/"}>Hướng dẫn</Link>
                   </li>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "#/"}>FAQs</Link>
+                    <Link to={process.env.PUBLIC_URL + "#/"}>
+                      Câu hỏi thường gặp
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -126,13 +130,15 @@ const Footer = ({
               sideMenu ? "col-xl-3 col-sm-4" : "col-lg-2 col-sm-6"
             }`}
           >
-            <div className={`${
+            <div
+              className={`${
                 sideMenu
                   ? "footer-widget mb-30 ml-145"
                   : "footer-widget mb-30 ml-75"
-              }`}>
+              }`}
+            >
               <div className="footer-title">
-                <h3>FOLLOW US</h3>
+                <h3>Theo dõi chúng tôi</h3>
               </div>
               <div className="footer-list">
                 <ul>
@@ -182,7 +188,11 @@ const Footer = ({
             }`}
           >
             {/* footer newsletter */}
-            <FooterNewsletter spaceBottomClass="mb-30" spaceLeftClass="ml-70" sideMenu={sideMenu} />
+            <FooterNewsletter
+              spaceBottomClass="mb-30"
+              spaceLeftClass="ml-70"
+              sideMenu={sideMenu}
+            />
           </div>
         </div>
       </div>
@@ -202,7 +212,7 @@ Footer.propTypes = {
   extraFooterClass: PropTypes.string,
   sideMenu: PropTypes.bool,
   spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
+  spaceTopClass: PropTypes.string,
 };
 
 export default Footer;
