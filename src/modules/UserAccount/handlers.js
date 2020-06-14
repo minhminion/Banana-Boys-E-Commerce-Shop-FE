@@ -5,7 +5,6 @@ import { setUserInformation } from "../LoginAndRegister/actions";
 import { ENUMS } from "../../constant";
 import checkError from "../../libraries/CheckError";
 
-
 export default (dispatch, props) => ({
   getAllUserAddress: async (pageNumber, params) => {
     try {
@@ -14,13 +13,17 @@ export default (dispatch, props) => ({
         method: "GET",
         params: {
           pageNumber,
-          ...params
-        }
-      }) 
-      return response
+          ...params,
+        },
+      });
+      return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -32,13 +35,17 @@ export default (dispatch, props) => ({
         url: ENDPOINTS.getAllUserAddress,
         method: "POST",
         data: {
-          ...newAddress
-        }
-      }) 
-      return response
+          ...newAddress,
+        },
+      });
+      return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -49,11 +56,15 @@ export default (dispatch, props) => ({
       const response = await fetchAuthLoading({
         url: ENDPOINTS.getSingleUserAddress(addressId),
         method: "GET",
-      }) 
-      return response
+      });
+      return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -68,8 +79,12 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -84,8 +99,12 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -99,8 +118,7 @@ export default (dispatch, props) => ({
       });
       dispatch(setUserInformation(response.data.data));
       console.log(response);
-    } catch (error) {
-    }
+    } catch (error) {}
   },
   changePassword: async (userId, data) => {
     try {
@@ -111,8 +129,12 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -123,11 +145,15 @@ export default (dispatch, props) => ({
       const response = await fetchAuthLoading({
         url: ENDPOINTS.getSingleUserAddress(addressId),
         method: "DELETE",
-      }) 
-      return response
+      });
+      return response;
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -147,8 +173,12 @@ export default (dispatch, props) => ({
         return result.data;
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -164,8 +194,12 @@ export default (dispatch, props) => ({
         return result.data;
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }

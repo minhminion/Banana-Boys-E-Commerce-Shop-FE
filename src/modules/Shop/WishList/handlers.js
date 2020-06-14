@@ -44,8 +44,12 @@ export default (dispatch, props) => ({
         dispatch(ADD_ALL_TO_WISHLIST(result.data.data));
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -65,8 +69,12 @@ export default (dispatch, props) => ({
         dispatch(DELETE_FROM_WISHLIST(wishListItem));
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
@@ -86,8 +94,12 @@ export default (dispatch, props) => ({
         dispatch(DELETE_ALL_FROM_WISHLIST());
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        checkError(error.response.data.errors);
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError(error.response.data);
+        }
       } else {
         checkError("Server error !");
       }
