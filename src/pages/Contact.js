@@ -1,23 +1,25 @@
-import PropTypes from "prop-types"
-import React, { Fragment } from "react"
-import MetaTags from "react-meta-tags"
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic"
-import MainLayoutShop from "../common/HOCS/MainLayoutShop"
-import Breadcrumb from "../wrappers/Breadcrumb"
-import LocationMap from "../common/components/widgets/LocationMap"
-import { multilanguage } from "redux-multilanguage"
+import PropTypes from "prop-types";
+import React, { Fragment } from "react";
+import MetaTags from "react-meta-tags";
+import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
+import MainLayoutShop from "../common/HOCS/MainLayoutShop";
+import Breadcrumb from "../wrappers/Breadcrumb";
+import LocationMap from "../common/components/widgets/LocationMap";
+import { multilanguage } from "redux-multilanguage";
 
 const Contact = ({ location, strings }) => {
-  const { pathname } = location
+  const { pathname } = location;
 
   return (
     <Fragment>
       <MetaTags>
-        <title>Banana Boys | {strings['contact']}</title>
+        <title>Banana Boys | {strings["contact"]}</title>
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + " "}>{strings['home']}</BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + " "}>
+        {strings["home"]}
+      </BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        {strings['contact']}
+        {strings["contact"]}
       </BreadcrumbsItem>
       <MainLayoutShop headerTop="visible">
         {/* breadcrumb */}
@@ -45,10 +47,12 @@ const Contact = ({ location, strings }) => {
                     </div>
                     <div className="contact-info-dec">
                       <p>
-                        <a href="mailto:urname@email.com">urname@email.com</a>
+                        <a href="mailto:urname@email.com">
+                          bananaboy@email.com
+                        </a>
                       </p>
                       <p>
-                        <a href="//urwebsitenaem.com">urwebsitenaem.com</a>
+                        <a href="//urwebsitenaem.com">bananaboywebsite.com</a>
                       </p>
                     </div>
                   </div>
@@ -57,12 +61,12 @@ const Contact = ({ location, strings }) => {
                       <i className="fa fa-map-marker" />
                     </div>
                     <div className="contact-info-dec">
-                      <p>Address goes here, </p>
-                      <p>street, Crossroad 123.</p>
+                      <p>Địa chỉ, </p>
+                      <p>105M Hồ Thị Kỷ, Quận 10.</p>
                     </div>
                   </div>
                   <div className="contact-social text-center">
-                    <h3>Follow Us</h3>
+                    <h3>Theo dõi chúng tôi</h3>
                     <ul>
                       <li>
                         <a href="//facebook.com">
@@ -96,31 +100,35 @@ const Contact = ({ location, strings }) => {
               <div className="col-lg-8 col-md-7">
                 <div className="contact-form">
                   <div className="contact-title mb-30">
-                    <h2>Get In Touch</h2>
+                    <h2>LIÊN LẠC </h2>
                   </div>
                   <form className="contact-form-style">
                     <div className="row">
                       <div className="col-lg-6">
-                        <input name="name" placeholder="Name*" type="text" />
+                        <input name="name" placeholder="Họ tên*" type="text" />
                       </div>
                       <div className="col-lg-6">
-                        <input name="email" placeholder="Email*" type="email" />
+                        <input
+                          name="email"
+                          placeholder="E-mail*"
+                          type="email"
+                        />
                       </div>
                       <div className="col-lg-12">
                         <input
                           name="subject"
-                          placeholder="Subject*"
+                          placeholder="Vấn đề*"
                           type="text"
                         />
                       </div>
                       <div className="col-lg-12">
                         <textarea
                           name="message"
-                          placeholder="Your Massege*"
+                          placeholder="Lời nhắn của bạn*"
                           defaultValue={""}
                         />
                         <button className="submit" type="submit">
-                          SEND
+                          GỬI
                         </button>
                       </div>
                     </div>
@@ -133,11 +141,11 @@ const Contact = ({ location, strings }) => {
         </div>
       </MainLayoutShop>
     </Fragment>
-  )
-}
+  );
+};
 
 Contact.propTypes = {
-  location: PropTypes.object
-}
+  location: PropTypes.object,
+};
 
-export default multilanguage(Contact)
+export default multilanguage(Contact);

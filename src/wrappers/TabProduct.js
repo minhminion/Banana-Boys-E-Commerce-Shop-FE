@@ -9,7 +9,7 @@ const TabProduct = ({
   spaceTopClass,
   spaceBottomClass,
   bgColorClass,
-  category
+  category,
 }) => {
   return (
     <div
@@ -18,7 +18,10 @@ const TabProduct = ({
       } ${bgColorClass ? bgColorClass : ""}`}
     >
       <div className="container">
-        <SectionTitle titleText="Sản phẩm hôm nay!" positionClass="text-center" />
+        <SectionTitle
+          titleText="Sản phẩm hôm nay!"
+          positionClass="text-center"
+        />
         <Tab.Container defaultActiveKey="bestSeller">
           <Nav
             variant="pills"
@@ -31,7 +34,7 @@ const TabProduct = ({
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="bestSeller">
-                <h4>Best Sellers</h4>
+                <h4>Sản phẩm bán chạy</h4>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
@@ -82,7 +85,7 @@ TabProduct.propTypes = {
   bgColorClass: PropTypes.string,
   category: PropTypes.string,
   spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
+  spaceTopClass: PropTypes.string,
 };
 
 export default TabProduct;

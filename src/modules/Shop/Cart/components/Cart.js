@@ -221,18 +221,18 @@ const Cart = ({
                       <Col span={12}>
                         <div className="title-wrap">
                           <h4 className="cart-bottom-title section-bg-gary-cart">
-                            Coupon
+                            Phiếu mua hàng
                           </h4>
                         </div>
                         <h5>
-                          Total products{" "}
+                          Tổng sản phẩm{" "}
                           <span>
                             {defaultCurrency(currency, cartTotalPrice)}
                           </span>
                         </h5>
 
                         <h4 className="grand-totall-title">
-                          Grand Total{" "}
+                          Tổng cộng{" "}
                           <span>
                             {defaultCurrency(currency, cartTotalPrice)}
                           </span>
@@ -241,18 +241,18 @@ const Cart = ({
                       <Col span={12}>
                         <div className="title-wrap">
                           <h4 className="cart-bottom-title section-bg-gary-cart">
-                            Cart Total
+                            Tổng giỏ hàng
                           </h4>
                         </div>
                         <h5>
-                          Total products{" "}
+                          Tổng sản phẩm{" "}
                           <span>
                             {defaultCurrency(currency, cartTotalPrice)}
                           </span>
                         </h5>
 
                         <h4 className="grand-totall-title">
-                          Grand Total{" "}
+                          Tổng cộng{" "}
                           <span>
                             {defaultCurrency(currency, cartTotalPrice)}
                           </span>
@@ -260,7 +260,7 @@ const Cart = ({
                       </Col>
                     </Row>
                     <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                      Proceed to Checkout
+                      Tiến hành thanh toán
                     </Link>
                   </div>
                 </div>

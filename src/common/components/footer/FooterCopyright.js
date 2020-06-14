@@ -15,7 +15,7 @@ const FooterCopyright = ({ footerLogo, spaceBottomClass }) => {
         <a href="//hasthemes.com" rel="noopener noreferrer" target="_blank">
           Flone
         </a>
-        .<br /> All Rights Reserved
+        .<br /> Đã đăng ký Bản quyền
       </p>
     </div>
   );
@@ -23,7 +23,7 @@ const FooterCopyright = ({ footerLogo, spaceBottomClass }) => {
 
 FooterCopyright.propTypes = {
   footerLogo: PropTypes.string,
-  spaceBottomClass: PropTypes.string
+  spaceBottomClass: PropTypes.string,
 };
 
 export default FooterCopyright;
