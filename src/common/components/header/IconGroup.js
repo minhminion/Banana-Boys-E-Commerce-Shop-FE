@@ -6,6 +6,9 @@ import MenuCart from "./sub-components/MenuCart";
 import cartHandlers from "../../../modules/Shop/Cart/handlers";
 import userHandlers from "../../../modules/LoginAndRegister/handlers";
 import { multilanguage } from "redux-multilanguage";
+import { Typography } from "antd";
+
+const { Text } = Typography;
 
 const IconGroup = ({
   currency,
@@ -17,7 +20,6 @@ const IconGroup = ({
   user,
   signOut,
 }) => {
-
   const cartId = user && user.customer ? user.customer.cart.id : null;
 
   const handleClick = (e) => {
@@ -40,7 +42,7 @@ const IconGroup = ({
     <div
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ""}`}
     >
-      <div className="same-style header-search d-none d-lg-block">
+      {/* <div className="same-style header-search d-none d-lg-block">
         <button className="search-active" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-search" />
         </button>
@@ -52,13 +54,24 @@ const IconGroup = ({
             </button>
           </form>
         </div>
-      </div>
+      </div> */}
       <div className="same-style account-setting d-none d-lg-block">
         <button
+          style={{ display: "flex", width: user && user.id ? 120 : "auto" }}
           className="account-setting-active"
           onClick={(e) => handleClick(e)}
         >
           <i className="pe-7s-user-female" />
+          {user && user.id ? (
+            <Text style={{ marginLeft: 5, fontSize: 14 }}>
+              Chào, {" "}
+              {
+                user.customer.name.split(" ")[
+                  user.customer.name.split(" ").length - 1
+                ]
+              }
+            </Text>
+          ) : null}
         </button>
         <div className="account-dropdown">
           <ul>
@@ -93,16 +106,20 @@ const IconGroup = ({
         </div>
       </div>
       <div className="same-style header-wishlist">
-        <Link to={cartId ? process.env.PUBLIC_URL + "/wishlist" : process.env.PUBLIC_URL + "/login-register"}>
+        <Link
+          to={
+            cartId
+              ? process.env.PUBLIC_URL + "/wishlist"
+              : process.env.PUBLIC_URL + "/login-register"
+          }
+        >
           <i className="pe-7s-like" />
           <span className="count-style">
             {wishlistData && wishlistData.length ? wishlistData.length : 0}
           </span>
         </Link>
       </div>
-      <div
-        className="same-style cart-wrap d-none d-lg-block"
-      >
+      <div className="same-style cart-wrap d-none d-lg-block">
         <button className="icon-cart" onClick={(e) => handleCart(e)}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">

@@ -18,7 +18,7 @@ const OrderSuccess = () => {
         <p style={{ width: "auto", margin: "auto", padding: 20 }}>
           Thông tin chi tiết đã được gửi đến mail của bạn, cám ơn bạn vì đã sử dụng dịch vụ của cúng tôi{" "}
         </p>
-        <Link to="/">
+        <a href="/">
 				<Button
           className="button"
           style={{ width: "80%", margin: "auto", justifyContent: "center" }}
@@ -29,7 +29,7 @@ const OrderSuccess = () => {
             <span>Tiếp tục mua sắm</span>
           </Space>
         </Button>
-        </Link>
+        </a>
     </div>
   );
 };

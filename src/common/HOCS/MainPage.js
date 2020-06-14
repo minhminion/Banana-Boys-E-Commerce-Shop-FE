@@ -14,20 +14,14 @@ import cartHandlers from "../../modules/Shop/Cart/handlers";
 import wishListHandlers from "../../modules/Shop/WishList/handlers";
 import ScrollToTop from "../components/widgets/ScrollToTop";
 import { ModalContextProvider } from "../context/ModalContext";
+import { LoadingContextProvider } from "../context/LoadingContext";
 
 const MainPage = (props) => {
   const [loading, setLoading] = useState(false);
 
   const { user, getUser, store, getAllCartDetails, getAllWishList } = props;
 
-  const checkUser = useCallback(async () => {
-    if (user && user.id) {
-      try {
-        await getUser(user.id);
-        setLoading(false);
-      } catch (err) {}
-    }
-  }, [user, getUser]);
+  
 
   const getUserCart = useCallback(async () => {
     if (user && user.id && user.customer) {
@@ -41,35 +35,49 @@ const MainPage = (props) => {
   }, [getUserCart]);
 
   useEffect(() => {
-    checkUser();
-  }, [checkUser]);
+    const checkUser = async (user) => {
+      if (user && user.id) {
+        try {
+          const result = await getUser(user.id);
+          if(result.status === 3 )
+          {
+            window.location.reload()
+          }
+          setLoading(false);
+        } catch (err) {}
+      }
+    }
+    checkUser(user)
+  }, [user, getUser]);
 
   if (loading) {
     return <Loading />;
   }
   return (
     <>
-      <ModalContextProvider>
-        <LoadingBar className="loading-progress-bar" />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Suspense
-            fallback={
-              <div className="flone-preloader-wrapper">
-                <div className="flone-preloader">
-                  <span></span>
-                  <span></span>
+      <LoadingContextProvider>
+        <ModalContextProvider>
+          <LoadingBar className="loading-progress-bar" />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Suspense
+              fallback={
+                <div className="flone-preloader-wrapper">
+                  <div className="flone-preloader">
+                    <span></span>
+                    <span></span>
+                  </div>
                 </div>
-              </div>
-            }
-          >
-            <Routes store={store} />
-          </Suspense>
-        </BrowserRouter>
-        <ChatBox user={user || null} />
-        <ProgressLoading.Component />
-        <PageLoading.Component type="bars" />
-      </ModalContextProvider>
+              }
+            >
+              <Routes store={store} />
+            </Suspense>
+          </BrowserRouter>
+          <ChatBox user={user || null} />
+          <ProgressLoading.Component />
+          <PageLoading.Component type="bars" />
+        </ModalContextProvider>
+      </LoadingContextProvider>
     </>
   );
 };
@@ -77,7 +85,7 @@ const MainPage = (props) => {
 export default connect(
   (state) => {
     return {
-      user: state.user ? state.user.user || {} : {},
+      user: state.user ? state.user.user : {},
     };
   },
   (dispatch, props) => ({

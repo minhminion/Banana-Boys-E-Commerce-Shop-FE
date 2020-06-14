@@ -34,7 +34,7 @@ const RelatedProductSlider = ({ spaceBottomClass, category }) => {
         <div
           className={'section-title text-center mb-50'}
         >
-          <h2>Related Products</h2>
+          <h2>Sản phẩm mới nhất</h2>
         </div>
         <div className="row">
           <Swiper {...settings}>

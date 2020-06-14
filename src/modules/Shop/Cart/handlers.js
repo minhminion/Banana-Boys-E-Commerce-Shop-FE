@@ -13,7 +13,6 @@ import { ENUMS } from "../../../constant";
 export default (dispatch, props) => ({
   getAllCartDetails: async () => {
     try {
-      console.log("======== Bao Minh: props", props);
       const response = await fetchAuthLoading({
         url: ENDPOINTS.cartDetails,
         method: "GET",
@@ -27,8 +26,10 @@ export default (dispatch, props) => ({
         return response.data;
       }
     } catch (error) {
-      if (error.response) {
-        return { success: false, error: error.response.data };
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
       }
     }
   },
@@ -66,7 +67,11 @@ export default (dispatch, props) => ({
           return response.data;
         }
       } catch (error) {
-        checkError(error.response.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError("Server error !");
+        }
       }
     } else {
       notify({
@@ -123,7 +128,11 @@ export default (dispatch, props) => ({
           return response.data;
         }
       } catch (error) {
-        checkError(error.response.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError("Server error !");
+        }
       }
     } else {
       notify({
@@ -149,7 +158,11 @@ export default (dispatch, props) => ({
           return response.data;
         }
       } catch (error) {
-        checkError(error.response.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+          checkError(error.response.data.errors);
+        } else {
+          checkError("Server error !");
+        }
       }
     } else {
       notify({

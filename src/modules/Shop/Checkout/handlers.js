@@ -14,8 +14,8 @@ export default (dispatch, props) => ({
       
         return response;
     } catch (error) {
-      if (error.response && error.response.errors) {
-        checkError(error.response.errors);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }

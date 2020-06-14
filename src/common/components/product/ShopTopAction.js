@@ -11,7 +11,7 @@ const ShopTopAction = ({
   return (
     <div className="shop-top-bar mb-35">
       <div className="select-shoing-wrap">
-        <div className="shop-select">
+        {/* <div className="shop-select">
           <select
             onChange={e => getFilterSortParams("filterSort", e.target.value)}
           >
@@ -21,8 +21,8 @@ const ShopTopAction = ({
           </select>
         </div>
         <p>
-          Showing {sortedProductCount} of {productCount} result
-        </p>
+          Số lượng {sortedProductCount} o {productCount} result
+        </p> */}
       </div>
 
       <div className="shop-tab">
