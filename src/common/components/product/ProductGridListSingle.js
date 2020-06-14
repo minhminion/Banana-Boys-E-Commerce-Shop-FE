@@ -2,13 +2,12 @@ import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { defaultCurrency } from "../../helpers/product";
-import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { DEFAULT_IMG_URL } from "../../configs";
-import { Space } from "antd";
+import { Space, Rate } from "antd";
 
 const ProductGridListSingle = ({
   key,
@@ -24,6 +23,10 @@ const ProductGridListSingle = ({
   strings,
 }) => {
   const [modalShow, setModalShow] = useState(false);
+
+  const rating = Math.round(
+    (product.productTier1AverageRate + product.productTier2AverageRate) / 2
+  );
 
   // THIS GET DISCOUNT BY %
   // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
@@ -175,15 +178,15 @@ const ProductGridListSingle = ({
                 {product.name}
               </Link>
             </h3>
-            {product.rating && product.rating > 0 ? (
+            {/* {rating  >= 0 ? (
               <div className="product-rating">
-                <Rating ratingValue={product.rating || 4} />
+                <Rate value={rating  }  disabled/>
               </div>
             ) : (
               <div className="product-rating">
-                <Rating ratingValue={4} />
+                <Rate value={4}  disabled/>
               </div>
-            )}
+            )} */}
             <div className="product-price">
               {product.productTiers &&
                 product.productTiers.length &&
@@ -231,13 +234,28 @@ const ProductGridListSingle = ({
                   <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
                     <img
                       className="default-img img-fluid"
-                      src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                      src={
+                        product.productImages && product.productImages.length
+                          ? DEFAULT_IMG_URL +
+                            product.productImages[0].imgLocation.replace(
+                              "\\",
+                              "/"
+                            )
+                          : process.env.PUBLIC_URL + "/img/products/3.jpg"
+                      }
                       alt=""
                     />
-                    {product.images && product.images.length > 1 ? (
+                    {product.productImages &&
+                    product.productImages.length > 1 ? (
                       <img
                         className="hover-img img-fluid"
-                        src={process.env.PUBLIC_URL + "/img/products/3.jpg"}
+                        src={
+                          DEFAULT_IMG_URL +
+                          product.productImages[1].imgLocation.replace(
+                            "\\",
+                            "/"
+                          )
+                        }
                         alt=""
                       />
                     ) : (
@@ -308,19 +326,19 @@ const ProductGridListSingle = ({
                       ))}
                   </Space>
                 </div>
-                {product.rating && product.rating > 0 ? (
+                {/* {rating  >= 0 ? (
                   <div className="rating-review">
                     <div className="product-list-rating">
-                      <Rating ratingValue={product.rating || 4} />
+                      <Rate value={rating  }  disabled/>
                     </div>
                   </div>
                 ) : (
                   <div className="rating-review">
                     <div className="product-list-rating">
-                      <Rating ratingValue={4} />
+                      <Rate value={4}  disabled/>
                     </div>
                   </div>
-                )}
+                )} */}
                 {product.description ? <p>{product.description}</p> : ""}
 
                 <div className="shop-list-actions d-flex align-items-center">

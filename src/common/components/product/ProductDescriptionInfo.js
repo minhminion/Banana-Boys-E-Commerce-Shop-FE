@@ -6,14 +6,13 @@ import {
   getProductCartQuantity,
   defaultCurrency,
 } from "../../../common/helpers/product";
-import Rating from "./sub-components/ProductRating";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import wishListHandler from "../../../modules/Shop/WishList/handlers";
 import cartHandler from "../../../modules/Shop/Cart/handlers";
 import { ENUMS } from "../../../constant";
 import handlers from "../../../modules/Shop/Products/handlers";
 import { multilanguage } from "redux-multilanguage";
-import { Space, Checkbox } from "antd";
+import { Space, Checkbox, Rate } from "antd";
 
 const ProductDescriptionInfo = ({
   strings,
@@ -30,6 +29,8 @@ const ProductDescriptionInfo = ({
       ? state.user.user.customer.cart.id
       : null
   );
+
+  const rating = Math.round((product.productTier1AverageRate+product.productTier2AverageRate)/2)
 
   const [quantityCount, setQuantityCount] = useState(1);
   const [productStock, setProductStock] = useState(
@@ -106,16 +107,16 @@ const ProductDescriptionInfo = ({
             ))}
         </Space>
       </div>
-      {product.rating && product.rating > 0 ? (
+      {rating  >= 0 ? (
         <div className="pro-details-rating-wrap">
           <div className="pro-details-rating">
-            <Rating ratingValue={product.rating || 4} />
+            <Rate value={rating  }  disabled/>
           </div>
         </div>
       ) : (
         <div className="pro-details-rating-wrap">
           <div className="pro-details-rating">
-            <Rating ratingValue={product.rating || 4} />
+            <Rate value={4  }  disabled/>
           </div>
         </div>
       )}
