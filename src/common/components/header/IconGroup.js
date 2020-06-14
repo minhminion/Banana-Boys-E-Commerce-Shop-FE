@@ -62,7 +62,7 @@ const IconGroup = ({
           onClick={(e) => handleClick(e)}
         >
           <i className="pe-7s-user-female" />
-          {user && user.id ? (
+          {user && user.id && user.customer? (
             <Text style={{ marginLeft: 5, fontSize: 14 }}>
               Chào, {" "}
               {

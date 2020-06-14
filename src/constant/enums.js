@@ -11,6 +11,12 @@ export const FilterOrder =
     Descending: 2
 }
 
+export const ProductStatus = {
+  NewGoodsImported: 1,
+  Stocking: 2,
+  OutOfStock: 3
+};
+
 export const MethodOfPayment = {
   COD: 1,
   BK: 2,

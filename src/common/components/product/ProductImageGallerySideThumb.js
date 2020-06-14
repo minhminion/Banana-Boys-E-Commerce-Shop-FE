@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 import Swiper from "react-id-swiper";
 import { DEFAULT_IMG_URL } from "../../configs";
+import { ENUMS } from "../../../constant";
 
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
@@ -74,14 +75,14 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
           }`}
         >
           <div className="product-large-image-wrapper">
-            {product.discount || product.new ? (
+            {product.discount || product.status ? (
               <div className="product-img-badges">
                 {product.discount ? (
                   <span className="red">-{product.discount}%</span>
                 ) : (
                   ""
                 )}
-                {product.new ? <span className="purple">New</span> : ""}
+                {product.status === ENUMS.ProductStatus.NewGoodsImported ? <span className="purple">Mới</span> : ""}
               </div>
             ) : (
               ""

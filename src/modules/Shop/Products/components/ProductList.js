@@ -27,7 +27,7 @@ const SingleProduct = ({
     offset: 0,
   });
   const [params, setParams] = useState({
-    pageSize: 5,
+    pageSize: 6,
     pageNumber: 1,
   });
 

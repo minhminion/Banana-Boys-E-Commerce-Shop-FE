@@ -77,10 +77,6 @@ function Login(props) {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Nhớ tài khoản</Checkbox>
           </Form.Item>
-
-          <a style={{ float: "right" }} className="login-form-forgot" href="# ">
-            Quên mật khẩu?
-          </a>
         </Form.Item>
 
         <Form.Item {...tailLayout}>
