@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { getDiscountPrice, defaultCurrency } from "../../helpers/product";
-import Rating from "./sub-components/ProductRating";
+import { defaultCurrency } from "../../helpers/product";
 import ProductModal from "./ProductModal";
 import { multilanguage } from "redux-multilanguage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { DEFAULT_IMG_URL } from "../../configs";
 import { ENUMS } from "../../../constant";
+import { Rate } from "antd";
 
 const ProductGridSingle = ({
   product,
@@ -29,6 +29,7 @@ const ProductGridSingle = ({
       : null
   );
 
+  const rating = Math.round((product.productTier1AverageRate+product.productTier2AverageRate)/2)
   // THIS GET DISCOUNT BY %
   // const discountedPrice = getDiscountPrice(product.salePrice, product.price);
   const discountedPrice = product.salePrice;
@@ -139,15 +140,15 @@ const ProductGridSingle = ({
                 {product.name}
               </Link>
             </h3>
-            {product.rating && product.rating > 0 ? (
+            {/* {rating  >= 0 ? (
               <div className="product-rating">
-                <Rating ratingValue={product.rating || 4} />
+                <Rate value={rating  }  disabled/>
               </div>
             ) : (
               <div className="product-rating">
-                <Rating ratingValue={4.5} />
+                <Rate value={4}  disabled/>
               </div>
-            )}
+            )} */}
             <div className="product-price">
               {product.productTiers &&
                 product.productTiers.length &&

@@ -9,7 +9,7 @@ import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { ENUMS } from "../../../constant";
 import { multilanguage } from "redux-multilanguage";
 import { DEFAULT_IMG_URL } from "../../configs";
-import { Checkbox, Space } from "antd";
+import { Checkbox, Space, Rate } from "antd";
 
 function ProductModal({
   product,
@@ -28,6 +28,8 @@ function ProductModal({
       : null
   );
 
+  const rating = Math.round((product.productTier1AverageRate+product.productTier2AverageRate)/2)
+
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
   const [quantityCount, setQuantityCount] = useState(1);
@@ -40,7 +42,7 @@ function ProductModal({
   const addToCart = (product, quantityCount, cartId, selectedTier) => {
     setQuantityCount(1);
     addtocart(product, quantityCount, cartId, selectedTier);
-    props.onHide()
+    props.onHide();
   };
   const addToWishlist = props.addtowishlist;
 
@@ -177,7 +179,7 @@ function ProductModal({
               <div className="product-details-content quickview-content">
                 <h2>{product.name}</h2>
                 <div className="product-details-price">
-                  <Space direction='vertical'>
+                  <Space direction="vertical">
                     {product.productTiers &&
                       product.productTiers.length &&
                       product.productTiers.map((productTier) => (
@@ -223,19 +225,19 @@ function ProductModal({
                       ))}
                   </Space>
                 </div>
-                {product.rating && product.rating > 0 ? (
+                {/* {rating  >= 0 ? (
                   <div className="pro-details-rating-wrap">
                     <div className="pro-details-rating">
-                      <Rating ratingValue={product.rating} />
+                      <Rate value={4} disable />
                     </div>
                   </div>
                 ) : (
                   <div className="pro-details-rating-wrap">
                     <div className="pro-details-rating">
-                      <Rating ratingValue={4} />
+                      <Rate value={4} disable />
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="pro-details-list">
                   <p>{product.description}</p>
                 </div>
@@ -280,8 +282,8 @@ function ProductModal({
                             quantityCount,
                             cartId,
                             selectedTier
-                          )}
-                        }
+                          );
+                        }}
                         disabled={productCartQty >= productQuantity}
                       >
                         {productCartQty >= productQuantity
