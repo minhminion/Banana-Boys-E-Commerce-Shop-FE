@@ -143,7 +143,7 @@ export const getMethodOfPayment = (method) => {
       };
     case MethodOfPayment.BK:
       return {
-        content: "Bảo kim",
+        content: "Stripe",
         color: "#52c41a",
       };
     default:

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Input,
   Col,
   Row,
   List,
@@ -12,17 +11,15 @@ import {
   DatePicker,
   Radio,
   Form,
+  message,
 } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { ENUMS } from "../../../../../constant";
 import AddressSingleItem from "../../../../UserAccount/components/subComponents/AddressSingleItem";
 import TextArea from "antd/lib/input/TextArea";
-import { notify } from "../../../../../libraries/Notify";
-import { getNodeText } from "@testing-library/react";
 import moment from "moment";
 
 const { Title, Text } = Typography;
-const { Search } = Input;
 
 const AddressList = ({
   getAllUserAddress,
@@ -65,16 +62,18 @@ const AddressList = ({
 
   const handleComfirmChoiceAddress = (values) => {
     if (!selectedAddressId) {
-      notify({
-        message: "Vui lòng chọn địa chỉ",
-        type: "warning",
-      });
+      message.warning("Vui lòng chọn địa chỉ")
     } else {
       const data = {
         ...values,
         idealShipTime: values.idealShipTime
-          ? moment(moment.utc(values.idealShipTime)).local().format("DD/MM/YYYY HH:mm:ss")
-          : moment(moment.utc()).local().add(7, 'days').format("DD/MM/YYYY HH:mm:ss"),
+          ? moment(moment.utc(values.idealShipTime))
+              .local()
+              .format("DD/MM/YYYY HH:mm:ss")
+          : moment(moment.utc())
+              .local()
+              .add(7, "days")
+              .format("DD/MM/YYYY HH:mm:ss"),
         addressId: selectedAddressId,
       };
       onSubmit(data);
@@ -84,15 +83,6 @@ const AddressList = ({
 
   return (
     <div className="billing-info-wrap">
-      <Row style={{ marginBottom: 30 }}>
-        <Col span={24}>
-          <Search
-            size="large"
-            placeholder="Tìm kiếm theo ID đơn hàng hoặc Tên Sản phẩm"
-            onSearch={(value) => console.log(value)}
-          />
-        </Col>
-      </Row>
       <Row gutter={20}>
         <Col lg={14} md={24}>
           {addresses && addresses.length ? (
@@ -101,14 +91,13 @@ const AddressList = ({
                 itemLayout="horizontal"
                 dataSource={addresses}
                 renderItem={(address) => (
-                  <List.Item
+                  <div
                     className={`address-item ${
                       address.id === selectedAddressId ? "active" : ""
                     }`}
                     style={{
                       border: "1px solid #d9d9d9",
                       borderRadius: 10,
-                      padding: "20px 30px",
                       marginBottom: 20,
                     }}
                   >
@@ -118,7 +107,7 @@ const AddressList = ({
                       onDelete={handleDeleteAddress}
                       onChoice={handleChoiceAddress}
                     />
-                  </List.Item>
+                  </div>
                 )}
               />
               <Pagination
@@ -133,7 +122,7 @@ const AddressList = ({
             <Empty style={{ margin: "150px auto" }} description={false} />
           )}
         </Col>
-        <Col lg={10} md={24}>
+        <Col lg={10} md={24} style={{ backgroundColor: '#f6f6f6', padding: '38px 45px 44px', borderRadius: 10 }}>
           <Title level={3}>Yêu cầu của khách hàng</Title>
           <Text>
             Banana Boys cam đoan sẽ thực hiện mọi yêu cầu của khách hàng

@@ -10,7 +10,6 @@ const ShopTierPrice = ({ getFilterTierPrice }) => {
   const [form] = useForm();
 
   const onFinish = (values) => {
-    console.log("======== Bao Minh: onFinish -> values", values);
     getFilterTierPrice(values);
   };
 

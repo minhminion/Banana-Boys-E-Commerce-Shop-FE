@@ -85,9 +85,14 @@ const ProductDescriptionTab = ({
   const [form] = useForm();
 
   const handleSubmitComment = (values) => {
-    handleCreateProductRates && handleCreateProductRates(values);
-    form.resetFields();
-    setFileList([])
+    if(values && values.comment) {
+        
+      handleCreateProductRates && handleCreateProductRates(values);
+      form.resetFields();
+      setFileList([])
+    } else {
+      message.warning('Hãy để lại đánh giá của bạn về sản phẩm')
+    }
   };
 
   return (
@@ -96,11 +101,11 @@ const ProductDescriptionTab = ({
         <div className="description-review-wrapper">
           <Tab.Container defaultActiveKey="productDescription">
             <Nav variant="pills" className="description-review-topbar">
-              <Nav.Item>
+              {/* <Nav.Item>
                 <Nav.Link eventKey="additionalInfo">
                   Additional Information
                 </Nav.Link>
-              </Nav.Item>
+              </Nav.Item> */}
               <Nav.Item>
                 <Nav.Link eventKey="productDescription">Mô tả</Nav.Link>
               </Nav.Item>

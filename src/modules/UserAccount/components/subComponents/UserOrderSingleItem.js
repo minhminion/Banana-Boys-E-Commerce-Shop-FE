@@ -19,8 +19,8 @@ const { Text } = Typography;
 const UserOrderSingleItem = ({ order }) => {
   const [status, setStatus] = useState({});
 
-  const history = useHistory()
-  const location = useLocation()
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     setStatus(ENUMS.getOrderStatus(order.orderStatus));
@@ -61,8 +61,8 @@ const UserOrderSingleItem = ({ order }) => {
         <Col lg={{ span: 6 }} md={{ span: 12 }}>
           <Statistic
             style={{ textAlign: "center", borderRight: "1px solid #d9d9d9" }}
-            title="Số lượng sản phẩm"
-            value={order.orderItems ? order.orderItems.length : 0}
+            title="Tình trạng thanh toán"
+            value={order.isPayed ? "Hoàn tất" : "Chưa hoàn tất"}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }}>
@@ -81,8 +81,19 @@ const UserOrderSingleItem = ({ order }) => {
             precision={2}
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} style={{ display: 'flex' , justifyContent: 'center', alignItems: 'center'}}>
-          <div className="iconButton activated primary" onClick={() => history.push(`${location.pathname}/${order.id}`)}>
+        <Col
+          lg={{ span: 6 }}
+          md={{ span: 12 }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="iconButton activated primary"
+            onClick={() => history.push(`${location.pathname}/${order.id}`)}
+          >
             <ArrowRightOutlined
               style={{ fontSize: 40 }}
               className="iconFont level-3"

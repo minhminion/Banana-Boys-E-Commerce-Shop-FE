@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import { Route, Switch } from "react-router";
+import { Route, Switch, Redirect } from "react-router";
 import UnderContruct from "../pages/UnderContruct";
 
 import LoginRegister from "../modules/LoginAndRegister/Containers/TabsLoginAndRegister";
@@ -15,8 +15,12 @@ const ProductList = lazy(() =>
   import("../modules/Shop/Products/containers/ProductList")
 );
 const NotFound = lazy(() => import("../pages/NotFound"));
-const Checkout = lazy(() => import("../modules/Shop/Checkout/containers/Checkout"));
-const UserAccount = lazy(() => import("../modules/UserAccount/containers/UserAccount"));
+const Checkout = lazy(() =>
+  import("../modules/Shop/Checkout/containers/Checkout")
+);
+const UserAccount = lazy(() =>
+  import("../modules/UserAccount/containers/UserAccount")
+);
 const Contact = lazy(() => import("../pages/Contact"));
 const Home = lazy(() => import("../pages/Home"));
 const OrderSuccess = lazy(() => import("../pages/OrderSuccess"));
@@ -27,7 +31,6 @@ const ProductInfo = lazy(() =>
 const Routes = (props) => {
   const { store } = props;
   let { user } = store.getState();
-  console.log('======== Bao Minh: Routes -> user', user)
   user = user || {};
   /** If use is not exists => not login then show mot found page */
   // if (!user.user || !user.user.id) {
@@ -42,7 +45,10 @@ const Routes = (props) => {
           path={process.env.PUBLIC_URL + "/product/:id"}
           component={ProductInfo}
         />
-        <Route path={process.env.PUBLIC_URL + "/shop"} component={ProductList} />
+        <Route
+          path={process.env.PUBLIC_URL + "/shop"}
+          component={ProductList}
+        />
         <Route
           path={process.env.PUBLIC_URL + "/wishlist"}
           component={Wishlist}
@@ -57,7 +63,11 @@ const Routes = (props) => {
           component={UserAccount}
         />
         <Route path={process.env.PUBLIC_URL + "/contact"} component={Contact} />
-        <Route exact path={process.env.PUBLIC_URL + "/orderSuccess"} component={OrderSuccess} />
+        <Route
+          exact
+          path={process.env.PUBLIC_URL + "/orderSuccess"}
+          component={OrderSuccess}
+        />
         <Route exact path={process.env.PUBLIC_URL} component={Home} />
         <Route exact component={NotFound} />
       </Switch>

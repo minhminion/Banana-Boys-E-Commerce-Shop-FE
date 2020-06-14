@@ -17,12 +17,6 @@ export const ModalContextProvider = ({ children}) => {
     setTitle(title)
   }
 
-  // const deactivateModal = () => {
-  //   setIsShow(false)
-  //   setComponent(undefined)
-  //   setParams({})
-  //   setTitle('')
-  // }
 
   const show = useCallback(
     (component, title, params) => {

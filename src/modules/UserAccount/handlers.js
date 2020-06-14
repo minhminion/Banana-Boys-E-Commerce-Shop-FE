@@ -19,8 +19,8 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -37,8 +37,8 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -52,8 +52,8 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -68,6 +68,11 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   },
   changeInfoCustomer: async (customerId, data) => {
@@ -79,7 +84,11 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      console.log("======== Tu Linh: error", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   },
   getInfoCustomer: async (userId) => {
@@ -102,8 +111,8 @@ export default (dispatch, props) => ({
       });
       return response;
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -117,8 +126,8 @@ export default (dispatch, props) => ({
       }) 
       return response
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -138,8 +147,8 @@ export default (dispatch, props) => ({
         return result.data;
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -155,8 +164,8 @@ export default (dispatch, props) => ({
         return result.data;
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        checkError(error.response.data);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }

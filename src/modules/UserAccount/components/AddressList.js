@@ -84,11 +84,10 @@ const AddressList = ({
             itemLayout="horizontal"
             dataSource={addresses}
             renderItem={(address) => (
-              <List.Item
+              <div
                 style={{
                   border: "1px solid #d9d9d9",
                   borderRadius: 10,
-                  padding: "20px 30px",
                   marginBottom: 20,
                 }}
               >
@@ -96,7 +95,7 @@ const AddressList = ({
                   address={address}
                   handleDeleteAddress={handleDeleteAddress}
                 />
-              </List.Item>
+              </div>
             )}
           />
           <Pagination

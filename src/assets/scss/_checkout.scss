@@ -216,12 +216,12 @@
     left: 0;
     bottom: 0px;
     width: 0;
-    background-color: $red-color;
+    background-color: $theme-color;
     transition: 0.3s ease-in-out all;
     clear: both;
   }
   &.active {
-    border-color: $red-color !important;
+    border-color: $theme-color !important;
     &::after {
       width: 15px;
     }

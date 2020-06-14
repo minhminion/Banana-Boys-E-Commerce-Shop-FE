@@ -11,7 +11,9 @@ import { Steps, Result, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import YouOrder from "./subComponents/YouOrder";
 import BillDetails from "./subComponents/BillDetails";
-import { ENUMS } from "../../../../constant";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useLoadingPage } from "../../../../common/hooks/useLoadingPage";
 
 const { Step } = Steps;
 
@@ -27,6 +29,11 @@ const Checkout = ({
   getAllCartDetails,
   deleteSingleUserAddress
 }) => {
+
+  const stripePromise = loadStripe('pk_test_51GtRSgDISKi19aTGFSTEZ2s4LVU2QjME0SJxftn6f3crZetSY4x0fykPLBl2bfslQeiNkZyujuBv7dXaSZZ2pov700rNJalLgb');
+  
+  const { show, hide } = useLoadingPage();
+
   const { pathname } = location;
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,29 +48,18 @@ const Checkout = ({
     user && user.id && setCurrentStep(1);
   }, [user]);
 
-  // useEffect(() => {
-  //   const orderItems =
-  //     cartItems &&
-  //     cartItems.map((item) => ({
-  //       quantity: item.quantity,
-  //       productTierId: item.id,
-  //     }));
-  //   setOrderDetails((prev) => ({ ...prev, orderItems }));
-  // }, [cartItems]);
-
   const handleOnChangeOrderDetails = (data) => {
     setOrderDetails((prev) => ({ ...prev, ...data }));
   };
 
   const handleCreateOrderProducts = async (paymentId) => {
+    show()
     const result = await createOrderProducts({
       ...orderDetails,
       paymentMethodId: paymentId,
     });
-    if (result && result.status === ENUMS.httpStatus.CREATED) {
-      await getAllCartDetails()
-      history.push("/orderSuccess");
-    }
+    hide()
+    return result
   };
 
   const steps = [
@@ -105,6 +101,7 @@ const Checkout = ({
     {
       title: "Pay",
       content: (
+        <Elements stripe={stripePromise}>
         <YouOrder
           onSubmit={handleCreateOrderProducts}
           cartItems={cartItems}
@@ -114,6 +111,7 @@ const Checkout = ({
           currency={currency}
           cartTotalPrice={0}
         />
+        </Elements>
       ),
     },
   ];
@@ -131,7 +129,7 @@ const Checkout = ({
         {/* breadcrumb */}
         <Breadcrumb />
         <div className="checkout-area pt-95 pb-100">
-          <div className="container">
+          <div className="container" style={{ width: 1500 }}>
             <div className="checkout-step">
               <Steps progressDot current={currentStep}>
                 {steps.map((item) => (
@@ -139,7 +137,7 @@ const Checkout = ({
                 ))}
               </Steps>
             </div>
-            <div className="checkout-content">{steps[currentStep].content}</div>
+            <div>{steps[currentStep].content}</div>
           </div>
         </div>
       </MainLayoutShop>

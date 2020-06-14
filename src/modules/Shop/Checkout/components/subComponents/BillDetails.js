@@ -51,19 +51,6 @@ const BillDetails = ({
     }
   };
 
-  // MESSAGE WHEN ERROR
-  const validateMessages = {
-    required: "${label} is required!",
-    whitespace: "${label} can not be empty!",
-    types: {
-      email: "${label} is not validate email!",
-      number: "${label} is not a validate number!",
-    },
-    pattern: {
-      mismatch: "${label} does not match pattern",
-    },
-  };
-
   const handleToggleChoiceAddress = () => {
     setIsNewAddress((prev) => !prev);
   };
@@ -100,9 +87,9 @@ const BillDetails = ({
             <i className="pe-7s-cash"></i>
           </div>
           <div className="item-empty-area__text">
-            No items found in cart to checkout <br />{" "}
+            Không có sản phẩm trong giỏ hàng <br />{" "}
             <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
-              Shop Now
+              Tiếp tục mua sắm
             </Link>
           </div>
         </div>

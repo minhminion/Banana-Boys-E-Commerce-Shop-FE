@@ -15,10 +15,11 @@ export default (dispatch, props) => ({
         return response.data
       }
     } catch (error) {
-      if (error.response) {
-        return { success: false, error: error.response.data }
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
       }
-      console.log(error.response)
     }
   },
   createProduct: async (data) => {
@@ -36,11 +37,11 @@ export default (dispatch, props) => ({
         return response.data
       }
     } catch (error) {
-      if (error.response) {
-        return { success: false, error: error.response.data }
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
       }
-      console.log(error)
-      return { success: false, error: { message: 'Server error' } }
     }
   },
   getAllProducts: async (params) => {
@@ -55,7 +56,11 @@ export default (dispatch, props) => ({
       })
       return response.data
     } catch (error) {
-      return { success: false, message: 'Server Error' }
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   },
   getSingleProduct: async (productId) => {
@@ -66,7 +71,11 @@ export default (dispatch, props) => ({
       })
       return response
     } catch (error) {
-      return { success: false, message: 'Server Error' }
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   },
   getSingleCategory: async (categoryId) => {
@@ -77,7 +86,11 @@ export default (dispatch, props) => ({
       })
       return response
     } catch (error) {
-      return { success: false, message: 'Server Error' }
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
+      } else {
+        checkError("Server error !");
+      }
     }
   },
   // ============ Rating ============
@@ -91,8 +104,8 @@ export default (dispatch, props) => ({
       
         return response;
     } catch (error) {
-      if (error.response && error.response.errors) {
-        checkError(error.response.errors);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
@@ -111,8 +124,8 @@ export default (dispatch, props) => ({
       
         return response;
     } catch (error) {
-      if (error.response && error.response.errors) {
-        checkError(error.response.errors);
+      if (error.response && error.response.data && error.response.data.errors) {
+        checkError(error.response.data.errors);
       } else {
         checkError("Server error !");
       }
